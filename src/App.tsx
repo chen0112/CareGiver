@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import CaregiverForm from "./components/CaregiverForm";
 import CaregiverList from "./components/CaregiverList";
-import { Caregiver } from "./types/Types"; // Import the Caregiver interface
+import { Caregiver } from "./types/Types"; 
 
 const API_URL = "http://127.0.0.1:5000/api/caregivers"; // Replace with your actual backend URL
 

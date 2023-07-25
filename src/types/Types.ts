@@ -1,13 +1,13 @@
 // types.ts
 export interface Caregiver {
-  id: number,
+  id: number;
   name: string;
   description: string;
-  imageUrl: string;
-  yearsOfExperience: number;
-  age: number;
-  education: string;
-  gender: string;
+  imageUrl?: string;
+  years_of_experience?: number | undefined;
+  age?: number | undefined;
+  education?: string;
+  gender?: string;
   // Add other properties as needed
 }
 
@@ -25,7 +25,7 @@ export interface CaregiverFormData {
   name: string;
   description: string;
   imageUrl: string;
-  yearsOfExperience: number;
+  years_of_experience: number;
   age: number;
   education: string;
   gender: string;
