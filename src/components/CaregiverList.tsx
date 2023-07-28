@@ -1,12 +1,14 @@
+// CaregiverList.tsx
 import React from "react";
 import CaregiverCard from "./CaregiverCard";
-import { Caregiver } from "../types/Types";
+import { useCaregiverContext } from "../context/CaregiverContext";
 
-interface CaregiverListProps {
-  caregivers: Caregiver[];
-}
+const CaregiverList: React.FC = () => {
+  const { caregivers } = useCaregiverContext();
 
-const CaregiverList: React.FC<CaregiverListProps> = ({ caregivers }) => {
+  console.log("Rendered CaregiverList.");
+  console.log("Context caregivers state:", caregivers);
+
   return (
     <div className="caregiver-list">
       {caregivers.map((caregiver) => (

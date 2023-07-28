@@ -4,8 +4,8 @@ export interface Caregiver {
   name: string;
   description: string;
   imageUrl?: string;
-  years_of_experience?: number | undefined;
-  age?: number | undefined;
+  years_of_experience?: number | null;
+  age?: number | null;
   education?: string;
   gender?: string;
   // Add other properties as needed

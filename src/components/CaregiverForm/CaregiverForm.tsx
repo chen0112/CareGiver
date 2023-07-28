@@ -1,24 +1,39 @@
 // components/CaregiverForm.tsx
 import React, { useState } from "react";
-import { Caregiver } from "../types/Types";
+import { Caregiver } from "../../types/Types";
+import "./CaregiverForm.css";
 
 interface CaregiverFormProps {
-  onSubmit: (caregiver: Caregiver) => void;
   API_URL: string;
+  updateCaregivers: (newCaregiver: Caregiver) => void;
+  getCaregivers: () => void;
 }
 
 const initialFormData: Partial<Caregiver> = {
   name: "",
   description: "",
-  age: undefined,
+  age: null,
   education: "",
   gender: "",
-  years_of_experience: undefined,
+  years_of_experience: null,
 };
 
-const CaregiverForm: React.FC<CaregiverFormProps> = ({ onSubmit, API_URL }) => {
+const CaregiverForm: React.FC<CaregiverFormProps> = ({API_URL, updateCaregivers, getCaregivers }) => {
   const [formData, setFormData] = useState<Partial<Caregiver>>(initialFormData); // Type annotation for formData
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isFormDisabled, setIsFormDisabled] = useState(false);
+
+  // Function to reset the form after successful submission
+  const resetForm = () => {
+    setIsSubmitted(true);
+    setIsSubmitting(false);
+    setIsFormDisabled(false);
+    setTimeout(() => {
+      setIsSubmitted(false); // Reset the success message after a short delay
+    }, 3000); // Adjust the duration of the success message display as needed (in milliseconds)
+    setFormData(initialFormData); // Clear the form fields after successful submission
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -40,8 +55,19 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({ onSubmit, API_URL }) => {
       return;
     }
 
+    // Convert the formData object to JSON, including undefined values
+    const formDataJson = JSON.stringify(formData, (key, value) => {
+      // If the value is undefined, return "undefined" as a string
+      return value === undefined ? "undefined" : value;
+    });
+
+    console.log(formData);
+
     // Set the isSubmitting flag to true to prevent duplicate submissions
     setIsSubmitting(true);
+
+    // Disable the form to prevent user interaction during submission
+    setIsFormDisabled(true);
 
     // Send the caregiver data to the backend
     fetch(API_URL, {
@@ -49,20 +75,22 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({ onSubmit, API_URL }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: formDataJson,
     })
       .then((response) => response.json())
       .then((newCaregiver) => {
         // Display the newly added caregiver in the frontend list
-        onSubmit(newCaregiver);
-        // Reset the form data after submission
-        setFormData({});
+        updateCaregivers(newCaregiver);
+        // Fetch the updated list of caregivers from the backend
+        getCaregivers();
+        // Reset the form after successful submission
+        resetForm();
       })
       .catch((error) => console.error("Error adding caregiver:", error));
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={isFormDisabled ? "disabled" : ""}>
       <div>
         <label htmlFor="name">Name:</label>
         <input
@@ -123,9 +151,15 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({ onSubmit, API_URL }) => {
         />
       </div>
       {/* Add other input fields for other properties */}
-      <button type="submit" disabled={isSubmitting}>
+      <button type="submit" disabled={isSubmitting || isFormDisabled}>
         {isSubmitting ? "Submitting..." : "Submit"}
       </button>
+      {isSubmitted && (
+        <div className="success-message">
+          <p>Form submitted successfully!</p>
+        </div>
+      )}
+      {/* Show success message */}
     </form>
   );
 };

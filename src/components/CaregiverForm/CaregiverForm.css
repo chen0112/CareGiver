@@ -1,0 +1,6 @@
+/* src/components/CaregiverForm/CaregiverForm.css */
+.success-message {
+  color: green; /* Change the text color to green */
+  font-weight: bold; /* Add bold font-weight */
+  margin-top: 10px; /* Add some margin for spacing */
+}
