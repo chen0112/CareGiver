@@ -3,13 +3,14 @@ export interface Caregiver {
   id: number;
   name: string;
   description: string;
-  imageUrl?: string;
+  imageUrl?: string; // Change property name to "imageUrl"
   years_of_experience?: number | null;
   age?: number | null;
   education?: string;
   gender?: string;
   // Add other properties as needed
 }
+
 
 // Interface for Client (Patient, Senior, Working Parent)
 export interface Client {

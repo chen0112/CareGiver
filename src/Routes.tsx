@@ -2,11 +2,12 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCaregiverContext } from "./context/CaregiverContext";
 import CaregiverForm from "./components/CaregiverForm/CaregiverForm";
-import CaregiverList from "./components/CaregiverList";
+import CaregiverList from "./components/CaregiverList/CaregiverList";
 import HomePage from "./components/Home/HomePage";
 import { Caregiver } from "./types/Types";
 
 const API_URL = "http://127.0.0.1:5000/api/caregivers";
+const API_URL_UPLOAD = "http://127.0.0.1:5000/api/upload";
 
 const AppRoutes: React.FC = () => {
   const { caregivers, setCaregivers } = useCaregiverContext();
@@ -21,7 +22,7 @@ const AppRoutes: React.FC = () => {
     fetch(API_URL)
       .then((response) => response.json())
       .then((data) => setCaregivers(data))
-      .catch((error) => console.error('Error fetching caregivers:', error));
+      .catch((error) => console.error("Error fetching caregivers:", error));
   };
 
   return (
@@ -36,6 +37,7 @@ const AppRoutes: React.FC = () => {
               updateCaregivers={updateCaregivers}
               getCaregivers={getCaregivers}
               API_URL={API_URL}
+              API_URL_UPLOAD={API_URL_UPLOAD}
             />
           }
         />

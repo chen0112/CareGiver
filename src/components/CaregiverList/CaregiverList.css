@@ -1,0 +1,15 @@
+/* src/components/CaregiverList/tailwind.css */
+
+/* Remove the existing styles and import Tailwind CSS */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Define custom styles for the logo and link */
+.logo-link {
+  @apply text-2xl font-bold text-gray-800 no-underline;
+}
+
+.logo-link:hover {
+  @apply underline;
+}

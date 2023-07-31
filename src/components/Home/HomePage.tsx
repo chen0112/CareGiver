@@ -1,6 +1,7 @@
 // src/components/HomePage.tsx
 import React from 'react';
 import './HomaPage.css';
+import { Link } from 'react-router-dom';
 import seniorCareImage from './senior_care.jpeg'; 
 
 
@@ -14,12 +15,16 @@ const HomePage: React.FC = () => {
 
       <main>
         <section className="hero">
-          <div className="hero-content">
+        <div className="hero-content">
             <h2>Connecting Caregivers and Patients</h2>
             <p>Join our platform to find caregiving opportunities or hire a compassionate caregiver for your loved ones.</p>
+            {/* Add the "Sign Up" button */}
+            <Link to="/signup" className="btn btn-primary">Sign Up</Link>
+            {/* Add the "Show Caregivers" button */}
+            <Link to="/caregivers" className="btn btn-primary">Show Caregivers</Link>
           </div>
           <div className="hero-image">
-          <img src={seniorCareImage} alt="Senior patient being taken care of" />
+            <img src={seniorCareImage} alt="Senior patient being taken care of" />
           </div>
         </section>
       </main>
