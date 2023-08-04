@@ -1,38 +1,99 @@
-// src/components/HomePage.tsx
-import React from 'react';
-import './HomaPage.css';
-import { Link } from 'react-router-dom';
-import seniorCareImage from './senior_care.jpeg'; 
-
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { BiHeart } from "react-icons/bi";
+import { AiOutlineClose } from "react-icons/ai";
+import { HiOutlineMenuAlt4 } from "react-icons/hi";
+import backGroundVideo from "../../assets/Backgound.mp4";
 
 const HomePage: React.FC = () => {
+  const [nav, setNav] = useState(false);
+  const [logo, setLogo] = useState(false);
+  const handleNav = () => {
+    setNav(!nav);
+    setLogo(!logo);
+  };
+
   return (
-    <div className="container">
-      <header>
-        <h1>Caregiver Platform</h1>
-        {/* Add navigation menu if needed */}
-      </header>
-
-      <main>
-        <section className="hero">
-        <div className="hero-content">
-            <h2>Connecting Caregivers and Patients</h2>
-            <p>Join our platform to find caregiving opportunities or hire a compassionate caregiver for your loved ones.</p>
-            {/* Add the "Sign Up" button */}
-            <Link to="/signup" className="btn btn-primary">Sign Up</Link>
-            {/* Add the "Show Caregivers" button */}
-            <Link to="/caregivers" className="btn btn-primary">Show Caregivers</Link>
+    <>
+      <div className="container mx-auto px-6 py-2 absolute z-10">
+        <header className="flex w-full justify-between items-center h-20 text-white">
+          <div className="flex items-center">
+            <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
+            <h1
+              onClick={handleNav}
+              className={`font-bold text-3xl ml-2 my-auto ${
+                logo ? "hidden" : "block"
+              }`}
+            >
+              关爱网
+            </h1>
           </div>
-          <div className="hero-image">
-            <img src={seniorCareImage} alt="Senior patient being taken care of" />
-          </div>
-        </section>
-      </main>
+          <ul className="hidden md:flex justify-center space-x-8 items-center m-0 p-0">
+            <li>
+              <Link
+                to="/signup"
+                className="no-underline text-white font-bold py-2 px-4 rounded"
+              >
+                成为护工
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/caregivers"
+                className="no-underline text-white font-bold py-2 px-4 rounded"
+              >
+                护工展示
+              </Link>
+            </li>
+          </ul>
 
-      <footer>
-        <p>&copy; 2023 Caregiver Platform. All rights reserved.</p>
-      </footer>
-    </div>
+          <BiHeart
+            size={30}
+            className="hidden md:block text-red-500 heart-icon my-auto"
+          />
+
+          <div onClick={handleNav} className="md:hidden z-10">
+            {nav ? (
+              <AiOutlineClose className="text-black" size={20} />
+            ) : (
+              <HiOutlineMenuAlt4 size={20} />
+            )}
+          </div>
+
+          {/* Mobile menu dropdown */}
+          <div
+            onClick={handleNav}
+            className={
+              nav
+                ? "absolute text-black left-0 top-0 w-full bg-gray-100/90 px-4 py-7 flex flex-col"
+                : "absolute left-[-100%]"
+            }
+          >
+            <ul>
+              <h1>关爱网</h1>
+              <li>
+                <Link to="/signup">成为护工</Link>
+              </li>
+              <li>
+                <Link to="/caregivers">护工展示</Link>
+              </li>
+              <li className="border-b">Travel</li>
+              <li className="border-b">View</li>
+              <li className="border-b">Book</li>
+            </ul>
+          </div>
+        </header>
+      </div>
+      <div className="w-screen h-screen overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          className="w-full h-full object-cover absolute top-0 left-0 z-0"
+          src={backGroundVideo}
+        />
+      </div>
+    </>
   );
 };
 

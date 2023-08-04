@@ -2,6 +2,7 @@
 export interface Caregiver {
   id: number;
   name: string;
+  phone: string;
   description: string;
   imageUrl?: string; // Change property name to "imageUrl"
   years_of_experience?: number | null;

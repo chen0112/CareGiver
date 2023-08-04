@@ -1,9 +1,9 @@
 /* src/components/CaregiverList/tailwind.css */
 
 /* Remove the existing styles and import Tailwind CSS */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Define custom styles for the logo and link */
 .logo-link {
