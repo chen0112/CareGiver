@@ -9,7 +9,6 @@ import { BiHeart } from "react-icons/bi";
 const CaregiverList: React.FC = () => {
   const { caregivers } = useCaregiverContext();
 
-  console.log("Rendered CaregiverList.");
   console.log("Context caregivers state:", caregivers);
 
   return (
@@ -27,6 +26,7 @@ const CaregiverList: React.FC = () => {
       </div>
 
       <hr className="border-t border-black-300 mx-1 my-2" />
+      
       <div className="flex flex-col items-center">
         {caregivers.map((caregiver) => (
           <CaregiverCard key={caregiver.id} caregiver={caregiver} />

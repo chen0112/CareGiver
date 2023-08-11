@@ -16,18 +16,14 @@ const HomePage: React.FC = () => {
   return (
     <>
       <div className="container mx-auto px-6 py-2 absolute z-10">
-        <header className="flex w-full justify-between items-center h-20 text-white">
-          <div className="flex items-center">
+        <header className="flex w-full justify-center items-center h-20 text-white relative px-4 md:px-0">
+          {/* Logo */}
+          <div className="absolute left-4 flex items-center">
             <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-            <h1
-              onClick={handleNav}
-              className={`font-bold text-3xl ml-2 my-auto ${
-                logo ? "hidden" : "block"
-              }`}
-            >
-              关爱网
-            </h1>
+            <h1 className="font-bold text-3xl ml-2 my-auto">关爱网</h1>
           </div>
+
+          {/* Links (Center-aligned) */}
           <ul className="hidden md:flex justify-center space-x-8 items-center m-0 p-0">
             <li>
               <Link
@@ -47,12 +43,11 @@ const HomePage: React.FC = () => {
             </li>
           </ul>
 
-          <BiHeart
-            size={30}
-            className="hidden md:block text-red-500 heart-icon my-auto"
-          />
-
-          <div onClick={handleNav} className="md:hidden z-10">
+          {/* Mobile Menu Icon */}
+          <div
+            onClick={handleNav}
+            className="md:hidden z-10 absolute right-4 top-1/2 transform -translate-y-1/2"
+          >
             {nav ? (
               <AiOutlineClose className="text-black" size={20} />
             ) : (
@@ -70,16 +65,18 @@ const HomePage: React.FC = () => {
             }
           >
             <ul>
-              <h1>关爱网</h1>
+              <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
+                关爱网
+              </h1>
+
+              <hr className="border-t border-black-300 mx-1 my-2" />
+
               <li>
-                <Link to="/signup">成为护工</Link>
+                <Link to="/signup" className="text-black">成为护工</Link>
               </li>
               <li>
-                <Link to="/caregivers">护工展示</Link>
+                <Link to="/caregivers" className="text-black">护工展示</Link>
               </li>
-              <li className="border-b">Travel</li>
-              <li className="border-b">View</li>
-              <li className="border-b">Book</li>
             </ul>
           </div>
         </header>

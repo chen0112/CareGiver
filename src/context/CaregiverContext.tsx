@@ -21,7 +21,7 @@ const CaregiverProvider: React.FC<CaregiverProviderProps> = ({ children }) => {
   const [caregivers, setCaregivers] = useState<Caregiver[]>([]);
 
   const getCaregivers = () => {
-    fetch("http://127.0.0.1:5000/api/caregivers")
+    fetch("https://54.183.20.207/api/caregivers")
       .then((response) => response.json())
       .then((data) => setCaregivers(data))
       .catch((error) => console.error('Error fetching caregivers:', error));
@@ -48,7 +48,13 @@ const CaregiverProvider: React.FC<CaregiverProviderProps> = ({ children }) => {
 
 export const useCaregiverContext = () => {
     const context = useContext(CaregiverContext);
-    console.log("Current caregivers state:", context.caregivers);
+    if (!context) {
+      throw new Error('useCaregiverContext must be used within a CaregiverProvider');
+    }
+    if (!Array.isArray(context.caregivers)) {
+      context.caregivers = []; // Ensuring that caregivers is an array
+    }
+    console.log("Current caregivers state from CaregiverContext:", context.caregivers);
     return context;
 };
 

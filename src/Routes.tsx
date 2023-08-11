@@ -3,18 +3,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCaregiverContext } from "./context/CaregiverContext";
 import CaregiverForm from "./components/CaregiverForm/CaregiverForm";
 import CaregiverList from "./components/CaregiverList/CaregiverList";
+import CaregiverDetail from "./components/CaregiverDetails/CaregiverDetail";
 import HomePage from "./components/Home/HomePage";
 import { Caregiver } from "./types/Types";
 
-const API_URL = "http://127.0.0.1:5000/api/caregivers";
-const API_URL_UPLOAD = "http://127.0.0.1:5000/api/upload";
+const API_URL = "https://54.183.20.207/api/caregivers";
+const API_URL_UPLOAD = "https://54.183.20.207/api/upload";
 
 const AppRoutes: React.FC = () => {
   const { caregivers, setCaregivers } = useCaregiverContext();
 
   const updateCaregivers = (newCaregiver: Caregiver) => {
+    console.log('Updating caregivers with:', caregivers); // Debugging log
     setCaregivers((prevData) => {
-      return [...prevData, newCaregiver];
+      return [...(prevData || []), newCaregiver];
     });
   };
 
@@ -42,6 +44,7 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route path="/caregivers" element={<CaregiverList />} />
+        <Route path="/caregivers/:id" element={<CaregiverDetail />} />
       </Routes>
     </BrowserRouter>
   );

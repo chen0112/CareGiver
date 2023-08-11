@@ -1,15 +1,27 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Caregiver } from "../../types/Types";
 import "./CaregiverForm.css";
 import { useNavigate, Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
-import Cropper from 'react-easy-crop';
+import getCroppedImg from "./CropperImg";
+import Cropper from "react-easy-crop";
+import { Slider, Button, Typography } from "antd";
+import { Point, Area } from "react-easy-crop/types";
+import Modal from "react-bootstrap/Modal";
+import { v4 as uuidv4 } from "uuid";
 
 interface CaregiverFormProps {
   API_URL: string;
   API_URL_UPLOAD: string;
   updateCaregivers: (newCaregiver: Caregiver) => void;
   getCaregivers: () => void;
+}
+
+interface CropArea {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 const initialFormData: Partial<Caregiver> = {
@@ -30,37 +42,81 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
 }) => {
   const [formData, setFormData] = useState<Partial<Caregiver>>(initialFormData);
 
+  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null); // Define a specific type if you know the shape of the object
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(false);
   const navigate = useNavigate();
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
+
+  const onCropComplete = useCallback((_: any, croppedAreaPixels: CropArea) => {
+    console.log("onCropComplete called with:", croppedAreaPixels);
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("handleImageChange called");
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
         setImageDataUrl(event.target?.result as string); // Use this to preview image
-
-        // Now upload the image to the server
-        const formData = new FormData();
-        formData.append("file", file);
-        fetch(API_URL_UPLOAD, {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => response.text())
-          .then((data) => {
-            setImageUrl(data); // Set the S3 URL to state after it's uploaded
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleButtonClick = async () => {
+    if (!imageDataUrl) {
+      console.error("No image data URL to crop");
+      return;
+    }
+    // Perform cropping based on the current image, crop, and zoom states.
+    const croppedImageBlob = await getCroppedImg(
+      imageDataUrl,
+      croppedAreaPixels
+    );
+
+    if (croppedImageBlob) {
+      // Preview the cropped image.
+      const objectUrl = URL.createObjectURL(croppedImageBlob);
+
+      // Use the objectUrl here
+      if (!objectUrl) {
+        console.error("Failed to crop image");
+        return;
+      }
+
+      setCroppedImage(objectUrl);
+
+      setShowModal(true);
+
+      setPreviewImage(croppedImage);
+
+      // Now upload the image to the server.
+      const filename = `croppedImage_${uuidv4()}.jpg`;
+      const formData = new FormData();
+      formData.append("file", croppedImageBlob, filename);
+      fetch(API_URL_UPLOAD, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setImageUrl(data.url); // Set the S3 URL to state after it's uploaded.
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   };
 
@@ -80,6 +136,18 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleCancelCrop = () => {
+    setImageDataUrl(null);
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setImageDataUrl(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -113,6 +181,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
 
     setIsSubmitting(true);
     setIsFormDisabled(true);
+    setShowSuccessModal(true);
 
     fetch(API_URL, {
       method: "POST",
@@ -167,18 +236,91 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             </div>
           </div>
           <input
+            ref={imageInputRef}
             className="hidden"
             type="file"
             id="image"
             accept="image/*"
             onChange={handleImageChange}
           />
+
           {imageDataUrl && (
-            <div className="w-64 h-auto">
+            <div className="flex flex-col items-center w-full">
+              <div
+                className="relative w-full max-w-screen-md"
+                style={{ paddingBottom: "75%" }}
+              >
+                <div className="absolute top-0 left-0 w-full h-full">
+                  <Cropper
+                    image={imageDataUrl}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={1 / 1}
+                    onCropChange={setCrop}
+                    onCropComplete={onCropComplete}
+                    onZoomChange={setZoom}
+                  />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <Typography.Text
+                  style={{
+                    display: "block",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  放大
+                </Typography.Text>
+
+                <Slider
+                  value={zoom}
+                  min={1}
+                  max={3}
+                  step={0.1}
+                  aria-labelledby="Zoom"
+                  onChange={(value) => {
+                    console.log("Zoom value:", value);
+                    setZoom(value);
+                  }}
+                />
+                <Button
+                  onClick={handleButtonClick}
+                  type="primary"
+                  className="mt-4 bg-blue-600 text-white hover:bg-blue-700"
+                >
+                  展示截图
+                </Button>
+
+                <Button
+                  onClick={handleCancelCrop}
+                  type="default"
+                  className="mt-4 ml-2 bg-red-500 text-white hover:bg-red-600"
+                >
+                  取消截图
+                </Button>
+              </div>
+              <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Cropped Image</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  {croppedImage && <img src={croppedImage} alt="Cropped" />}
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button onClick={handleClose}>Close</Button>
+                </Modal.Footer>
+              </Modal>
+            </div>
+          )}
+          {/* Display the previewImage here */}
+          {croppedImage && (
+            <div className="mt-4">
               <img
-                src={imageDataUrl}
+                src={croppedImage}
                 alt="Preview"
-                className="w-full object-contain"
+                className="w-full h-[200px] object-cover"
               />
             </div>
           )}
@@ -191,6 +333,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
           <input
             className="border border-gray-300 rounded-md p-2 w-full"
             type="text"
+            placeholder="名字"
             id="name"
             name="name"
             value={formData.name}
@@ -217,10 +360,10 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
 
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="description">
-            服务内容:
+            自我简介及服务内容
           </label>
           <textarea
-            className="border border-gray-300 rounded-md p-2 w-full"
+            className="border border-gray-300 rounded-md p-1 w-full h-32"
             id="description"
             name="description"
             value={formData.description}
@@ -293,11 +436,20 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
         >
           {isSubmitting ? "提交中..." : "提交"}
         </button>
-        {isSubmitted && (
-          <div className="text-center mt-4 text-green-500">
+        <Modal
+          show={showSuccessModal}
+          onHide={() => setShowSuccessModal(false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>提交成功</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <p>表单提交成功！</p>
-          </div>
-        )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => setShowSuccessModal(false)}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </form>
     </div>
   );

@@ -1,0 +1,31 @@
+.description-container {
+    position: relative;
+    max-height: 4em; /* Adjust this value based on your needs */
+    overflow: hidden;
+  }
+  
+.description-container::after {
+    content: "...";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #ffffff; /* Assumes a white background. Adjust accordingly */
+    padding-left: 4px; /* Some padding to ensure it doesn't overlap with the text */
+  }
+  
+.more-link {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #ffffff; /* Ensures the link is visible on top of the text */
+    padding-left: 8px; /* Creates some spacing between ... and more */
+  }
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Number of lines to display before truncating */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  
