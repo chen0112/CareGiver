@@ -11,7 +11,7 @@ const CaregiverDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`https://www.yongxinguanai.com/api/all_caregivers/${id}`)
+    fetch(`https://nginx.yongxinguanai.com/api/all_caregivers/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

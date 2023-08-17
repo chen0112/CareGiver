@@ -35,7 +35,7 @@ const Register: React.FC = () => {
     };
 
     try {
-      const response = await fetch("https://www.yongxinguanai.com/api/register", {
+      const response = await fetch("https://nginx.yongxinguanai.com/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

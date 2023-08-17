@@ -21,7 +21,7 @@ const CaregiverProvider: React.FC<CaregiverProviderProps> = ({ children }) => {
   const [caregivers, setCaregivers] = useState<Caregiver[]>([]);
 
   const getCaregivers = () => {
-    fetch("https://www.yongxinguanai.com/api/all_caregivers")
+    fetch("https://nginx.yongxinguanai.com/api/all_caregivers")
       .then((response) => response.json())
       .then((data) => setCaregivers(data))
       .catch((error) => console.error('Error fetching caregivers:', error));
