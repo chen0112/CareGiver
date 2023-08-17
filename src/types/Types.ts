@@ -4,7 +4,7 @@ export interface Caregiver {
   name: string;
   phone: string;
   description: string;
-  imageUrl?: string; // Change property name to "imageUrl"
+  imageurl?: string; // Change property name to "imageurl"
   years_of_experience?: number | null;
   age?: number | null;
   education?: string;
@@ -26,7 +26,7 @@ export interface Client {
 export interface CaregiverFormData {
   name: string;
   description: string;
-  imageUrl: string;
+  imageurl: string;
   years_of_experience: number;
   age: number;
   education: string;

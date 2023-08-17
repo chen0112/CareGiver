@@ -19,7 +19,7 @@ const CaregiverCard: React.FC<{ caregiver: Caregiver }> = ({ caregiver }) => {
         {/* Image Container */}
         <div className="flex-shrink-0 flex items-center justify-center w-1/3">
           <img
-            src={caregiver.imageUrl}
+            src={caregiver.imageurl}
             alt={caregiver.name}
             style={imageStyle}
           />

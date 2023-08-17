@@ -7,8 +7,11 @@ import CaregiverDetail from "./components/CaregiverDetails/CaregiverDetail";
 import HomePage from "./components/Home/HomePage";
 import { Caregiver } from "./types/Types";
 
-const API_URL = "https://54.183.20.207/api/caregivers";
-const API_URL_UPLOAD = "https://54.183.20.207/api/upload";
+const API_URL = "https://www.yongxinguanai.com/api/all_caregivers";
+
+
+const API_URL_UPLOAD = "https://www.yongxinguanai.com/api/upload";
+
 
 const AppRoutes: React.FC = () => {
   const { caregivers, setCaregivers } = useCaregiverContext();

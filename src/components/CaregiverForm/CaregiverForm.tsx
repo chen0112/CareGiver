@@ -51,7 +51,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageurl, setImageUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(false);
@@ -154,7 +154,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
     e.preventDefault();
 
     console.log("formData:", formData);
-    console.log("imageUrl:", imageUrl);
+    console.log("imageurl:", imageurl);
 
     if (isSubmitting) {
       return;
@@ -163,7 +163,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
     if (
       !formData.name ||
       !formData.description ||
-      !imageUrl ||
+      !imageurl ||
       !formData.phone
     ) {
       alert("请输入必要信息！");
@@ -171,7 +171,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
     }
 
     const formDataJson = JSON.stringify(
-      { ...formData, imageUrl },
+      { ...formData, imageurl },
       (key, value) => {
         return value === undefined ? "undefined" : value;
       }

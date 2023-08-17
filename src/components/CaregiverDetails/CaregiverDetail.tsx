@@ -11,7 +11,7 @@ const CaregiverDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`https://54.183.20.207/api/caregivers/${id}`)
+    fetch(`https://www.yongxinguanai.com/api/all_caregivers/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -59,7 +59,7 @@ const CaregiverDetail: React.FC = () => {
           <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
             <img
               className="w-32 h-32 rounded-full"
-              src={caregiver?.imageUrl}
+              src={caregiver?.imageurl}
               alt={caregiver?.name}
             />
           </div>
