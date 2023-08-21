@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
               <hr className="border-t border-black-300 mx-1 my-2" />
 
               <li>
-                <Link to="/signup" className="text-black">
+                <Link to="/signin" className="text-black">
                   成为护工
                 </Link>
               </li>

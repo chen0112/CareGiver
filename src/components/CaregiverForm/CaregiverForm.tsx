@@ -161,10 +161,10 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
     }
 
     const missingFields = [];
-    if (!formData.name) missingFields.push("name");
-    if (!formData.description) missingFields.push("description");
-    if (!formData.phone) missingFields.push("phone");
-    if (!imageurl) missingFields.push("image");
+    if (!formData.name) missingFields.push("名字");
+    if (!formData.description) missingFields.push("简介");
+    if (!formData.phone) missingFields.push("电话");
+    if (!imageurl) missingFields.push("照片");
 
     if (missingFields.length > 0) {
       const missingFieldsString = missingFields.join(", ");
@@ -293,7 +293,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
                   type="primary"
                   className="mt-4 bg-blue-600 text-white hover:bg-blue-700"
                 >
-                  展示截图
+                  提交图片
                 </Button>
 
                 <Button
