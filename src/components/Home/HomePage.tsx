@@ -41,6 +41,23 @@ const HomePage: React.FC = () => {
                 护工展示
               </Link>
             </li>
+            <li>
+              <Link
+                to="/register"
+                className="no-underline text-white font-bold py-2 px-4 rounded"
+              >
+                注册
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/signin"
+                className="no-underline text-white font-bold py-2 px-4 rounded"
+              >
+                登陆
+              </Link>
+            </li>
+            
           </ul>
 
           {/* Mobile Menu Icon */}
