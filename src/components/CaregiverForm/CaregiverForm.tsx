@@ -160,13 +160,15 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
       return;
     }
 
-    if (
-      !formData.name ||
-      !formData.description ||
-      !imageurl ||
-      !formData.phone
-    ) {
-      alert("请输入必要信息！");
+    const missingFields = [];
+    if (!formData.name) missingFields.push("name");
+    if (!formData.description) missingFields.push("description");
+    if (!formData.phone) missingFields.push("phone");
+    if (!imageurl) missingFields.push("image");
+
+    if (missingFields.length > 0) {
+      const missingFieldsString = missingFields.join(", ");
+      alert(`请输入必要信息：${missingFieldsString}!`);
       return;
     }
 
