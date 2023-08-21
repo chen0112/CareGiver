@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
           <ul className="hidden md:flex justify-center space-x-8 items-center m-0 p-0">
             <li>
               <Link
-                to="/signup"
+                to="/signin"
                 className="no-underline text-white font-bold py-2 px-4 rounded"
               >
                 成为护工
@@ -41,23 +41,6 @@ const HomePage: React.FC = () => {
                 护工展示
               </Link>
             </li>
-            <li>
-              <Link
-                to="/register"
-                className="no-underline text-white font-bold py-2 px-4 rounded"
-              >
-                注册
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/signin"
-                className="no-underline text-white font-bold py-2 px-4 rounded"
-              >
-                登陆
-              </Link>
-            </li>
-            
           </ul>
 
           {/* Mobile Menu Icon */}
@@ -89,10 +72,14 @@ const HomePage: React.FC = () => {
               <hr className="border-t border-black-300 mx-1 my-2" />
 
               <li>
-                <Link to="/signup" className="text-black">成为护工</Link>
+                <Link to="/signup" className="text-black">
+                  成为护工
+                </Link>
               </li>
               <li>
-                <Link to="/caregivers" className="text-black">护工展示</Link>
+                <Link to="/caregivers" className="text-black">
+                  护工展示
+                </Link>
               </li>
             </ul>
           </div>
