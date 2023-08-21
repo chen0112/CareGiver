@@ -241,6 +241,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             ref={imageInputRef}
             className="hidden"
             type="file"
+            required={true}
             id="image"
             accept="image/*"
             onChange={handleImageChange}
@@ -336,6 +337,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             className="border border-gray-300 rounded-md p-2 w-full"
             type="text"
             placeholder="名字"
+            required={true}
             id="name"
             name="name"
             value={formData.name}
@@ -369,6 +371,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             id="description"
             name="description"
             value={formData.description}
+            required={true}
             onChange={handleChange}
           />
         </div>
