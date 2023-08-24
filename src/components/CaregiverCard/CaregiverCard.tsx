@@ -98,21 +98,22 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
               onClick={handleSave}
               className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
-              Save
+              保存
             </button>
             <button
               onClick={handleEditClick}
               className="ml-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
-              Cancel
+              取消
             </button>
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center mb-6">
+        <div className="flex flex-col items-center mb-6 mx-4 sm:mx-6">
+          {/* Add horizontal margin */}
           <Link
             to={`/caregivers/${caregiver.id}`}
-            className="no-underline w-full sm:w-3/4 md:w-1/2 lg:w-4/7 bg-white shadow-lg rounded-lg overflow-hidden mb-2 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
+            className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-2 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100" // Adjust width for different screen sizes
           >
             {/* Image Container */}
             <div className="flex-shrink-0 flex items-center justify-center w-1/3">

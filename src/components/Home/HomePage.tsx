@@ -58,13 +58,24 @@ const HomePage: React.FC = () => {
           {/* Mobile menu dropdown */}
           <div
             onClick={handleNav}
+            className="md:hidden z-10 absolute right-4 top-1/2 transform -translate-y-1/2"
+          >
+            {nav ? (
+              <AiOutlineClose className="text-black" size={20} />
+            ) : (
+              <HiOutlineMenuAlt4 size={20} />
+            )}
+          </div>
+
+          {/* Mobile menu dropdown */}
+          <div
             className={
               nav
-                ? "absolute text-black left-0 top-0 w-full bg-gray-100/90 px-4 py-7 flex flex-col"
-                : "absolute left-[-100%]"
+                ? "absolute text-black left-0 top-0 w-full bg-gray-100 transition-all ease-in-out duration-500"
+                : "absolute left-0 top-0 w-full bg-gray-100 transition-all ease-in-out duration-500 h-0 overflow-hidden"
             }
           >
-            <ul>
+            <ul className={nav ? "py-4 px-7" : "h-0 overflow-hidden"}>
               <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
                 关爱网
               </h1>
