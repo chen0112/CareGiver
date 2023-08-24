@@ -8,7 +8,7 @@ import HomePage from "./components/Home/HomePage";
 import { Caregiver } from "./types/Types";
 import Register from "./components/Register/Register";
 import SignIn from "./components/SignIn/SignIn";
-
+import MyCaregivers from "./components/MyCaregiver/MyCaregiver";
 
 const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
 
@@ -51,6 +51,7 @@ const AppRoutes: React.FC = () => {
         />
         <Route path="/caregivers" element={<CaregiverList />} />
         <Route path="/caregivers/:id" element={<CaregiverDetail />} />
+        <Route path="/mycaregiver/:phone" element={<MyCaregivers />} />
       </Routes>
     </BrowserRouter>
   );

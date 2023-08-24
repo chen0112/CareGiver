@@ -40,8 +40,14 @@ const SignIn: React.FC = () => {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // Optionally, navigate to another page after some delay
-        setTimeout(() => navigate("/signup"), 2000);
+        // Check if the user has posted ads before
+        if (data.hasPostedAds) {
+          // If user has posted ads, navigate to "mycaregivers" page
+          navigate(`/mycaregiver/${formData.phone}`);
+        } else {
+          // If user has not posted ads, navigate to "signup" page
+          navigate("/signup");
+        }
       } else {
         // Handle error
         setErrorMsg("登录失败: " + data.message);

@@ -27,5 +27,12 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+.edit-button {
+    position: relative; /* or absolute depending on your layout needs */
+    z-index: 1000; /* to ensure it's above other elements */
+    /* other styling as needed */
+  }
+ 
   
   
