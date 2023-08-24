@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CaregiverCard from "../CaregiverCard/CaregiverCard";
 import { BiHeart } from "react-icons/bi";
 import { Caregiver } from "../../types/Types";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const MyCaregivers: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -28,28 +28,53 @@ const MyCaregivers: React.FC = () => {
       });
   }, [phone]);
 
+  const handleCaregiverUpdate = (updatedCaregiver: Caregiver) => {
+    setMyCaregivers((prevCaregivers) =>
+      prevCaregivers.map((caregiver) =>
+        caregiver.id === updatedCaregiver.id ? updatedCaregiver : caregiver
+      )
+    );
+  };
+
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p>卖力为您加载中...</p>;
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <p>错误: {error}</p>;
   }
 
   return (
     <div>
-      <div className="flex items-center mx-9 py-3">
+      <Link
+        to="/"
+        className="flex items-center mx-8 py-3 text-black no-underline"
+      >
         <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
         <h1 className="font-bold text-4xl ml-2 my-auto align-middle text-red-500">
-          我的关爱网广告
+          关爱网
         </h1>
-      </div>
+      </Link>
 
       <hr className="border-t border-black-300 mx-1 my-2" />
 
+      <div className="text-center my-4">
+        <Link
+          to="/signup"
+          className="no-underline py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+        >
+          发布新广告
+        </Link>
+      </div>
+
       <div className="flex flex-col items-center">
         {myCaregivers.map((caregiver) => (
-          <CaregiverCard key={caregiver.id} caregiver={caregiver} loggedInUserPhone={phone}  />
+          <CaregiverCard
+            key={caregiver.id}
+            caregiver={caregiver}
+            loggedInUserPhone={phone}
+            onUpdateCaregiver={handleCaregiverUpdate} // Pass the update handler down
+          />
         ))}
       </div>
     </div>

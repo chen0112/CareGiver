@@ -29,7 +29,7 @@ const CaregiverDetail: React.FC = () => {
   }, [id]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p>卖力为您加载中...</p>;
   }
 
   if (error) {

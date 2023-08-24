@@ -29,9 +29,19 @@
   }
 
 .edit-button {
-    position: relative; /* or absolute depending on your layout needs */
-    z-index: 1000; /* to ensure it's above other elements */
-    /* other styling as needed */
+    position: absolute;
+    bottom: -30px; /* Adjust this value based on your needs */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    transition: 0.3s;
   }
  
   

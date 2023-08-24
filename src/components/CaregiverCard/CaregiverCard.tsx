@@ -6,11 +6,13 @@ import "./CaregiverCard.css";
 interface CaregiverCardProps {
   caregiver: Caregiver;
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
+  onUpdateCaregiver?: (updatedCaregiver: Caregiver) => void; // New prop for handling updates
 }
 
 const CaregiverCard: React.FC<CaregiverCardProps> = ({
   caregiver,
   loggedInUserPhone,
+  onUpdateCaregiver, // Receive the update function from the parent component
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
@@ -45,6 +47,9 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
       .then((response) => response.json())
       .then((data) => {
         console.log("Response data:", data);
+        if (onUpdateCaregiver) {
+          onUpdateCaregiver(editedCaregiver); // Call the update function provided by the parent component
+        }
         setIsEditing(false);
       })
       .catch((error) => {
@@ -104,36 +109,35 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
           </div>
         </div>
       ) : (
-        <div>
+        <div className="flex flex-col items-center mb-6">
           <Link
             to={`/caregivers/${caregiver.id}`}
-            className="no-underline block"
+            className="no-underline w-full sm:w-3/4 md:w-1/2 lg:w-4/7 bg-white shadow-lg rounded-lg overflow-hidden mb-2 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
           >
-            <div className="w-full sm:w-3/4 md:w-1/2 lg:w-4/7 mx-auto bg-white shadow-lg rounded-lg overflow-hidden mb-6 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100">
-              {/* Image Container */}
-              <div className="flex-shrink-0 flex items-center justify-center w-1/3">
-                <img
-                  src={caregiver.imageurl}
-                  alt={caregiver.name}
-                  style={imageStyle}
-                />
-              </div>
-              {/* Text Container */}
-              <div className="flex-grow p-6 flex flex-col justify-between">
-                <h3 className="text-xl font-semibold mb-4 underline">
-                  {caregiver.name}
-                </h3>
-                {/* Explicitly added underline */}
-                <p className="text-gray-600 mb-4 pr-6 line-clamp">
-                  {caregiver.description}
-                </p>
-              </div>
+            {/* Image Container */}
+            <div className="flex-shrink-0 flex items-center justify-center w-1/3">
+              <img
+                src={caregiver.imageurl}
+                alt={caregiver.name}
+                style={imageStyle}
+              />
+            </div>
+            {/* Text Container */}
+            <div className="flex-grow p-6 flex flex-col justify-between">
+              <h3 className="text-xl font-semibold mb-4 underline">
+                {caregiver.name}
+              </h3>
+              <p className="text-gray-600 mb-4 pr-6 line-clamp">
+                {caregiver.description}
+              </p>
             </div>
           </Link>
-          {/* Edit button will only be visible if the logged-in user's phone number matches the caregiver's phone number */}
           {caregiver.phone === loggedInUserPhone && (
-            <button className="edit-button" onClick={handleEditClick}>
-              Edit
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-auto text-center"
+              onClick={handleEditClick}
+            >
+              编辑
             </button>
           )}
         </div>
