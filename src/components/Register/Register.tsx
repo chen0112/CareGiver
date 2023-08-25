@@ -71,17 +71,17 @@ const Register: React.FC = () => {
       <div className="flex items-center mx-9 py-3">
         <Link
           to="/"
-          className="flex items-center mx-8 py-3 text-black no-underline"
+          className="flex items-center text-black no-underline ml-0" // Remove 'mx-8 py-3' and add 'ml-0' to push it to the far left
         >
           <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-4xl ml-2 my-auto align-middle text-red-500">
+          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
             关爱网
           </h1>
         </Link>
       </div>
 
       <hr className="border-t border-black-300 mx-1 my-2" />
-      
+
       {successMsg && (
         <div className="text-green-500 text-center mb-4">{successMsg}</div>
       )}
