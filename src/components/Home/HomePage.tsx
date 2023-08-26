@@ -41,6 +41,14 @@ const HomePage: React.FC = () => {
                 护工展示
               </Link>
             </li>
+            <li>
+              <Link
+                to="/careneeders"
+                className="no-underline text-white font-bold py-2 px-4 rounded"
+              >
+                寻找护工
+              </Link>
+            </li>
           </ul>
 
           {/* Mobile Menu Icon */}
@@ -90,6 +98,11 @@ const HomePage: React.FC = () => {
               <li>
                 <Link to="/caregivers" className="text-black">
                   护工展示
+                </Link>
+              </li>
+              <li>
+                <Link to="/careneeders" className="text-black">
+                  寻找护工
                 </Link>
               </li>
             </ul>

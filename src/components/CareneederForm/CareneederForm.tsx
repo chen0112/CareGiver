@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { Caregiver } from "../../types/Types";
-import "./CaregiverForm.css";
+import { Careneeder } from "../../types/Types";
+import { MultiSelect } from "react-multi-select-component";
+import "./CareneederForm.css";
 import { useNavigate, Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import getCroppedImg from "./CropperImg";
@@ -9,13 +10,12 @@ import { Slider, Button, Typography } from "antd";
 import { Point, Area } from "react-easy-crop/types";
 import Modal from "react-bootstrap/Modal";
 import { v4 as uuidv4 } from "uuid";
-import { MultiSelect } from "react-multi-select-component";
 
-interface CaregiverFormProps {
+interface CareneederFormProps {
   API_URL: string;
   API_URL_UPLOAD: string;
-  updateCaregivers: (newCaregiver: Caregiver) => void;
-  getCaregivers: () => void;
+  updateCareneeder: (newCaregiver: Careneeder) => void;
+  getCareneeder: () => void;
 }
 
 interface CropArea {
@@ -25,21 +25,26 @@ interface CropArea {
   height: number;
 }
 
-const initialFormData: Partial<Caregiver> = {
-  name: "",
-  phone: "",
-  location: [],
-  description: "",
-  age: null,
-  education: "",
-  gender: "",
-  years_of_experience: null,
-};
-
 interface Option {
   label: string;
   value: string;
 }
+
+const initialFormData: Partial<Careneeder> = {
+  name: "",
+  phone: "",
+  location: [],
+  live_in_care: false,
+  live_out_care: false,
+  domestic_work: false,
+  meal_preparation: false,
+  companionship: false,
+  washing_dressing: false,
+  nursing_health_care: false,
+  mobility_support: false,
+  transportation: false,
+  errands_shopping: false,
+};
 
 const locationOptions = [
   { label: "New York", value: "New York" },
@@ -49,13 +54,14 @@ const locationOptions = [
   { label: "Miami", value: "Miami" },
 ];
 
-const CaregiverForm: React.FC<CaregiverFormProps> = ({
+const CareneederForm: React.FC<CareneederFormProps> = ({
   API_URL,
   API_URL_UPLOAD,
-  updateCaregivers,
-  getCaregivers,
+  updateCareneeder,
+  getCareneeder,
 }) => {
-  const [formData, setFormData] = useState<Partial<Caregiver>>(initialFormData);
+  const [formData, setFormData] =
+    useState<Partial<Careneeder>>(initialFormData);
 
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -203,10 +209,11 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
     }
 
     const missingFields = [];
-    if (!formData.name) missingFields.push("名字");
-    if (!formData.description) missingFields.push("简介");
-    if (!formData.phone) missingFields.push("电话");
+
     if (!imageurl) missingFields.push("照片");
+    if (!formData.name) missingFields.push("名字");
+    if (!formData.phone) missingFields.push("电话");
+    if (!formData.location) missingFields.push("地址");
 
     if (missingFields.length > 0) {
       const missingFieldsString = missingFields.join(", ");
@@ -235,16 +242,16 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
       body: formDataJson,
     })
       .then((response) => response.json())
-      .then((newCaregiver) => {
-        console.log("NewCaregiver:------", newCaregiver);
-        updateCaregivers(newCaregiver);
-        getCaregivers();
+      .then((newCareneeder) => {
+        console.log("NewCareneeder:------", newCareneeder);
+        updateCareneeder(newCareneeder);
+        getCareneeder();
         resetForm();
         setTimeout(() => {
           navigate("/");
         }, 2000);
       })
-      .catch((error) => console.error("Error adding caregiver:", error));
+      .catch((error) => console.error("Error adding careneeder:", error));
   };
 
   return (
@@ -264,7 +271,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <header className="flex items-center justify-center text-2xl font-bold text-gray-700 mb-4">
-        发布工作
+        雇主招聘
       </header>
       <form
         onSubmit={handleSubmit}
@@ -273,7 +280,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
         <div className="flex flex-col items-center justify-center bg-white shadow p-2 rounded-lg mb-2">
           <div className="flex items-center mb-2">
             <label className="text-gray-700 mr-2" htmlFor="image">
-              照片：
+              照片（必选）：
             </label>
             <div className="border-2 border-gray-200 rounded-md p-2 cursor-pointer bg-blue-500 text-white">
               <label htmlFor="image">上传照片</label>
@@ -393,7 +400,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
           </label>
           <input
             className="border border-gray-300 rounded-md p-2 w-full"
-            placeholder="联系方式 （必填）"
+            placeholder="联系方式 (必填）"
             title="请输入联系方式"
             required={true}
             type="text"
@@ -411,82 +418,120 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
           <MultiSelect
             className="wide-dropdown"
             options={locationOptions}
-            value={formData.location ?? []}
+            value={formData.location ?? []} 
             onChange={handleMultiSelectChange}
             labelledBy="Select"
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
-          <label className="mb-2 text-gray-700" htmlFor="description">
-            自我简介及服务内容
+        <div className="flex items-center justify-between bg-white shadow p-4 rounded-lg mb-4">
+          <label className="text-gray-700" htmlFor="live_in_care">
+            住家照顾:
           </label>
-          <textarea
-            className="border border-gray-300 rounded-md p-1 w-full h-32"
-            id="description"
-            name="description"
-            placeholder="必填"
-            value={formData.description}
-            required={true}
+          <input
+            className="border border-gray-300 rounded-md p-2"
+            type="checkbox"
+            id="live_in_care"
+            name="live_in_care"
+            checked={formData.live_in_care}
             onChange={handleChange}
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
-          <label className="mb-2 text-gray-700" htmlFor="age">
-            年龄:
+        <div className="flex items-center justify-between bg-white shadow p-4 rounded-lg mb-4">
+          <label className="text-gray-700" htmlFor="live_out_care">
+            上门照顾:
           </label>
           <input
-            className="border border-gray-300 rounded-md p-2 w-full"
-            type="number"
-            id="age"
-            name="age"
-            value={formData.age || ""}
+            className="border border-gray-300 rounded-md p-2"
+            type="checkbox"
+            id="live_out_care"
+            name="live_out_care"
+            checked={formData.live_out_care}
             onChange={handleChange}
           />
         </div>
-        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
-          <label className="mb-2 text-gray-700" htmlFor="education">
-            教育程度:
+
+        <div className="flex items-center justify-between bg-white shadow p-4 rounded-lg mb-4">
+          <label className="text-gray-700" htmlFor="live_in_care">
+            需做家务:
           </label>
           <input
-            className="border border-gray-300 rounded-md p-2 w-full"
-            type="text"
-            id="education"
-            name="education"
-            value={formData.education}
+            className="border border-gray-300 rounded-md p-2"
+            type="checkbox"
+            id="domestic_work"
+            name="domestic_work"
+            checked={formData.domestic_work}
             onChange={handleChange}
           />
         </div>
-        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
-          <label className="mb-2 text-gray-700" htmlFor="gender">
-            性别:
+
+        <div className="flex items-center justify-between bg-white shadow p-4 rounded-lg mb-4">
+          <label className=" text-gray-700" htmlFor="live_out_care">
+            需要备餐:
           </label>
           <input
-            className="border border-gray-300 rounded-md p-2 w-full"
-            placeholder="男性/女性"
-            maxLength={6}
-            title="请输入性别"
-            autoComplete="off"
-            type="text"
-            id="gender"
-            name="gender"
-            value={formData.gender}
+            className="border border-gray-300 rounded-md p-2"
+            type="checkbox"
+            id="meal_preparation"
+            name="meal_preparation"
+            checked={formData.meal_preparation}
             onChange={handleChange}
           />
         </div>
-        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
-          <label className="mb-2 text-gray-700" htmlFor="years_of_experience">
-            工作经验:
+
+        <div className="flex items-center justify-between bg-white shadow p-4 rounded-lg mb-4">
+          <label className="text-gray-700" htmlFor="live_in_care">
+            需要陪伴:
           </label>
           <input
-            className="border border-gray-300 rounded-md p-2 w-full"
-            title="请输入工作经验"
-            autoComplete="off"
-            type="number"
-            id="years_of_experience"
-            name="years_of_experience"
-            value={formData.years_of_experience || ""}
+            className="border border-gray-300 rounded-md p-2"
+            type="checkbox"
+            id="companionship"
+            name="companionship"
+            checked={formData.companionship}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex items-center justify-between bg-white shadow p-4 rounded-lg mb-4">
+          <label className="text-gray-700" htmlFor="live_out_care">
+            辅助行动:
+          </label>
+          <input
+            className="border border-gray-300 rounded-md p-2"
+            type="checkbox"
+            id="mobility_support"
+            name="mobility_support"
+            checked={formData.mobility_support}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex items-center justify-between bg-white shadow p-4 rounded-lg mb-4">
+          <label className="text-gray-700" htmlFor="live_out_care">
+            辅助出行:
+          </label>
+          <input
+            className="border border-gray-300 rounded-md p-2"
+            type="checkbox"
+            id="transportation"
+            name="transportation"
+            checked={formData.transportation}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex items-center justify-between bg-white shadow p-4 rounded-lg mb-4">
+          <label className="text-gray-700" htmlFor="live_out_care">
+            外出买菜/买东西:
+          </label>
+          <input
+            className="border border-gray-300 rounded-md p-2"
+            type="checkbox"
+            id="errands_shopping"
+            name="errands_shopping"
+            checked={formData.errands_shopping}
             onChange={handleChange}
           />
         </div>
@@ -516,4 +561,4 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
   );
 };
 
-export default CaregiverForm;
+export default CareneederForm;

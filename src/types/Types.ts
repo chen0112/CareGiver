@@ -4,6 +4,7 @@ export interface Caregiver {
   name: string;
   phone: string;
   description: string;
+  location: Option[];
   imageurl?: string; // Change property name to "imageurl"
   years_of_experience?: number | null;
   age?: number | null;
@@ -12,6 +13,28 @@ export interface Caregiver {
   // Add other properties as needed
 }
 
+interface Option {
+  label: string;
+  value: string;
+}
+
+export interface Careneeder {
+  id: number;
+  name: string;
+  phone: string;
+  imageurl?: string; // Change property name to "imageurl"
+  location: Option[];
+  live_in_care: boolean;
+  live_out_care: boolean;
+  domestic_work: boolean;
+  meal_preparation: boolean;
+  companionship: boolean;
+  washing_dressing: boolean;
+  nursing_health_care: boolean;
+  mobility_support: boolean;
+  transportation: boolean;
+  errands_shopping: boolean;
+};
 
 // Interface for Client (Patient, Senior, Working Parent)
 export interface Client {
