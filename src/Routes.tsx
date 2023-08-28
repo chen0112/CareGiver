@@ -11,6 +11,7 @@ import Register from "./components/Register/Register";
 import SignIn from "./components/SignIn/SignIn";
 import MyCaregivers from "./components/MyCaregiver/MyCaregiver";
 import CareneederForm from "./components/CareneederForm/CareneederForm";
+import CareneederList from "./components/CareneederList/CareneederList";
 
 const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
 
@@ -60,7 +61,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/signin" element={<SignIn />} />
         {/* Pass updateCaregivers and getCaregivers as props to the CaregiverForm component */}
         <Route
-          path="/signup"
+          path="/signup_caregivers"
           element={
             <CaregiverForm
               updateCaregivers={updateCaregivers}
@@ -74,7 +75,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/caregivers/:id" element={<CaregiverDetail />} />
         <Route path="/mycaregiver/:phone" element={<MyCaregivers />} />
         <Route
-          path="/careneeders"
+          path="/signup_careneeders"
           element={
             <CareneederForm
               updateCareneeder={updateCareneeders}
@@ -84,6 +85,7 @@ const AppRoutes: React.FC = () => {
             />
           }
         />
+        <Route path="/careneeders" element={<CareneederList />} />
       </Routes>
     </BrowserRouter>
   );

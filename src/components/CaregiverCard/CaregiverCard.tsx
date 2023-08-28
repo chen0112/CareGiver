@@ -3,6 +3,7 @@ import { Caregiver } from "../../types/Types";
 import { Link } from "react-router-dom";
 import "./CaregiverCard.css";
 import { MultiSelect } from "react-multi-select-component";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 interface CaregiverCardProps {
   caregiver: Caregiver;
@@ -166,12 +167,12 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
             {/* Text Container */}
             <div className="flex-grow p-6 flex flex-col justify-between">
               <div className="flex items-center">
-                <h3 className="text-xl font-semibold">{caregiver.name}</h3>
+                <h3 className="text-xl font-semibold mr-3">{caregiver.name}</h3>
+                <FaMapMarkerAlt className="text-gray-600 mb-2" />
                 <span
                   className="text-gray-600 ml-2"
                   style={{ marginTop: "-7px" }}
                 >
-                  地点:{" "}
                   {Array.isArray(caregiver.location)
                     ? caregiver.location.map((loc) => loc.label).join(", ")
                     : "无"}

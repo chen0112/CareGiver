@@ -56,7 +56,7 @@ const Register: React.FC = () => {
       if (response.ok && data.success) {
         setSuccessMsg("创建账号成功!");
         // Optionally, navigate to another page after some delay
-        setTimeout(() => navigate("/signup"), 2000);
+        setTimeout(() => navigate("/signup_caregivers"), 2000);
       } else {
         // Handle error
         console.error("注册失败:", data);

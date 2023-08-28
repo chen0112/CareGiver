@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Caregiver } from "../../types/Types";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 const CaregiverDetail: React.FC = () => {
   const { id } = useParams();
@@ -66,9 +67,16 @@ const CaregiverDetail: React.FC = () => {
 
           {/* Details section */}
           <div className="flex flex-col space-y-2">
-            <h2 className="text-xl md:text-2xl font-semibold mb-2">
-              {caregiver?.name}
-            </h2>
+            <div className="flex items-center space-x-2">
+              <h2 className="text-xl md:text-2xl font-semibold mr-6">
+                {caregiver?.name}
+              </h2>
+              <FaMapMarkerAlt className="text-gray-600 mb-2" />
+              <p className="text-gray-600 font-semibold mt-2">
+                {caregiver?.location &&
+                  caregiver?.location.map((loc) => loc.label).join(", ")}
+              </p>
+            </div>
 
             {/* Age and Gender */}
             <div className="flex" style={{ gap: "1.5rem" }}>

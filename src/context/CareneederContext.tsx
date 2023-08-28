@@ -36,7 +36,7 @@ const CareneederProvider: React.FC<CareneederProviderProps> = ({
   const updateCareneeders = (updatedCareneeders: Careneeder) => {
     console.log("Previous careneeder:", careneeders);
     setCareneeders((prevData) => {
-      console.log("Updating caregivers with new caregiver:", updatedCareneeders);
+      console.log("Updating careneeder with new careneeder:", updatedCareneeders);
       // Map through the previous caregivers and replace the one with the updated ID
       return prevData.map((Careneeder) =>
       Careneeder.id === updatedCareneeders.id ? updatedCareneeders : Careneeder

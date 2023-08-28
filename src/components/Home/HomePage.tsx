@@ -43,10 +43,18 @@ const HomePage: React.FC = () => {
             </li>
             <li>
               <Link
-                to="/careneeders"
+                to="/signup_careneeders"
                 className="no-underline text-white font-bold py-2 px-4 rounded"
               >
                 寻找护工
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/careneeders"
+                className="no-underline text-white font-bold py-2 px-4 rounded"
+              >
+                招聘护工
               </Link>
             </li>
           </ul>
@@ -101,8 +109,13 @@ const HomePage: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/careneeders" className="text-black">
+                <Link to="/signup_careneeders" className="text-black">
                   寻找护工
+                </Link>
+              </li>
+              <li>
+                <Link to="/careneeders" className="text-black">
+                  招聘护工
                 </Link>
               </li>
             </ul>

@@ -45,8 +45,8 @@ const SignIn: React.FC = () => {
           // If user has posted ads, navigate to "mycaregivers" page
           navigate(`/mycaregiver/${formData.phone}`);
         } else {
-          // If user has not posted ads, navigate to "signup" page
-          navigate("/signup");
+          // If user has not posted ads, navigate to "signup_caregivers" page
+          navigate("/signup_caregivers");
         }
       } else {
         // Handle error
@@ -63,10 +63,10 @@ const SignIn: React.FC = () => {
       <div className="flex items-center mx-9 py-3">
         <Link
           to="/"
-          className="flex items-center text-black no-underline ml-0" // Remove 'mx-8 py-3' and add 'ml-0' to push it to the far left
+          className="flex items-center mx-8 py-3 text-black no-underline"
         >
           <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
+          <h1 className="font-bold text-4xl ml-2 my-auto align-middle text-red-500">
             关爱网
           </h1>
         </Link>
