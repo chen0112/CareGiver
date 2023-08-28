@@ -2,12 +2,26 @@ import React, { useState } from "react";
 import { Caregiver } from "../../types/Types";
 import { Link } from "react-router-dom";
 import "./CaregiverCard.css";
+import { MultiSelect } from "react-multi-select-component";
 
 interface CaregiverCardProps {
   caregiver: Caregiver;
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
   onUpdateCaregiver?: (updatedCaregiver: Caregiver) => void; // New prop for handling updates
 }
+
+interface Option {
+  label: string;
+  value: string;
+}
+
+const locationOptions = [
+  { label: "New York", value: "New York" },
+  { label: "San Francisco", value: "San Francisco" },
+  { label: "Los Angeles", value: "Los Angeles" },
+  { label: "Chicago", value: "Chicago" },
+  { label: "Miami", value: "Miami" },
+];
 
 const CaregiverCard: React.FC<CaregiverCardProps> = ({
   caregiver,
@@ -24,6 +38,18 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
+  };
+
+  const handleLocationChange = (newLocation: Option[]) => {
+    if (newLocation && newLocation.length <= 2) {
+      setEditedCaregiver((prev) => ({
+        ...prev,
+        location: newLocation,
+      }));
+    } else {
+      // Display a notification to the user about the selection limit
+      alert("请最多选择两个地点");
+    }
   };
 
   const handleInputChange = (
@@ -79,6 +105,20 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
           </div>
           <div className="mb-4">
             <label
+              htmlFor="location"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Locations
+            </label>
+            <MultiSelect
+              options={locationOptions} // Make sure locationOptions is defined
+              value={editedCaregiver.location ?? []}
+              onChange={handleLocationChange} // You will need to define this
+              labelledBy="Select"
+            />
+          </div>
+          <div className="mb-4">
+            <label
               htmlFor="description"
               className="block text-sm font-medium text-gray-600"
             >
@@ -113,7 +153,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
           {/* Add horizontal margin */}
           <Link
             to={`/caregivers/${caregiver.id}`}
-            className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-2 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100" // Adjust width for different screen sizes
+            className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-2 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
           >
             {/* Image Container */}
             <div className="flex-shrink-0 flex items-center justify-center w-1/3">
@@ -125,14 +165,24 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
             </div>
             {/* Text Container */}
             <div className="flex-grow p-6 flex flex-col justify-between">
-              <h3 className="text-xl font-semibold mb-4 underline">
-                {caregiver.name}
-              </h3>
+              <div className="flex items-center">
+                <h3 className="text-xl font-semibold">{caregiver.name}</h3>
+                <span
+                  className="text-gray-600 ml-2"
+                  style={{ marginTop: "-7px" }}
+                >
+                  地点:{" "}
+                  {Array.isArray(caregiver.location)
+                    ? caregiver.location.map((loc) => loc.label).join(", ")
+                    : "无"}
+                </span>
+              </div>
               <p className="text-gray-600 mb-4 pr-6 line-clamp">
                 {caregiver.description}
               </p>
             </div>
           </Link>
+
           {caregiver.phone === loggedInUserPhone && (
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-auto text-center"

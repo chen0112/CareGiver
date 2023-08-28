@@ -180,10 +180,15 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
   };
 
   const handleMultiSelectChange = (selectedOptions: Option[] | null) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      location: selectedOptions ? selectedOptions : [],
-    }));
+    if (selectedOptions && selectedOptions.length <= 2) {
+      setFormData((prevData) => ({
+        ...prevData,
+        location: selectedOptions,
+      }));
+    } else {
+      // Display a notification to the user about the selection limit
+      alert("请最多选择两个地点");
+    }
   };
 
   const handleCancelCrop = () => {
@@ -418,7 +423,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
           <MultiSelect
             className="wide-dropdown"
             options={locationOptions}
-            value={formData.location ?? []} 
+            value={formData.location ?? []}
             onChange={handleMultiSelectChange}
             labelledBy="Select"
           />

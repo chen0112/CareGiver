@@ -174,10 +174,15 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
   };
 
   const handleMultiSelectChange = (selectedOptions: Option[] | null) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      location: selectedOptions ? selectedOptions : [],
-    }));
+    if (selectedOptions && selectedOptions.length <= 2) {
+      setFormData((prevData) => ({
+        ...prevData,
+        location: selectedOptions,
+      }));
+    } else {
+      // Display a notification to the user about the selection limit
+      alert('请最多选择两个地点');
+    }
   };
 
   const handleCancelCrop = () => {
