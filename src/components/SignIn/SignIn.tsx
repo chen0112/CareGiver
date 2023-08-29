@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 
-const SignIn: React.FC = () => {
+interface SignInProps {
+    userType: "caregiver" | "careneeder"; // Define the valid user types here
+  }
+
+const SignIn: React.FC<SignInProps> = ({userType}) => {
   const [formData, setFormData] = useState({
     phone: "",
     passcode: "",
@@ -42,11 +46,15 @@ const SignIn: React.FC = () => {
       if (response.ok && data.success) {
         // Check if the user has posted ads before
         if (data.hasPostedAds) {
-          // If user has posted ads, navigate to "mycaregivers" page
-          navigate(`/mycaregiver/${formData.phone}`);
+          // Use dynamic navigation paths based on userType
+          if (userType === "caregiver") {
+            navigate(`/mycaregiver/${formData.phone}`);
+          } else if (userType === "careneeder") {
+            navigate(`/mycareneeder/${formData.phone}`);
+          }
         } else {
-          // If user has not posted ads, navigate to "signup_caregivers" page
-          navigate("/signup_caregivers");
+          // Use dynamic navigation paths based on userType
+          navigate(`/signup_${userType}`);
         }
       } else {
         // Handle error

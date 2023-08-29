@@ -246,7 +246,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
         getCaregivers();
         resetForm();
         setTimeout(() => {
-          navigate("/");
+          navigate("/caregivers");
         }, 2000);
       })
       .catch((error) => console.error("Error adding caregiver:", error));

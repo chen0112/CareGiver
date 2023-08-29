@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
           <ul className="hidden md:flex justify-center space-x-8 items-center m-0 p-0">
             <li>
               <Link
-                to="/signin"
+                to="/signin/caregiver"
                 className="no-underline text-white font-bold py-2 px-4 rounded"
               >
                 成为护工
@@ -43,10 +43,10 @@ const HomePage: React.FC = () => {
             </li>
             <li>
               <Link
-                to="/signup_careneeders"
+                to="/signin/careneeder"
                 className="no-underline text-white font-bold py-2 px-4 rounded"
               >
-                寻找护工
+                雇主发布
               </Link>
             </li>
             <li>
@@ -54,7 +54,7 @@ const HomePage: React.FC = () => {
                 to="/careneeders"
                 className="no-underline text-white font-bold py-2 px-4 rounded"
               >
-                招聘护工
+                雇主广告
               </Link>
             </li>
           </ul>
@@ -99,7 +99,7 @@ const HomePage: React.FC = () => {
               <hr className="border-t border-black-300 mx-1 my-2" />
 
               <li>
-                <Link to="/signin" className="text-black">
+                <Link to="/signin/caregiver" className="text-black">
                   成为护工
                 </Link>
               </li>
@@ -109,7 +109,7 @@ const HomePage: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/signup_careneeders" className="text-black">
+                <Link to="/signin/careneeder" className="text-black">
                   寻找护工
                 </Link>
               </li>

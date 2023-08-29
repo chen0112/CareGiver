@@ -253,7 +253,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
         getCareneeder();
         resetForm();
         setTimeout(() => {
-          navigate("/");
+          navigate("/careneeders");
         }, 2000);
       })
       .catch((error) => console.error("Error adding careneeder:", error));
