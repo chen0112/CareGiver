@@ -12,18 +12,19 @@ import SignIn from "./components/SignIn/SignIn";
 import MyCaregivers from "./components/MyCaregiver/MyCaregiver";
 import CareneederForm from "./components/CareneederForm/CareneederForm";
 import CareneederList from "./components/CareneederList/CareneederList";
-import CareneederDetail from "./components/CareneederDetail/CareneederDetail"
+import CareneederDetail from "./components/CareneederDetail/CareneederDetail";
+import MyCareneeders from "./components/MyCardneeder/MyCareneeder";
 
 const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
 
 const API_URL_UPLOAD = "https://nginx.yongxinguanai.com/api/upload";
 
-const API_URL_careneeders = "https://nginx.yongxinguanai.com/api/all_careneeders";
+const API_URL_careneeders =
+  "https://nginx.yongxinguanai.com/api/all_careneeders";
 
 const AppRoutes: React.FC = () => {
   const { caregivers, setCaregivers } = useCaregiverContext();
   const { careneeders, setCareneeders } = useCareneederContext();
-  
 
   const updateCaregivers = (newCaregiver: Caregiver) => {
     console.log("Updating caregivers with:", caregivers); // Debugging log
@@ -45,21 +46,19 @@ const AppRoutes: React.FC = () => {
       return [...(prevData || []), newCareNeeder];
     });
   };
-  
+
   const getCareneeders = () => {
     fetch(API_URL)
       .then((response) => response.json())
       .then((data) => setCareneeders(data))
       .catch((error) => console.error("Error fetching care needers:", error));
   };
-  
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/signin/caregiver" element={<SignIn userType="caregiver"/>} />
         {/* Pass updateCaregivers and getCaregivers as props to the CaregiverForm component */}
         <Route
           path="/signup_caregiver"
@@ -71,6 +70,10 @@ const AppRoutes: React.FC = () => {
               API_URL_UPLOAD={API_URL_UPLOAD}
             />
           }
+        />
+        <Route
+          path="/signin/caregiver"
+          element={<SignIn userType="caregiver" />}
         />
         <Route path="/caregivers" element={<CaregiverList />} />
         <Route path="/caregivers/:id" element={<CaregiverDetail />} />
@@ -86,9 +89,13 @@ const AppRoutes: React.FC = () => {
             />
           }
         />
+        <Route
+          path="/signin/careneeder"
+          element={<SignIn userType="careneeder" />}
+        />
         <Route path="/careneeders" element={<CareneederList />} />
         <Route path="/careneeders/:id" element={<CareneederDetail />} />
-        <Route path="/signin/careneeder" element={<SignIn userType="careneeder" />} />
+        <Route path="/mycareneeder/:phone" element={<MyCareneeders />} />
       </Routes>
     </BrowserRouter>
   );

@@ -110,12 +110,12 @@ const HomePage: React.FC = () => {
               </li>
               <li>
                 <Link to="/signin/careneeder" className="text-black">
-                  寻找护工
+                  雇主发布
                 </Link>
               </li>
               <li>
                 <Link to="/careneeders" className="text-black">
-                  招聘护工
+                  雇主广告
                 </Link>
               </li>
             </ul>
