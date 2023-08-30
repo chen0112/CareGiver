@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
+const defaultImageUrl =
+  "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+
 interface CareneederCardProps {
   careneeder: Careneeder;
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
@@ -92,7 +95,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
               htmlFor="name"
               className="block text-sm font-medium text-gray-600"
             >
-              Name
+              姓名
             </label>
             <input
               type="text"
@@ -108,7 +111,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
               htmlFor="location"
               className="block text-sm font-medium text-gray-600"
             >
-              Locations
+              地点
             </label>
             <MultiSelect
               options={locationOptions} // Make sure locationOptions is defined
@@ -138,24 +141,22 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
           {/* Add horizontal margin */}
           <Link
             to={`/careneeders/${careneeder.id}`}
-            className="no-underline block"
+            className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-2 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
           >
-            <div className="w-full sm:w-3/4 md:w-1/2 lg:w-4/7 mx-auto bg-white shadow-lg rounded-lg overflow-hidden mb-6 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100">
-              {/* Image Container */}
-              <div className="flex-shrink-0 flex items-center justify-center w-1/3">
-                <img
-                  src={careneeder.imageurl}
-                  alt={careneeder.name}
-                  style={imageStyle}
-                />
-              </div>
-              {/* Text Container */}
-              <div className="flex-grow p-6 flex flex-col justify-between">
-                <h3 className="text-xl font-semibold mb-4 underline">
+            {/* Image Container */}
+            <div className="flex-shrink-0 flex items-center justify-center w-1/3">
+              <img
+                src={careneeder.imageurl || defaultImageUrl} // Use the imageurl if available, otherwise use defaultImageUrl
+                alt={careneeder.name}
+                style={imageStyle}
+              />
+            </div>
+            {/* Text Container */}
+            <div className="flex-grow p-6 flex flex-col justify-between">
+              <div className="flex items-center">
+                <h3 className="text-xl font-semibold mr-3">
                   {careneeder.name}
                 </h3>
-                {/* Explicitly added underline */}
-                {/* Display selected locations */}
                 <FaMapMarkerAlt className="text-gray-600 mb-2" />
                 <span
                   className="text-gray-600 ml-2"
@@ -165,10 +166,10 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
                     ? careneeder.location.map((loc) => loc.label).join(", ")
                     : "无"}
                 </span>
-                <p className="text-gray-600 mb-4 pr-6 line-clamp">
-                {careneeder.phone}
-              </p>
               </div>
+              <p className="text-gray-600 mb-4 pr-6 line-clamp">
+                {/* {careneeder.description} */}
+              </p>
             </div>
           </Link>
 

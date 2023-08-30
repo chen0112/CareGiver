@@ -215,7 +215,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
 
     const missingFields = [];
 
-    if (!imageurl) missingFields.push("照片");
+    // if (!imageurl) missingFields.push("照片");
     if (!formData.name) missingFields.push("名字");
     if (!formData.phone) missingFields.push("电话");
     if (!formData.location) missingFields.push("地址");
@@ -285,7 +285,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
         <div className="flex flex-col items-center justify-center bg-white shadow p-2 rounded-lg mb-2">
           <div className="flex items-center mb-2">
             <label className="text-gray-700 mr-2" htmlFor="image">
-              照片（必选）：
+              照片：
             </label>
             <div className="border-2 border-gray-200 rounded-md p-2 cursor-pointer bg-blue-500 text-white">
               <label htmlFor="image">上传照片</label>
@@ -295,7 +295,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
             ref={imageInputRef}
             className="hidden"
             type="file"
-            required={true}
+            // required={true}
             id="image"
             accept="image/*"
             onChange={handleImageChange}
@@ -401,7 +401,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
 
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="phone">
-            电话:
+            电话 (请与注册电话一致):
           </label>
           <input
             className="border border-gray-300 rounded-md p-2 w-full"

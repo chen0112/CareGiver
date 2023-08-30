@@ -5,6 +5,10 @@ import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
+const defaultImageUrl =
+  "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+
+
 const CareneederDetail: React.FC = () => {
   const { id } = useParams();
   const [careneeder, setCareneeder] = useState<Careneeder | null>(null);
@@ -60,7 +64,7 @@ const CareneederDetail: React.FC = () => {
           <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
             <img
               className="w-32 h-32 rounded-full"
-              src={careneeder?.imageurl}
+              src={careneeder?.imageurl || defaultImageUrl}
               alt={careneeder?.name}
             />
           </div>

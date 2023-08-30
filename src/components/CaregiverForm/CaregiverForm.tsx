@@ -181,7 +181,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
       }));
     } else {
       // Display a notification to the user about the selection limit
-      alert('请最多选择两个地点');
+      alert("请最多选择两个地点");
     }
   };
 
@@ -394,7 +394,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
 
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="phone">
-            电话:
+            电话 (请与注册电话一致):
           </label>
           <input
             className="border border-gray-300 rounded-md p-2 w-full"
