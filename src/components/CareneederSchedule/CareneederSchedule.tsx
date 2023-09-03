@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import "./CareneederSchedule.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -39,6 +39,8 @@ const CareneederSchedule: React.FC = () => {
     setScheduleType(type);
   };
 
+  const navigate = useNavigate();
+
   const handleSlotSelection = (slot: string) => {
     // Check if the slot is already selected
     if (schedule.selectedTimeSlots.includes(slot)) {
@@ -77,7 +79,7 @@ const CareneederSchedule: React.FC = () => {
     }
 
     // Step 2: Create an API request
-    const API_URL =  "https://nginx.yongxinguanai.com/api/careneeder_schedule";; // Replace with your actual API endpoint
+    const API_URL =  "https://nginx.yongxinguanai.com/api/careneeder_schedule"; // Replace with your actual API endpoint
 
     const requestData = {
       scheduleType: scheduleType,
@@ -101,6 +103,9 @@ const CareneederSchedule: React.FC = () => {
         // Handle the server response if needed
         console.log("Server Response:", data);
         // You can show a success message to the user or navigate to another page
+        setTimeout(() => {
+            navigate("/signup_careneeder/schedule/ads");
+          }, 1000);
       })
       .catch((error) => {
         // Handle any errors that occurred during the API call
