@@ -14,6 +14,7 @@ import CareneederForm from "./components/CareneederForm/CareneederForm";
 import CareneederList from "./components/CareneederList/CareneederList";
 import CareneederDetail from "./components/CareneederDetail/CareneederDetail";
 import MyCareneeders from "./components/MyCardneeder/MyCareneeder";
+import CareneederSchedule from "./components/CareneederSchedule/CareneederSchedule"
 
 const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
 
@@ -96,6 +97,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/careneeders" element={<CareneederList />} />
         <Route path="/careneeders/:id" element={<CareneederDetail />} />
         <Route path="/mycareneeder/:phone" element={<MyCareneeders />} />
+        <Route path="/signup_careneeder/schedule" element={<CareneederSchedule />} />
       </Routes>
     </BrowserRouter>
   );

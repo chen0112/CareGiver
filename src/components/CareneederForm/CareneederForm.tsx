@@ -253,7 +253,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
         getCareneeder();
         resetForm();
         setTimeout(() => {
-          navigate("/careneeders");
+          navigate("/signup_careneeder/schedule");
         }, 2000);
       })
       .catch((error) => console.error("Error adding careneeder:", error));
@@ -545,8 +545,9 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
           disabled={isSubmitting || isFormDisabled}
           className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
         >
-          {isSubmitting ? "提交中..." : "提交"}
+          {isSubmitting ? "请等待..." : "下一步"}
         </button>
+
         <Modal
           show={showSuccessModal}
           onHide={() => setShowSuccessModal(false)}

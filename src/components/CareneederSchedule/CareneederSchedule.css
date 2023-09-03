@@ -1,0 +1,42 @@
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid;
+  padding: 8px;
+  text-align: center;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+/* Add this to your CSS file */
+
+.circle {
+  width: 24px;
+  height: 24px;
+  background-color: transparent !important; /* Remove the background color */
+  border: 1px solid #000;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Style for the checkmark inside the circle */
+.circle::after {
+  content: "\2713"; /* Checkmark character */
+  display: none; /* Initially hidden */
+  font-size: 18px;
+  color: #000;
+  line-height: 24px; /* Vertically center the checkmark */
+  text-align: center; /* Horizontally center the checkmark */
+  position: relative; /* Remove absolute positioning */
+}
+
+/* Style for selected circles */
+.circle.selected::after {
+  display: block; /* Show the checkmark when selected */
+}
