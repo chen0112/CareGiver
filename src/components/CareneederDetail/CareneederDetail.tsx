@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Careneeder } from "../../types/Types";
+import { Careneeder, Schedule } from "../../types/Types";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import dayjs from "dayjs";
+import { useCareneederScheduleContext } from "../../context/CareneederScheduleContext";
 
 const defaultImageUrl =
   "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
 
-
 const CareneederDetail: React.FC = () => {
   const { id } = useParams();
   const [careneeder, setCareneeder] = useState<Careneeder | null>(null);
+  const [careneederSchedule, setCareneederSchedule] = useState<Schedule | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { careneedersSchedule } = useCareneederScheduleContext();
+  console.log("Context careneederSchedule state:", careneedersSchedule);
+
   useEffect(() => {
+    // Fetch careneeder data
     fetch(`https://nginx.yongxinguanai.com/api/all_careneeders/${id}`)
       .then((response) => {
         if (!response.ok) {
@@ -40,6 +48,15 @@ const CareneederDetail: React.FC = () => {
   if (error) {
     return <p>Error: {error}</p>;
   }
+
+  console.log("careneederSchedule:", careneederSchedule);
+
+  // Check if careneeder is not null before attempting to find the schedule
+  const selectedSchedule = careneeder
+    ? careneedersSchedule?.find(
+        (schedule) => schedule.careneeder_id === careneeder.id
+      )
+    : null;
 
   return (
     <div>
@@ -90,6 +107,31 @@ const CareneederDetail: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {selectedSchedule && (
+          <div>
+            <h4 className="text-lg font-semibold mt-2">排班信息</h4>
+            <p>排班类型: {selectedSchedule.scheduletype}</p>
+            <p>总时长: {selectedSchedule.totalhours}</p>
+            <p>频率: {selectedSchedule.frequency}</p>
+            <p>
+              开始日期:{" "}
+              {selectedSchedule.startdate
+                ? dayjs(selectedSchedule.startdate)
+                    .toDate()
+                    .toLocaleDateString("zh-CN")
+                : "日期未定义"}
+            </p>
+            <p>
+              选择的时间段:{" "}
+              {selectedSchedule.selectedtimeslots &&
+              selectedSchedule.selectedtimeslots.length > 0
+                ? selectedSchedule.selectedtimeslots.join(", ")
+                : "时间段未定义"}
+            </p>
+            <p>持续天数: {selectedSchedule.durationdays}</p>
+          </div>
+        )}
 
         {/* Description section */}
         <div className="max-w-4xl w-full p-4 bg-white shadow-md rounded-lg">

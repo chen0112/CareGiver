@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 // types.ts
 export interface Caregiver {
   id: number;
@@ -34,7 +36,7 @@ export interface Careneeder {
   mobility_support: boolean;
   transportation: boolean;
   errands_shopping: boolean;
-};
+}
 
 // Interface for Client (Patient, Senior, Working Parent)
 export interface Client {
@@ -55,4 +57,15 @@ export interface CaregiverFormData {
   education: string;
   gender: string;
   // Add other properties as needed
+}
+
+export interface Schedule {
+  id: number
+  scheduletype: string;
+  totalhours: string;
+  frequency: string;
+  startdate: dayjs.Dayjs;
+  selectedtimeslots: string[];
+  durationdays: string;
+  careneeder_id: number;
 }

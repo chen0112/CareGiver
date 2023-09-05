@@ -206,9 +206,6 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("formData:", formData);
-    console.log("imageurl:", imageurl);
-
     if (isSubmitting) {
       return;
     }
@@ -233,8 +230,6 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
       }
     );
 
-    console.log(formData);
-
     setIsSubmitting(true);
     setIsFormDisabled(true);
     setShowSuccessModal(true);
@@ -250,11 +245,14 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
       .then((newCareneeder) => {
         console.log("NewCareneeder:------", newCareneeder);
         updateCareneeder(newCareneeder);
-        getCareneeder();
+
+        // After successfully creating the careneeder, navigate to the schedule page
+        // by extracting the careneeder's ID from the response and including it in the URL
+        const careneeder_id = newCareneeder.id;
         resetForm();
-        setTimeout(() => {
-          navigate("/signup_careneeder/schedule");
-        }, 2000);
+
+        // Navigate to the schedule page with the careneeder's ID as a query parameter
+        navigate(`/signup_careneeder/schedule?careneederId=${careneeder_id}`);
       })
       .catch((error) => console.error("Error adding careneeder:", error));
   };

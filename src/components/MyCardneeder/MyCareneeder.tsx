@@ -3,12 +3,16 @@ import CareneederCard from "../CareneederCard/CareneederCard"; // Replace with a
 import { BiHeart } from "react-icons/bi";
 import { Careneeder } from "../../types/Types"; // Adjust the import for Careneeder type
 import { Link, useParams } from "react-router-dom";
+import { useCareneederScheduleContext } from "../../context/CareneederScheduleContext";
 
 const MyCareneeders: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
   const [myCareneeders, setMyCareneeders] = useState<Careneeder[]>([]); // Adjust the type here
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { careneedersSchedule } = useCareneederScheduleContext();
+  console.log("Context careneederSchedule state:", careneedersSchedule);
 
   useEffect(() => {
     fetch(`https://nginx.yongxinguanai.com/api/mycareneeder/${phone}`) // Adjust the API endpoint
@@ -30,8 +34,8 @@ const MyCareneeders: React.FC = () => {
 
   const handleCareneederUpdate = (updatedCareneeder: Careneeder) => {
     setMyCareneeders((prevCareneeders) =>
-    prevCareneeders.map((careneeder) =>
-    careneeder.id === updatedCareneeder.id ? updatedCareneeder : careneeder
+      prevCareneeders.map((careneeder) =>
+        careneeder.id === updatedCareneeder.id ? updatedCareneeder : careneeder
       )
     );
   };
@@ -70,14 +74,22 @@ const MyCareneeders: React.FC = () => {
       </div>
 
       <div className="flex flex-col items-center">
-        {myCareneeders.map((careneeder) => (
-          <CareneederCard
-            key={careneeder.id}
-            careneeder={careneeder}
-            loggedInUserPhone={phone}
-            onUpdateCareneeder={handleCareneederUpdate} // Pass the update handler down
-          />
-        ))}
+        {myCareneeders.map((careneeder) => {
+          // Find the associated careneederschedule for this careneeder
+          const associatedSchedule = careneedersSchedule.find(
+            (schedule) => schedule.careneeder_id === careneeder.id
+          );
+
+          return (
+            <CareneederCard
+              key={careneeder.id}
+              careneeder={careneeder}
+              careneederSchedule={associatedSchedule} // Pass the associated schedule as a prop
+              onUpdateCareneeder={handleCareneederUpdate}
+              loggedInUserPhone={phone}
+            />
+          );
+        })}
       </div>
     </div>
   );

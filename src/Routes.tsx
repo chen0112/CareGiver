@@ -99,6 +99,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/careneeders/:id" element={<CareneederDetail />} />
         <Route path="/mycareneeder/:phone" element={<MyCareneeders />} />
         <Route path="/signup_careneeder/schedule" element={<CareneederSchedule />} />
+        {/* `/signup_careneeder/schedule?careneederId=${careneederId}` */}
         <Route path="/signup_careneeder/schedule/ads" element={<CareneederAds />} />
       </Routes>
     </BrowserRouter>

@@ -1,34 +1,28 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import "./CareneederSchedule.css";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 dayjs.locale("zh-cn"); // Set the locale to Chinese
+import { Schedule } from "../../types/Types";
 
 import DatePicker, { registerLocale } from "react-datepicker";
 import { zhCN } from "date-fns/locale";
 
 registerLocale("zh-cn", zhCN);
 
-interface Schedule {
-  scheduleType: string;
-  totalHours: string;
-  frequency: string;
-  startDate: dayjs.Dayjs;
-  selectedTimeSlots: string[];
-  durationDays: string;
-}
-
 const CareneederSchedule: React.FC = () => {
   const [schedule, setSchedule] = useState<Schedule>({
-    scheduleType: "Regular", // Add this property
-    totalHours: "", // Add this property
+    id: 0, // You need to include 'id' since it's part of the Schedule interface
+    scheduletype: "Regular",
+    totalhours: "", // Add this property
     frequency: "daily", // Add this property with a default value
-    startDate: dayjs(),
-    selectedTimeSlots: [],
-    durationDays: "",
+    startdate: dayjs(),
+    selectedtimeslots: [],
+    durationdays: "",
+    careneeder_id: 0, // You need to include 'careneeder_id' since it's part of the Schedule interface
   });
 
   const [scheduleType, setScheduleType] = useState<
@@ -41,13 +35,19 @@ const CareneederSchedule: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
+  // Extract the careneederId from the query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const careneederId = queryParams.get("careneederId");
+
   const handleSlotSelection = (slot: string) => {
     // Check if the slot is already selected
-    if (schedule.selectedTimeSlots.includes(slot)) {
+    if (schedule.selectedtimeslots.includes(slot)) {
       // Deselect the slot
       setSchedule((prevSchedule) => ({
         ...prevSchedule,
-        selectedTimeSlots: prevSchedule.selectedTimeSlots.filter(
+        selectedtimeslots: prevSchedule.selectedtimeslots.filter(
           (selectedSlot) => selectedSlot !== slot
         ),
       }));
@@ -55,7 +55,7 @@ const CareneederSchedule: React.FC = () => {
       // Select the slot
       setSchedule((prevSchedule) => ({
         ...prevSchedule,
-        selectedTimeSlots: [...prevSchedule.selectedTimeSlots, slot],
+        selectedtimeslots: [...prevSchedule.selectedtimeslots, slot],
       }));
     }
   };
@@ -63,31 +63,32 @@ const CareneederSchedule: React.FC = () => {
   const handleSubmit = () => {
     console.log("Schedule:", schedule);
     // Step 1: Validate user inputs
-    if (!schedule.totalHours) {
+    if (!schedule.totalhours) {
       alert("请选择时长.");
       return; // Stop further execution
     }
 
     if (!schedule.frequency) {
-        alert("请选择频率.");
-        return; // Stop further execution
-      }
+      alert("请选择频率.");
+      return; // Stop further execution
+    }
 
-    if (scheduleType === "One Time" && !schedule.durationDays) {
+    if (scheduleType === "One Time" && !schedule.durationdays) {
       alert("请选择持续天数.");
       return; // Stop further execution
     }
 
     // Step 2: Create an API request
-    const API_URL =  "https://nginx.yongxinguanai.com/api/careneeder_schedule"; // Replace with your actual API endpoint
+    const API_URL = "https://nginx.yongxinguanai.com/api/careneeder_schedule"; // Replace with your actual API endpoint
 
     const requestData = {
-      scheduleType: scheduleType,
-      totalHours: schedule.totalHours,
+      careneeder_id: careneederId,
+      scheduletype: scheduleType,
+      totalhours: schedule.totalhours,
       frequency: schedule.frequency,
-      startDate: schedule.startDate.format("YYYY-MM-DD"), // Format date as needed
-      selectedTimeSlots: JSON.stringify(schedule.selectedTimeSlots),
-      durationDays: schedule.durationDays,
+      startdate: schedule.startdate.format("YYYY-MM-DD"), // Format date as needed
+      selectedtimeslots: JSON.stringify(schedule.selectedtimeslots),
+      durationdays: schedule.durationdays,
     };
 
     // Step 3: Send data to the server
@@ -104,8 +105,8 @@ const CareneederSchedule: React.FC = () => {
         console.log("Server Response:", data);
         // You can show a success message to the user or navigate to another page
         setTimeout(() => {
-            navigate("/signup_careneeder/schedule/ads");
-          }, 1000);
+          navigate("/signup_careneeder/schedule/ads");
+        }, 1000);
       })
       .catch((error) => {
         // Handle any errors that occurred during the API call
@@ -152,11 +153,11 @@ const CareneederSchedule: React.FC = () => {
           <div className="w-1/2 md:w-2/4 pr-2 mb-4 md:mb-0">
             <select
               className="w-full md:w-1/2 px-2 py-1 mt-2 border rounded-md ml-auto"
-              value={schedule.totalHours}
+              value={schedule.totalhours}
               onChange={(e) =>
                 setSchedule((prevSchedule) => ({
                   ...prevSchedule,
-                  totalHours: e.target.value,
+                  totalhours: e.target.value,
                 }))
               }
             >
@@ -215,7 +216,7 @@ const CareneederSchedule: React.FC = () => {
                         <td key={day} className="text-center border">
                           <button
                             className={`circle ${
-                              schedule.selectedTimeSlots.includes(
+                              schedule.selectedtimeslots.includes(
                                 `${day}_${period}`
                               )
                                 ? "selected"
@@ -235,11 +236,11 @@ const CareneederSchedule: React.FC = () => {
             <div className="mt-4">
               <label className="block font-semibold">选择开始日期:</label>
               <DatePicker
-                selected={schedule.startDate.toDate()}
+                selected={schedule.startdate.toDate()}
                 onChange={(date) =>
                   setSchedule((prevSchedule) => ({
                     ...prevSchedule,
-                    startDate: dayjs(date),
+                    startdate: dayjs(date),
                   }))
                 }
                 locale="zh-cn"
@@ -256,11 +257,11 @@ const CareneederSchedule: React.FC = () => {
           <div className="w-full md:w-2/4 pr-2 mb-4 md:mb-0">
             <select
               className="w-full px-2 py-1 mt-2 border rounded-md"
-              value={schedule.totalHours}
+              value={schedule.totalhours}
               onChange={(e) =>
                 setSchedule((prevSchedule) => ({
                   ...prevSchedule,
-                  totalHours: e.target.value,
+                  totalhours: e.target.value,
                 }))
               }
             >
@@ -276,11 +277,11 @@ const CareneederSchedule: React.FC = () => {
           <div className="w-full md:w-2/4 pl-2">
             <select
               className="w-full px-2 py-1 mt-2 border rounded-md"
-              value={schedule.durationDays}
+              value={schedule.durationdays}
               onChange={(e) =>
                 setSchedule((prevSchedule) => ({
                   ...prevSchedule,
-                  durationDays: e.target.value,
+                  durationdays: e.target.value,
                 }))
               }
             >
@@ -299,11 +300,11 @@ const CareneederSchedule: React.FC = () => {
         <div className="flex justify-center mt-2 md:mt-4">
           <label className="block font-semibold md:mr-8">选择开始日期:</label>
           <DatePicker
-            selected={schedule.startDate.toDate()} // Convert Dayjs to Date
+            selected={schedule.startdate.toDate()} // Convert Dayjs to Date
             onChange={(date) =>
               setSchedule((prevSchedule) => ({
                 ...prevSchedule,
-                startDate: dayjs(date), // Convert Date to Dayjs
+                startdate: dayjs(date), // Convert Date to Dayjs
               }))
             }
             locale="zh-cn"
