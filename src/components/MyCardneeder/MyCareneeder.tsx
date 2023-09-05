@@ -4,6 +4,7 @@ import { BiHeart } from "react-icons/bi";
 import { Careneeder } from "../../types/Types"; // Adjust the import for Careneeder type
 import { Link, useParams } from "react-router-dom";
 import { useCareneederScheduleContext } from "../../context/CareneederScheduleContext";
+import { useCareneederAdsContext } from "../../context/CareneederAdsContext";
 
 const MyCareneeders: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -13,6 +14,9 @@ const MyCareneeders: React.FC = () => {
 
   const { careneedersSchedule } = useCareneederScheduleContext();
   console.log("Context careneederSchedule state:", careneedersSchedule);
+
+  const { careneederAds } = useCareneederAdsContext();
+  console.log("Context careneederAds state:", careneederAds);
 
   useEffect(() => {
     fetch(`https://nginx.yongxinguanai.com/api/mycareneeder/${phone}`) // Adjust the API endpoint
@@ -80,11 +84,17 @@ const MyCareneeders: React.FC = () => {
             (schedule) => schedule.careneeder_id === careneeder.id
           );
 
+          // Find all the associated careneederAds for this careneeder
+          const associatedAds = careneederAds.find(
+            (ad) => ad.careneeder_id === careneeder.id
+          );
+
           return (
             <CareneederCard
               key={careneeder.id}
               careneeder={careneeder}
               careneederSchedule={associatedSchedule} // Pass the associated schedule as a prop
+              careneederAd={associatedAds}
               onUpdateCareneeder={handleCareneederUpdate}
               loggedInUserPhone={phone}
             />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Careneeder, Schedule } from "../../types/Types";
+import { Careneeder, Schedule, Ads } from "../../types/Types";
 import { Link } from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
@@ -10,7 +10,8 @@ const defaultImageUrl =
 
 interface CareneederCardProps {
   careneeder: Careneeder;
-  careneederSchedule: Schedule | undefined; // Add careneederSchedule prop
+  careneederSchedule: Schedule | undefined;
+  careneederAd: Ads | undefined;
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
   onUpdateCareneeder?: (updatedCareneeder: Careneeder) => void; // New prop for handling updates
 }
@@ -31,6 +32,7 @@ const locationOptions = [
 const CareneederCard: React.FC<CareneederCardProps> = ({
   careneeder,
   careneederSchedule,
+  careneederAd,
   loggedInUserPhone,
   onUpdateCareneeder, // Receive the update function from the parent component
 }) => {
@@ -173,32 +175,12 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
               <p className="text-gray-600 mb-4 pr-6 line-clamp">
                 {/* {careneeder.description} */}
               </p>
-              {careneederSchedule && (
+
+              {careneederAd && ( // New section for displaying ad details
                 <div>
-                  <h4 className="text-lg font-semibold mt-2">排班信息</h4>
-                  <p>排班类型: {careneederSchedule.scheduletype}</p>
-                  <p>总时长: {careneederSchedule.totalhours}</p>
-                  <p>频率: {careneederSchedule.frequency}</p>
-                  <p>
-                    开始日期:{" "}
-                    {careneederSchedule.startdate
-                      ? dayjs(careneederSchedule.startdate, {
-                          // Specify the input date format
-                          format: "ddd, DD MMM YYYY HH:mm:ss ZZ",
-                        })
-                          .toDate()
-                          .toLocaleDateString("zh-CN")
-                      : "日期未定义"}
-                  </p>
-
-                  <p>
-                    选择的时间段:{" "}
-                    {careneederSchedule.selectedtimeslots
-                      ? careneederSchedule.selectedtimeslots.join(", ")
-                      : "时间段未定义"}
-                  </p>
-
-                  <p>持续天数: {careneederSchedule.durationdays}</p>
+                  <h4 className="text-lg font-semibold mt-2">广告信息</h4>
+                  <p>标题: {careneederAd.title}</p>
+                  <p>描述: {careneederAd.description}</p>
                 </div>
               )}
             </div>

@@ -6,6 +6,7 @@ import { BiHeart } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useCareneederScheduleContext } from "../../context/CareneederScheduleContext";
+import { useCareneederAdsContext } from "../../context/CareneederAdsContext";
 
 const defaultImageUrl =
   "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
@@ -21,6 +22,9 @@ const CareneederDetail: React.FC = () => {
 
   const { careneedersSchedule } = useCareneederScheduleContext();
   console.log("Context careneederSchedule state:", careneedersSchedule);
+
+  const { careneederAds } = useCareneederAdsContext();
+  console.log("Context careneederAds state:", careneederAds);
 
   useEffect(() => {
     // Fetch careneeder data
@@ -50,12 +54,17 @@ const CareneederDetail: React.FC = () => {
   }
 
   console.log("careneederSchedule:", careneederSchedule);
+  console.log("careneederAds:", careneederAds);
 
   // Check if careneeder is not null before attempting to find the schedule
   const selectedSchedule = careneeder
     ? careneedersSchedule?.find(
         (schedule) => schedule.careneeder_id === careneeder.id
       )
+    : null;
+
+  const associatedAds = careneeder
+    ? careneederAds?.find((ad) => ad.careneeder_id === careneeder.id)
     : null;
 
   return (
@@ -130,6 +139,14 @@ const CareneederDetail: React.FC = () => {
                 : "时间段未定义"}
             </p>
             <p>持续天数: {selectedSchedule.durationdays}</p>
+          </div>
+        )}
+
+        {associatedAds && ( // New section for displaying ad details
+          <div>
+            <h4 className="text-lg font-semibold mt-2">广告信息</h4>
+            <p>标题: {associatedAds.title}</p>
+            <p>描述: {associatedAds.description}</p>
           </div>
         )}
 

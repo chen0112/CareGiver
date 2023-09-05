@@ -5,13 +5,16 @@ import { Link } from "react-router-dom";
 import { useCareneederContext } from "../../context/CareneederContext";
 import { BiHeart } from "react-icons/bi";
 import { useCareneederScheduleContext } from "../../context/CareneederScheduleContext";
+import { useCareneederAdsContext } from "../../context/CareneederAdsContext";
 
 const CareneederList: React.FC = () => {
   const { careneeders } = useCareneederContext();
   const { careneedersSchedule } = useCareneederScheduleContext();
+  const { careneederAds } = useCareneederAdsContext();  
 
   console.log("Context careneeders state:", careneeders);
   console.log("Context careneederSchedule state:", careneedersSchedule);
+  console.log("Context careneederAd state:", careneederAds);
 
   return (
     <div>
@@ -32,12 +35,17 @@ const CareneederList: React.FC = () => {
           const associatedSchedule = careneedersSchedule.find(
             (schedule) => schedule.careneeder_id === careneeder.id
           );
+          // Find all the associated careneederAds for this careneeder
+          const associatedAds = careneederAds.find(
+            (ad) => ad.careneeder_id === careneeder.id
+          );
 
           return (
             <CareneederCard
               key={careneeder.id}
               careneeder={careneeder}
               careneederSchedule={associatedSchedule} // Pass the associated schedule as a prop
+              careneederAd={associatedAds}
             />
           );
         })}

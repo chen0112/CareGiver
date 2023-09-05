@@ -69,3 +69,10 @@ export interface Schedule {
   durationdays: string;
   careneeder_id: number;
 }
+
+export interface Ads {
+  id: number
+  title: string;
+  description: string;
+  careneeder_id: number;
+}

@@ -205,35 +205,35 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (isSubmitting) {
       return;
     }
-
+  
     const missingFields = [];
-
+  
     // if (!imageurl) missingFields.push("照片");
     if (!formData.name) missingFields.push("名字");
     if (!formData.phone) missingFields.push("电话");
     if (!formData.location) missingFields.push("地址");
-
+  
     if (missingFields.length > 0) {
       const missingFieldsString = missingFields.join(", ");
       alert(`请输入必要信息：${missingFieldsString}!`);
       return;
     }
-
+  
     const formDataJson = JSON.stringify(
       { ...formData, imageurl },
       (key, value) => {
         return value === undefined ? "undefined" : value;
       }
     );
-
+  
     setIsSubmitting(true);
     setIsFormDisabled(true);
     setShowSuccessModal(true);
-
+  
     fetch(API_URL, {
       method: "POST",
       headers: {
@@ -245,17 +245,18 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
       .then((newCareneeder) => {
         console.log("NewCareneeder:------", newCareneeder);
         updateCareneeder(newCareneeder);
-
+  
         // After successfully creating the careneeder, navigate to the schedule page
         // by extracting the careneeder's ID from the response and including it in the URL
-        const careneeder_id = newCareneeder.id;
+        const careneederId = newCareneeder.id;
         resetForm();
-
+  
         // Navigate to the schedule page with the careneeder's ID as a query parameter
-        navigate(`/signup_careneeder/schedule?careneederId=${careneeder_id}`);
+        navigate(`/signup_careneeder/schedule?careneederId=${careneederId}`);
       })
       .catch((error) => console.error("Error adding careneeder:", error));
   };
+  
 
   return (
     <div>

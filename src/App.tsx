@@ -3,6 +3,7 @@ import Routes from "./Routes";
 import CaregiverProvider from "./context/CaregiverContext";
 import CareneederProvider from "./context/CareneederContext"; // Import CareneederProvider
 import CareneederScheduleProvider from "./context/CareneederScheduleContext"; // Import CareneederScheduleProvider
+import CareneederAdsProvider from "./context/CareneederAdsContext";
 import "./index.css";
 
 const App: React.FC = () => {
@@ -10,8 +11,10 @@ const App: React.FC = () => {
     <div>
       <CaregiverProvider>
         <CareneederProvider>
-          <CareneederScheduleProvider> {/* Use CareneederScheduleProvider here */}
-            <Routes />
+          <CareneederScheduleProvider>
+            <CareneederAdsProvider>
+              <Routes />
+            </CareneederAdsProvider>
           </CareneederScheduleProvider>
         </CareneederProvider>
       </CaregiverProvider>

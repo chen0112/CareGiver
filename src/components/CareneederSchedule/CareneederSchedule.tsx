@@ -103,10 +103,11 @@ const CareneederSchedule: React.FC = () => {
       .then((data) => {
         // Handle the server response if needed
         console.log("Server Response:", data);
+        const careneederId = data.careneeder_id;
         // You can show a success message to the user or navigate to another page
         setTimeout(() => {
-          navigate("/signup_careneeder/schedule/ads");
-        }, 1000);
+            navigate(`/signup_careneeder/schedule/ads?careneederId=${careneederId}`);
+          }, 1000);
       })
       .catch((error) => {
         // Handle any errors that occurred during the API call

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BiHeart } from "react-icons/bi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal"; // Import the Modal component
 import Button from "react-bootstrap/Button"; // Import the Button component
 
@@ -11,6 +11,12 @@ const CareneederAds: React.FC = () => {
   const [titleError, setTitleError] = useState<string>("");
   const [descriptionError, setDescriptionError] = useState<string>("");
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  // Extract the careneederId from the query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const careneederId = queryParams.get("careneederId");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const titleText = e.target.value;
@@ -55,12 +61,18 @@ const CareneederAds: React.FC = () => {
 
     // Create an object with the data to send to the backend
     const requestData = {
+      careneeder_id: careneederId,
       title: title,
       description: description,
     };
 
     // Replace with your actual API URL
     const API_URL = "https://nginx.yongxinguanai.com/api/careneeder_ads";
+
+    if (!careneederId) {
+      console.error("Missing careneederId");
+      return;
+    }
 
     fetch(API_URL, {
       method: "POST",
@@ -71,9 +83,14 @@ const CareneederAds: React.FC = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          // Handle errors here, for example:
-          throw new Error("Network response was not ok");
+          if (response.status === 400) {
+            // Handle 400
+          } else if (response.status === 500) {
+            // Handle 500
+          }
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
+
         return response.json();
       })
       .then((data) => {
