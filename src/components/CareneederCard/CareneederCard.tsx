@@ -94,11 +94,11 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
   return (
     <div>
       {isEditing ? (
-        <div className="bg-white p-6 rounded shadow-md">
+        <div className="bg-white p-6 rounded-lg shadow-lg">
           <div className="mb-4">
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-600"
+              className="block text-sm font-medium text-gray-700"
             >
               姓名
             </label>
@@ -108,34 +108,34 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
               id="name"
               value={editedCareneeder.name}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-md"
+              className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
           <div className="mb-4">
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-gray-600"
+              className="block text-sm font-medium text-gray-700"
             >
               地点
             </label>
             <MultiSelect
-              options={locationOptions} // Make sure locationOptions is defined
+              options={locationOptions}
               value={editedCareneeder.location ?? []}
-              onChange={handleLocationChange} // You will need to define this
+              onChange={handleLocationChange}
               labelledBy="Select"
+              className="border rounded-md shadow-sm"
             />
           </div>
-
           <div className="flex justify-end">
             <button
               onClick={handleSave}
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="inline-flex items-center justify-center px-4 py-2 text-white bg-green-500 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
               保存
             </button>
             <button
               onClick={handleEditClick}
-              className="ml-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              className="ml-2 inline-flex items-center justify-center px-4 py-2 text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               取消
             </button>
@@ -172,17 +172,14 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
                     : "无"}
                 </span>
               </div>
-              <p className="text-gray-600 mb-4 pr-6 line-clamp">
-                {/* {careneeder.description} */}
+              <p className="text-gray-600 mb-4 pr-6">
+                {careneederAd && ( // New section for displaying ad details
+                  <div>
+                    <p>{careneederAd.title}</p>
+                    <p className="line-clamp-3">{careneederAd.description}</p>
+                  </div>
+                )}
               </p>
-
-              {careneederAd && ( // New section for displaying ad details
-                <div>
-                  <h4 className="text-lg font-semibold mt-2">广告信息</h4>
-                  <p>标题: {careneederAd.title}</p>
-                  <p>描述: {careneederAd.description}</p>
-                </div>
-              )}
             </div>
           </Link>
 

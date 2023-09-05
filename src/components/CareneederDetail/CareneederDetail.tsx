@@ -84,42 +84,34 @@ const CareneederDetail: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <div className="flex flex-col items-center justify-start min-h-screen space-y-6 px-4 md:px-0">
-        {/* Top section for image and details */}
-        <div className="max-w-4xl w-full flex flex-col md:flex-row items-start p-4 bg-white shadow-md rounded-lg">
-          {/* Image section */}
-          <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
-            <img
-              className="w-32 h-32 rounded-full"
-              src={careneeder?.imageurl || defaultImageUrl}
-              alt={careneeder?.name}
-            />
-          </div>
-
-          {/* Details section */}
+        {/* Top section */}
+        <div className="max-w-4xl w-full flex flex-col md:flex-row items-center p-4 bg-blue-100 shadow-lg rounded-lg">
+          {/* Image and Details */}
+          <img
+            className="w-32 h-32 rounded-full border-4 border-blue-300 mb-4 md:mb-0 md:mr-4"
+            src={careneeder?.imageurl || defaultImageUrl}
+            alt={careneeder?.name}
+          />
           <div className="flex flex-col space-y-2">
+            <h2 className="text-xl md:text-2xl font-semibold text-blue-600">
+              {careneeder?.name}
+            </h2>
             <div className="flex items-center space-x-2">
-              <h2 className="text-xl md:text-2xl font-semibold mr-6">
-                {careneeder?.name}
-              </h2>
-              <FaMapMarkerAlt className="text-gray-600 mb-2" />
-              <p className="text-gray-600 font-semibold mt-2">
+              <FaMapMarkerAlt className="text-blue-600 mb-2" />
+              <p className="text-blue-500">
                 {careneeder?.location &&
                   careneeder?.location.map((loc) => loc.label).join(", ")}
               </p>
             </div>
-
-            {/* Education, Experience, Phone */}
-            <div className="flex flex-wrap space-x-4 md:space-x-10">
-              <p>
-                <strong>电话:</strong> {careneeder?.phone}
-              </p>
-            </div>
+            <p>
+              <strong>电话:</strong> {careneeder?.phone}
+            </p>
           </div>
         </div>
-
+        {/* Schedule Information */}
         {selectedSchedule && (
-          <div>
-            <h4 className="text-lg font-semibold mt-2">排班信息</h4>
+          <div className="max-w-4xl w-full p-4 bg-blue-100 shadow-lg rounded-lg">
+            <h4 className="text-lg font-semibold text-blue-600">排班信息</h4>
             <p>排班类型: {selectedSchedule.scheduletype}</p>
             <p>总时长: {selectedSchedule.totalhours}</p>
             <p>频率: {selectedSchedule.frequency}</p>
@@ -141,17 +133,14 @@ const CareneederDetail: React.FC = () => {
             <p>持续天数: {selectedSchedule.durationdays}</p>
           </div>
         )}
-
-        {/* Description section */}
-        <div className="max-w-4xl w-full p-4 bg-white shadow-md rounded-lg">
-          {associatedAds && ( // New section for displaying ad details
-            <div>
-              <h4 className="text-lg font-semibold mt-2">广告信息</h4>
-              <p>标题: {associatedAds.title}</p>
-              <p>描述: {associatedAds.description}</p>
-            </div>
-          )}
-        </div>
+        {/* Associated Ads */}
+        {associatedAds && (
+          <div className="max-w-4xl w-full p-4 bg-blue-100 shadow-lg rounded-lg">
+            <h4 className="text-lg font-semibold text-blue-600">广告信息</h4>
+            <p> {associatedAds.title}</p>
+            <p> {associatedAds.description}</p>
+          </div>
+        )}
       </div>
     </div>
   );

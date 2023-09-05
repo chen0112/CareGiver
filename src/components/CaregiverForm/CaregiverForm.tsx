@@ -10,6 +10,7 @@ import { Point, Area } from "react-easy-crop/types";
 import Modal from "react-bootstrap/Modal";
 import { v4 as uuidv4 } from "uuid";
 import { MultiSelect } from "react-multi-select-component";
+import { LOCATION_OPTIONS } from '../../types/Constant';
 
 interface CaregiverFormProps {
   API_URL: string;
@@ -41,13 +42,7 @@ interface Option {
   value: string;
 }
 
-const locationOptions = [
-  { label: "New York", value: "New York" },
-  { label: "San Francisco", value: "San Francisco" },
-  { label: "Los Angeles", value: "Los Angeles" },
-  { label: "Chicago", value: "Chicago" },
-  { label: "Miami", value: "Miami" },
-];
+const locationOptions = LOCATION_OPTIONS;
 
 const CaregiverForm: React.FC<CaregiverFormProps> = ({
   API_URL,
@@ -419,6 +414,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             value={formData.location ?? []}
             onChange={handleMultiSelectChange}
             labelledBy="Select"
+            hasSelectAll={false}
           />
         </div>
 
