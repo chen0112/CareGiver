@@ -111,7 +111,7 @@ const CareneederDetail: React.FC = () => {
             {/* Education, Experience, Phone */}
             <div className="flex flex-wrap space-x-4 md:space-x-10">
               <p>
-                <strong>Phone:</strong> {careneeder?.phone}
+                <strong>电话:</strong> {careneeder?.phone}
               </p>
             </div>
           </div>
@@ -142,17 +142,15 @@ const CareneederDetail: React.FC = () => {
           </div>
         )}
 
-        {associatedAds && ( // New section for displaying ad details
-          <div>
-            <h4 className="text-lg font-semibold mt-2">广告信息</h4>
-            <p>标题: {associatedAds.title}</p>
-            <p>描述: {associatedAds.description}</p>
-          </div>
-        )}
-
         {/* Description section */}
         <div className="max-w-4xl w-full p-4 bg-white shadow-md rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">Description</h3>
+          {associatedAds && ( // New section for displaying ad details
+            <div>
+              <h4 className="text-lg font-semibold mt-2">广告信息</h4>
+              <p>标题: {associatedAds.title}</p>
+              <p>描述: {associatedAds.description}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

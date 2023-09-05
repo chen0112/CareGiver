@@ -16,9 +16,9 @@ registerLocale("zh-cn", zhCN);
 const CareneederSchedule: React.FC = () => {
   const [schedule, setSchedule] = useState<Schedule>({
     id: 0, // You need to include 'id' since it's part of the Schedule interface
-    scheduletype: "Regular",
+    scheduletype: "长期",
     totalhours: "", // Add this property
-    frequency: "daily", // Add this property with a default value
+    frequency: "每天", // Add this property with a default value
     startdate: dayjs(),
     selectedtimeslots: [],
     durationdays: "",
@@ -26,10 +26,10 @@ const CareneederSchedule: React.FC = () => {
   });
 
   const [scheduleType, setScheduleType] = useState<
-    "Regular" | "One Time" | null
-  >("Regular");
+    "长期" | "单次" | null
+  >("长期");
 
-  const handleScheduleTypeChange = (type: "Regular" | "One Time") => {
+  const handleScheduleTypeChange = (type: "长期" | "单次") => {
     setScheduleType(type);
   };
 
@@ -73,7 +73,7 @@ const CareneederSchedule: React.FC = () => {
       return; // Stop further execution
     }
 
-    if (scheduleType === "One Time" && !schedule.durationdays) {
+    if (scheduleType === "单次" && !schedule.durationdays) {
       alert("请选择持续天数.");
       return; // Stop further execution
     }
@@ -133,23 +133,23 @@ const CareneederSchedule: React.FC = () => {
       <div className="flex justify-center mt-4">
         <button
           className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 ${
-            scheduleType === "Regular" ? "bg-blue-700" : ""
+            scheduleType === "长期" ? "bg-blue-700" : ""
           }`}
-          onClick={() => handleScheduleTypeChange("Regular")}
+          onClick={() => handleScheduleTypeChange("长期")}
         >
           长期
         </button>
         <button
           className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 ${
-            scheduleType === "One Time" ? "bg-blue-700" : ""
+            scheduleType === "单次" ? "bg-blue-700" : ""
           }`}
-          onClick={() => handleScheduleTypeChange("One Time")}
+          onClick={() => handleScheduleTypeChange("单次")}
         >
           单次
         </button>
       </div>
 
-      {scheduleType === "Regular" && (
+      {scheduleType === "长期" && (
         <div className="flex flex-col md:flex-row justify-center mt-4">
           <div className="w-1/2 md:w-2/4 pr-2 mb-4 md:mb-0">
             <select
@@ -182,16 +182,16 @@ const CareneederSchedule: React.FC = () => {
                 }))
               }
             >
-              <option value="daily">每天</option>
-              <option value="weekly">每周</option>
-              <option value="bi-weekly">每两周</option>
-              <option value="monthly">每月</option>
+              <option value="每天">每天</option>
+              <option value="每周">每周</option>
+              <option value="每两周">每两周</option>
+              <option value="每月">每月</option>
             </select>
           </div>
         </div>
       )}
 
-      {scheduleType === "Regular" && (
+      {scheduleType === "长期" && (
         <div className="flex justify-center mt-4">
           <div className="w-full md:w-1/2">
             <table className="w-full border-collapse border">
@@ -211,7 +211,7 @@ const CareneederSchedule: React.FC = () => {
                 {["早上", "下午", "晚上"].map((period) => (
                   <tr key={period}>
                     <td className="font-bold border">{period}</td>
-                    {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
+                    {["周一", "周二", "周三", "周四", "周五", "周六", "周天"].map(
                       (day) => (
                         // Inside your TSX code
                         <td key={day} className="text-center border">
@@ -253,7 +253,7 @@ const CareneederSchedule: React.FC = () => {
         </div>
       )}
 
-      {scheduleType === "One Time" && (
+      {scheduleType === "单次" && (
         <div className="flex flex-col md:flex-row justify-center mt-4">
           <div className="w-full md:w-2/4 pr-2 mb-4 md:mb-0">
             <select
@@ -297,7 +297,7 @@ const CareneederSchedule: React.FC = () => {
         </div>
       )}
 
-      {scheduleType === "One Time" && (
+      {scheduleType === "单次" && (
         <div className="flex justify-center mt-2 md:mt-4">
           <label className="block font-semibold md:mr-8">选择开始日期:</label>
           <DatePicker

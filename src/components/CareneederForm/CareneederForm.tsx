@@ -10,6 +10,8 @@ import { Slider, Button, Typography } from "antd";
 import { Point, Area } from "react-easy-crop/types";
 import Modal from "react-bootstrap/Modal";
 import { v4 as uuidv4 } from "uuid";
+import { LOCATION_OPTIONS } from '../../types/Constant';
+
 
 interface CareneederFormProps {
   API_URL: string;
@@ -46,13 +48,7 @@ const initialFormData: Partial<Careneeder> = {
   errands_shopping: false,
 };
 
-const locationOptions = [
-  { label: "New York", value: "New York" },
-  { label: "San Francisco", value: "San Francisco" },
-  { label: "Los Angeles", value: "Los Angeles" },
-  { label: "Chicago", value: "Chicago" },
-  { label: "Miami", value: "Miami" },
-];
+const locationOptions = LOCATION_OPTIONS;
 
 const CareneederForm: React.FC<CareneederFormProps> = ({
   API_URL,
@@ -425,6 +421,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
             value={formData.location ?? []}
             onChange={handleMultiSelectChange}
             labelledBy="Select"
+            hasSelectAll={false}
           />
         </div>
 
