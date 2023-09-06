@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import dayjs from "dayjs";
+import {LOCATION_OPTIONS} from "../../types/Constant"
 
 const defaultImageUrl =
   "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
@@ -21,13 +22,7 @@ interface Option {
   value: string;
 }
 
-const locationOptions = [
-  { label: "New York", value: "New York" },
-  { label: "San Francisco", value: "San Francisco" },
-  { label: "Los Angeles", value: "Los Angeles" },
-  { label: "Chicago", value: "Chicago" },
-  { label: "Miami", value: "Miami" },
-];
+const locationOptions = LOCATION_OPTIONS;
 
 const CareneederCard: React.FC<CareneederCardProps> = ({
   careneeder,

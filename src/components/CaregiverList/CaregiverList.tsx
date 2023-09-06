@@ -3,13 +3,16 @@ import React from "react";
 import CaregiverCard from "../CaregiverCard/CaregiverCard";
 import { Link } from "react-router-dom";
 import { useCaregiverContext } from "../../context/CaregiverContext";
+import { useCaregiverAdsContext } from "../../context/CaregiverAdsContext";
 import "./CaregiverList.css";
 import { BiHeart } from "react-icons/bi";
 
 const CaregiverList: React.FC = () => {
   const { caregivers } = useCaregiverContext();
+  const { caregiverAds } = useCaregiverAdsContext();
 
   console.log("Context caregivers state:", caregivers);
+  console.log("Context caregivers Ads state:", caregiverAds);
 
   return (
     <div>
@@ -26,11 +29,22 @@ const CaregiverList: React.FC = () => {
       </div>
 
       <hr className="border-t border-black-300 mx-1 my-2" />
-      
+
       <div className="flex flex-col items-center">
-        {caregivers.map((caregiver) => (
-          <CaregiverCard key={caregiver.id} caregiver={caregiver} />
-        ))}
+        {caregivers.map((caregiver) => {
+          // Find all the associated careneederAds for this careneeder
+          const associatedAds = caregiverAds.find(
+            (ad) => ad.caregiver_id === caregiver.id
+          );
+
+          return (
+            <CaregiverCard
+              key={caregiver.id}
+              caregiver={caregiver}
+              caregiverAd={associatedAds}
+            />
+          );
+        })}
       </div>
     </div>
   );

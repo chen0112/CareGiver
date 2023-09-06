@@ -4,12 +4,18 @@ import { Caregiver } from "../../types/Types";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { useCaregiverAdsContext } from "../../context/CaregiverAdsContext";
+import './CaregiverDetail.css';
+
 
 const CaregiverDetail: React.FC = () => {
   const { id } = useParams();
   const [caregiver, setCaregiver] = useState<Caregiver | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { caregiverAds } = useCaregiverAdsContext();
+  console.log("Context careneederAds state:", caregiverAds);
 
   useEffect(() => {
     fetch(`https://nginx.yongxinguanai.com/api/all_caregivers/${id}`)
@@ -37,8 +43,12 @@ const CaregiverDetail: React.FC = () => {
     return <p>Error: {error}</p>;
   }
 
+  const associatedAds = caregiver
+    ? caregiverAds?.find((ad) => ad.caregiver_id === caregiver.id)
+    : null;
+
   return (
-    <div>
+    <div className="variant3">
       <div className="flex items-center mx-9 py-3">
         <Link
           to="/"
@@ -105,10 +115,13 @@ const CaregiverDetail: React.FC = () => {
         </div>
 
         {/* Description section */}
-        <div className="max-w-4xl w-full p-4 bg-white shadow-md rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">Description</h3>
-          <p>{caregiver?.description}</p>
-        </div>
+        {associatedAds && (
+          <div className="max-w-4xl w-full p-4 bg-blue-100 shadow-lg rounded-lg">
+            <h4 className="text-lg font-semibold text-blue-600">广告信息</h4>
+            <p> {associatedAds.title}</p>
+            <p> {associatedAds.description}</p>
+          </div>
+        )}
       </div>
     </div>
   );

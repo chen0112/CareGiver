@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Caregiver } from "../../types/Types";
+import { Caregiver, CaregiverAds } from "../../types/Types";
 import { Link } from "react-router-dom";
 import "./CaregiverCard.css";
 import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { LOCATION_OPTIONS } from "../../types/Constant";
 
 interface CaregiverCardProps {
   caregiver: Caregiver;
+  caregiverAd: CaregiverAds | undefined;
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
   onUpdateCaregiver?: (updatedCaregiver: Caregiver) => void; // New prop for handling updates
 }
@@ -16,16 +18,11 @@ interface Option {
   value: string;
 }
 
-const locationOptions = [
-  { label: "New York", value: "New York" },
-  { label: "San Francisco", value: "San Francisco" },
-  { label: "Los Angeles", value: "Los Angeles" },
-  { label: "Chicago", value: "Chicago" },
-  { label: "Miami", value: "Miami" },
-];
+const locationOptions = LOCATION_OPTIONS;
 
 const CaregiverCard: React.FC<CaregiverCardProps> = ({
   caregiver,
+  caregiverAd,
   loggedInUserPhone,
   onUpdateCaregiver, // Receive the update function from the parent component
 }) => {
@@ -118,22 +115,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
               labelledBy="Select"
             />
           </div>
-          <div className="mb-4">
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Description
-            </label>
-            <textarea
-              name="description"
-              id="description"
-              rows={4}
-              value={editedCaregiver.description}
-              onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div>
+
           <div className="flex justify-end">
             <button
               onClick={handleSave}
@@ -179,7 +161,12 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
                 </span>
               </div>
               <p className="text-gray-600 mb-4 pr-6 line-clamp">
-                {caregiver.description}
+              {caregiverAd && ( // New section for displaying ad details
+                  <div>
+                    <p>{caregiverAd.title}</p>
+                    <p className="line-clamp-3">{caregiverAd.description}</p>
+                  </div>
+                )}
               </p>
             </div>
           </Link>

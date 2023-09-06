@@ -10,7 +10,7 @@ import { Point, Area } from "react-easy-crop/types";
 import Modal from "react-bootstrap/Modal";
 import { v4 as uuidv4 } from "uuid";
 import { MultiSelect } from "react-multi-select-component";
-import { LOCATION_OPTIONS } from '../../types/Constant';
+import { LOCATION_OPTIONS } from "../../types/Constant";
 
 interface CaregiverFormProps {
   API_URL: string;
@@ -30,7 +30,6 @@ const initialFormData: Partial<Caregiver> = {
   name: "",
   phone: "",
   location: [],
-  description: "",
   age: null,
   education: "",
   gender: "",
@@ -149,6 +148,24 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
     const target = e.target;
     const { name, value, type } = target;
 
+    // New check for years_of_experience
+    if (name === "years_of_experience") {
+      const numValue = parseInt(value);
+      if (numValue <= 0) {
+        alert("工作经验必须大于 0");
+        return;
+      }
+    }
+
+    // New check for years_of_experience
+    if (name === "age") {
+      const numValue = parseInt(value);
+      if (numValue <= 0) {
+        alert("年龄必须大于 18");
+        return;
+      }
+    }
+
     if (type === "select-multiple") {
       const select = target as HTMLSelectElement;
       const values = Array.from(select.selectedOptions).map(
@@ -204,7 +221,6 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
 
     const missingFields = [];
     if (!formData.name) missingFields.push("名字");
-    if (!formData.description) missingFields.push("简介");
     if (!formData.phone) missingFields.push("电话");
     if (!imageurl) missingFields.push("照片");
 
@@ -239,9 +255,14 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
         console.log("NewCaregiver:------", newCaregiver);
         updateCaregivers(newCaregiver);
         getCaregivers();
+
+        // After successfully creating the careneeder, navigate to the schedule page
+        // by extracting the careneeder's ID from the response and including it in the URL
+        const caregiverId = newCaregiver.id;
+
         resetForm();
         setTimeout(() => {
-          navigate("/caregivers");
+          navigate(`/signup_caregiver/ads?caregiverId=${caregiverId}`);
         }, 2000);
       })
       .catch((error) => console.error("Error adding caregiver:", error));
@@ -273,7 +294,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
         <div className="flex flex-col items-center justify-center bg-white shadow p-2 rounded-lg mb-2">
           <div className="flex items-center mb-2">
             <label className="text-gray-700 mr-2" htmlFor="image">
-              照片：
+              照片（必选）：
             </label>
             <div className="border-2 border-gray-200 rounded-md p-2 cursor-pointer bg-blue-500 text-white">
               <label htmlFor="image">上传照片</label>
@@ -415,21 +436,10 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             onChange={handleMultiSelectChange}
             labelledBy="Select"
             hasSelectAll={false}
-          />
-        </div>
-
-        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
-          <label className="mb-2 text-gray-700" htmlFor="description">
-            自我简介及服务内容
-          </label>
-          <textarea
-            className="border border-gray-300 rounded-md p-1 w-full h-32"
-            id="description"
-            name="description"
-            placeholder="必填"
-            value={formData.description}
-            required={true}
-            onChange={handleChange}
+            overrideStrings={{
+              selectSomeItems: "请选择", // This changes "Select" text
+              search: "搜索", // This changes "Search" text
+            }}
           />
         </div>
 
@@ -446,6 +456,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             onChange={handleChange}
           />
         </div>
+
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="education">
             教育程度:
@@ -483,6 +494,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
           <input
             className="border border-gray-300 rounded-md p-2 w-full"
             title="请输入工作经验"
+            placeholder="请只输入数字年限"
             autoComplete="off"
             type="number"
             id="years_of_experience"
@@ -496,7 +508,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
           disabled={isSubmitting || isFormDisabled}
           className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
         >
-          {isSubmitting ? "提交中..." : "提交"}
+          {isSubmitting ? "下一步..." : "下一步"}
         </button>
         <Modal
           show={showSuccessModal}

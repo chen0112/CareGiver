@@ -5,6 +5,7 @@ import { useCareneederContext } from "./context/CareneederContext";
 import CaregiverForm from "./components/CaregiverForm/CaregiverForm";
 import CaregiverList from "./components/CaregiverList/CaregiverList";
 import CaregiverDetail from "./components/CaregiverDetails/CaregiverDetail";
+import CaregiverAds from "./components/CaregiverAds/CaregiverAds"
 import HomePage from "./components/Home/HomePage";
 import { Caregiver, Careneeder } from "./types/Types";
 import Register from "./components/Register/Register";
@@ -80,6 +81,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/caregivers" element={<CaregiverList />} />
         <Route path="/caregivers/:id" element={<CaregiverDetail />} />
         <Route path="/mycaregiver/:phone" element={<MyCaregivers />} />
+        <Route path="/signup_caregiver/ads" element={<CaregiverAds />} />
         <Route
           path="/signup_careneeder"
           element={

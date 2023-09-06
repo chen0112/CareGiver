@@ -3,12 +3,16 @@ import CaregiverCard from "../CaregiverCard/CaregiverCard";
 import { BiHeart } from "react-icons/bi";
 import { Caregiver } from "../../types/Types";
 import { Link, useParams } from "react-router-dom";
+import { useCaregiverAdsContext } from "../../context/CaregiverAdsContext";
 
 const MyCaregivers: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
   const [myCaregivers, setMyCaregivers] = useState<Caregiver[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { caregiverAds } = useCaregiverAdsContext();
+  console.log("Context careneederAds state:", caregiverAds);
 
   useEffect(() => {
     fetch(`https://nginx.yongxinguanai.com/api/mycaregiver/${phone}`)
@@ -70,14 +74,22 @@ const MyCaregivers: React.FC = () => {
       </div>
 
       <div className="flex flex-col items-center">
-        {myCaregivers.map((caregiver) => (
-          <CaregiverCard
-            key={caregiver.id}
-            caregiver={caregiver}
-            loggedInUserPhone={phone}
-            onUpdateCaregiver={handleCaregiverUpdate} // Pass the update handler down
-          />
-        ))}
+        {myCaregivers.map((caregiver) => {
+          // Find all the associated careneederAds for this careneeder
+          const associatedAds = caregiverAds.find(
+            (ad) => ad.caregiver_id === caregiver.id
+          );
+
+          return (
+            <CaregiverCard
+              key={caregiver.id}
+              caregiver={caregiver}
+              caregiverAd={associatedAds}
+              onUpdateCaregiver={handleCaregiverUpdate}
+              loggedInUserPhone={phone}
+            />
+          );
+        })}
       </div>
     </div>
   );
