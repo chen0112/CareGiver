@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Careneeder, Schedule, Ads } from "../../types/Types";
 import { Link } from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import dayjs from "dayjs";
-import {LOCATION_OPTIONS} from "../../types/Constant"
+import { LOCATION_OPTIONS } from "../../types/Constant";
 
 const defaultImageUrl =
   "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
@@ -38,6 +38,13 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedCareneeder, setEditedCareneeder] = useState(careneeder);
+  const [editedCareneederAd, setEditedCareneederAd] = useState(
+    careneederAd || { title: "", description: "" }
+  );
+
+  useEffect(() => {
+    setEditedCareneederAd(careneederAd || { title: "", description: "" });
+  }, [careneederAd]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -58,19 +65,19 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setEditedCareneeder({
-      ...editedCareneeder,
+    setEditedCareneederAd({
+      ...editedCareneederAd,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleSave = () => {
     fetch(
-      `https://nginx.yongxinguanai.com/api/mycareneeder/${editedCareneeder.id}`,
+      `https://nginx.yongxinguanai.com/api/mycareneeder/${editedCareneeder.id}/ad`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editedCareneeder),
+        body: JSON.stringify(editedCareneederAd),
       }
     )
       .then((response) => response.json())
@@ -82,7 +89,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
         setIsEditing(false);
       })
       .catch((error) => {
-        console.error("Error updating careneeder:", error);
+        console.error("Error updating careneederAd:", error);
       });
   };
 
@@ -92,35 +99,36 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <div className="mb-4">
             <label
-              htmlFor="name"
+              htmlFor="title"
               className="block text-sm font-medium text-gray-700"
             >
-              姓名
+              标题
             </label>
             <input
               type="text"
-              name="name"
-              id="name"
-              value={editedCareneeder.name}
+              name="title"
+              id="title"
+              value={editedCareneederAd.title}
               onChange={handleInputChange}
               className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
           <div className="mb-4">
             <label
-              htmlFor="location"
+              htmlFor="description"
               className="block text-sm font-medium text-gray-700"
             >
-              地点
+              描述
             </label>
-            <MultiSelect
-              options={locationOptions}
-              value={editedCareneeder.location ?? []}
-              onChange={handleLocationChange}
-              labelledBy="Select"
-              className="border rounded-md shadow-sm"
+            <textarea
+              name="description"
+              id="description"
+              value={editedCareneederAd.description}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
+          
           <div className="flex justify-end">
             <button
               onClick={handleSave}

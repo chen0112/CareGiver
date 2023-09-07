@@ -12,6 +12,7 @@ const Register: React.FC = () => {
 
   const navigate = useNavigate();
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -48,21 +49,21 @@ const Register: React.FC = () => {
         }
       );
 
-      const responseText = await response.text(); // Add this line
-      console.log("Response Text:", responseText); // Add this line
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        const data = await response.json();
 
-      const data = JSON.parse(responseText); // Replace this line with existing line to parse JSON
-
-      if (response.ok && data.success) {
-        setSuccessMsg("创建账号成功!");
-        // Optionally, navigate to another page after some delay
-        setTimeout(() => navigate("/signup_caregiver"), 2000);
+        if (response.ok && data.success) {
+          setSuccessMsg("创建账号成功!");
+          setTimeout(() => navigate("/signup_caregiver"), 2000);
+        } else {
+          setErrorMsg("注册失败: " + (data.error || "Unknown Error"));
+        }
       } else {
-        // Handle error
-        console.error("注册失败:", data);
+        setErrorMsg("注册失败: Invalid response from server");
       }
-    } catch (error) {
-      console.error("注册失败:", error);
+    } catch (error: any) {
+      setErrorMsg("注册失败: " + error.message);
     }
   };
 
@@ -82,6 +83,9 @@ const Register: React.FC = () => {
 
       <hr className="border-t border-black-300 mx-1 my-2" />
 
+      {errorMsg && (
+        <div className="text-red-500 text-center mb-4">{errorMsg}</div>
+      )}
       {successMsg && (
         <div className="text-green-500 text-center mb-4">{successMsg}</div>
       )}

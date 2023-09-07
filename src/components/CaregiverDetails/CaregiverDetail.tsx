@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useCaregiverAdsContext } from "../../context/CaregiverAdsContext";
-import './CaregiverDetail.css';
-
+import "./CaregiverDetail.css";
 
 const CaregiverDetail: React.FC = () => {
   const { id } = useParams();
@@ -48,7 +47,7 @@ const CaregiverDetail: React.FC = () => {
     : null;
 
   return (
-    <div className="variant3">
+    <div>
       <div className="flex items-center mx-9 py-3">
         <Link
           to="/"
@@ -64,7 +63,7 @@ const CaregiverDetail: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <div className="flex flex-col items-center justify-start min-h-screen space-y-6 px-4 md:px-0">
-        {/* Top section for image and details */}
+        {/* Top section */}
         <div className="max-w-4xl w-full flex flex-col md:flex-row items-start p-4 bg-white shadow-md rounded-lg">
           {/* Image section */}
           <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
@@ -91,24 +90,24 @@ const CaregiverDetail: React.FC = () => {
             {/* Age and Gender */}
             <div className="flex" style={{ gap: "1.5rem" }}>
               <p>
-                <strong>Age:</strong> {caregiver?.age}
+                <strong>年龄:</strong> {caregiver?.age}
               </p>
               <p>
-                <strong>Gender:</strong> {caregiver?.gender}
+                <strong>性别:</strong> {caregiver?.gender}
               </p>
             </div>
 
             {/* Education, Experience, Phone */}
             <div className="flex flex-wrap space-x-4 md:space-x-10">
               <p>
-                <strong>Education:</strong> {caregiver?.education}
+                <strong>教育程度:</strong> {caregiver?.education}
               </p>
               <p>
-                <strong>Experience:</strong> {caregiver?.years_of_experience}{" "}
-                years
+                <strong>工作经验:</strong> {caregiver?.years_of_experience}{" "}
+                年
               </p>
               <p>
-                <strong>Phone:</strong> {caregiver?.phone}
+                <strong>电话:</strong> {caregiver?.phone}
               </p>
             </div>
           </div>

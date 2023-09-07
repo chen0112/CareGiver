@@ -461,32 +461,45 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
           <label className="mb-2 text-gray-700" htmlFor="education">
             教育程度:
           </label>
-          <input
+          <select
             className="border border-gray-300 rounded-md p-2 w-full"
-            type="text"
             id="education"
             name="education"
             value={formData.education}
             onChange={handleChange}
-          />
+          >
+            <option value="" disabled className="text-gray-400">
+              选择教育程度
+            </option>
+            <option value="本科">本科</option>
+            <option value="专科">专科</option>
+            <option value="职高">职高</option>
+            <option value="高中">高中</option>
+            <option value="初中">初中</option>
+            <option value="小学">小学</option>
+          </select>
         </div>
+
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="gender">
             性别:
           </label>
-          <input
+          <select
             className="border border-gray-300 rounded-md p-2 w-full"
             placeholder="男性/女性"
-            maxLength={6}
-            title="请输入性别"
-            autoComplete="off"
-            type="text"
             id="gender"
             name="gender"
             value={formData.gender}
             onChange={handleChange}
-          />
+          >
+            <option value="" disabled className="text-gray-400">
+              选择性别
+            </option>
+            <option value="男性">男性</option>
+            <option value="女性">女性</option>
+          </select>
         </div>
+
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="years_of_experience">
             工作经验:
@@ -503,6 +516,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             onChange={handleChange}
           />
         </div>
+
         <button
           type="submit"
           disabled={isSubmitting || isFormDisabled}

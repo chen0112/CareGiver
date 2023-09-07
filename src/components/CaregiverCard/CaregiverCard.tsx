@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Caregiver, CaregiverAds } from "../../types/Types";
 import { Link } from "react-router-dom";
 import "./CaregiverCard.css";
@@ -33,6 +33,13 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedCaregiver, setEditedCaregiver] = useState(caregiver);
+  const [editedCaregiverAd, setEditedCaregiverAd] = useState(
+    caregiverAd || { title: "", description: "" }
+  );
+
+  useEffect(() => {
+    setEditedCaregiverAd(caregiverAd || { title: "", description: "" });
+  }, [caregiverAd]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -53,19 +60,19 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setEditedCaregiver({
-      ...editedCaregiver,
+    setEditedCaregiverAd({
+      ...editedCaregiverAd,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleSave = () => {
     fetch(
-      `https://nginx.yongxinguanai.com/api/mycaregiver/${editedCaregiver.id}`,
+      `https://nginx.yongxinguanai.com/api/mycaregiver/${editedCaregiver.id}/ad`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editedCaregiver),
+        body: JSON.stringify(editedCaregiverAd),
       }
     )
       .then((response) => response.json())
@@ -77,7 +84,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
         setIsEditing(false);
       })
       .catch((error) => {
-        console.error("Error updating caregiver:", error);
+        console.error("Error updating caregiverAd:", error);
       });
   };
 
@@ -87,32 +94,33 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
         <div className="bg-white p-6 rounded shadow-md">
           <div className="mb-4">
             <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-600"
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700"
             >
-              Name
+              标题
             </label>
             <input
               type="text"
-              name="name"
-              id="name"
-              value={editedCaregiver.name}
+              name="title"
+              id="title"
+              value={editedCaregiverAd.title}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-md"
+              className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
           <div className="mb-4">
             <label
-              htmlFor="location"
-              className="block text-sm font-medium text-gray-600"
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700"
             >
-              Locations
+              描述
             </label>
-            <MultiSelect
-              options={locationOptions} // Make sure locationOptions is defined
-              value={editedCaregiver.location ?? []}
-              onChange={handleLocationChange} // You will need to define this
-              labelledBy="Select"
+            <textarea
+              name="description"
+              id="description"
+              value={editedCaregiverAd.description}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
 
@@ -161,7 +169,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
                 </span>
               </div>
               <p className="text-gray-600 mb-4 pr-6 line-clamp">
-              {caregiverAd && ( // New section for displaying ad details
+                {caregiverAd && ( // New section for displaying ad details
                   <div>
                     <p>{caregiverAd.title}</p>
                     <p className="line-clamp-3">{caregiverAd.description}</p>

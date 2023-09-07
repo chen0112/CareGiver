@@ -113,7 +113,7 @@ const CareneederDetail: React.FC = () => {
           <div className="max-w-4xl w-full p-4 bg-blue-100 shadow-lg rounded-lg">
             <h4 className="text-lg font-semibold text-blue-600">排班信息</h4>
             <p>排班类型: {selectedSchedule.scheduletype}</p>
-            <p>总时长: {selectedSchedule.totalhours}</p>
+            <p>总时长: {selectedSchedule.totalhours}小时</p>
             <p>频率: {selectedSchedule.frequency}</p>
             <p>
               开始日期:{" "}
@@ -130,7 +130,7 @@ const CareneederDetail: React.FC = () => {
                 ? selectedSchedule.selectedtimeslots.join(", ")
                 : "时间段未定义"}
             </p>
-            <p>持续天数: {selectedSchedule.durationdays}</p>
+            <p>持续天数: {selectedSchedule.durationdays}天</p>
           </div>
         )}
         {/* Associated Ads */}
