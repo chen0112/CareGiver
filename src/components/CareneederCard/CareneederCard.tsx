@@ -128,7 +128,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
               className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
-          
+
           <div className="flex justify-end">
             <button
               onClick={handleSave}
@@ -149,7 +149,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
           {/* Add horizontal margin */}
           <Link
             to={`/careneeders/${careneeder.id}`}
-            className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-2 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
+            className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
           >
             {/* Image Container */}
             <div className="flex-shrink-0 flex items-center justify-center w-1/3">
@@ -175,14 +175,14 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
                     : "无"}
                 </span>
               </div>
-              <p className="text-gray-600 mb-4 pr-6">
+              <div className="text-gray-600 mb-3 pr-6">
                 {careneederAd && ( // New section for displaying ad details
                   <div>
                     <p>{careneederAd.title}</p>
                     <p className="line-clamp-3">{careneederAd.description}</p>
                   </div>
                 )}
-              </p>
+              </div>
             </div>
           </Link>
 

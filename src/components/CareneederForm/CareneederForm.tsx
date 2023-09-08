@@ -353,13 +353,13 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
               </div>
               <Modal show={showModal} onHide={handleClose}>
                 <Modal.Header closeButton>
-                  <Modal.Title>Cropped Image</Modal.Title>
+                  <Modal.Title>截图</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   {croppedImage && <img src={croppedImage} alt="Cropped" />}
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button onClick={handleClose}>Close</Button>
+                  <Button onClick={handleClose}>关闭</Button>
                 </Modal.Footer>
               </Modal>
             </div>

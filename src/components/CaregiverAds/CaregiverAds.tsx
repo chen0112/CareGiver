@@ -137,7 +137,7 @@ const CaregiverAds: React.FC = () => {
               value={title}
               required={true} // Make the title input mandatory
               onChange={handleTitleChange}
-              placeholder="请包括您招工的具体信息，比如：需要做饭，照顾老人在中环路."
+              placeholder="请保持简介的标题，比如照顾老年人小时工."
             />
             {titleError && <p className="text-red-500">{titleError}</p>}
           </div>
@@ -153,7 +153,7 @@ const CaregiverAds: React.FC = () => {
               required={true} // Make the description input mandatory
               rows={5}
               onChange={handleDescriptionChange}
-              placeholder="请让您的广告尽量简洁，但包括一些重要信息， 比如：照顾内容，特殊需求。这样能让护工们很快了解他们的工作内容."
+              placeholder="请让您的广告尽量简洁，但包括一些重要信息， 比如：照顾内容，特殊需求。这样能让雇主们很快了解您能提供的服务."
             />
             {descriptionError && (
               <p className="text-red-500">{descriptionError}</p>

@@ -91,11 +91,12 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
   return (
     <div>
       {isEditing ? (
-        <div className="bg-white p-6 rounded shadow-md">
+        <div className="bg-white p-4 md:p-6 rounded shadow-lg">
+          {/* Title */}
           <div className="mb-4">
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-blue-700"
             >
               标题
             </label>
@@ -108,10 +109,12 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
               className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
+
+          {/* Description */}
           <div className="mb-4">
             <label
               htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-blue-700"
             >
               描述
             </label>
@@ -124,10 +127,11 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
             />
           </div>
 
+          {/* Save and Cancel Buttons */}
           <div className="flex justify-end">
             <button
               onClick={handleSave}
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               保存
             </button>
@@ -140,13 +144,13 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center mb-6 mx-4 sm:mx-6">
-          {/* Add horizontal margin */}
+        <div className="flex flex-col items-center mb-6 mx-2 md:mx-6">
+          {/* Link to Caregiver's Profile */}
           <Link
             to={`/caregivers/${caregiver.id}`}
-            className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-2 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
+            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
-            {/* Image Container */}
+            {/* Image */}
             <div className="flex-shrink-0 flex items-center justify-center w-1/3">
               <img
                 src={caregiver.imageurl}
@@ -154,35 +158,36 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
                 style={imageStyle}
               />
             </div>
-            {/* Text Container */}
+
+            {/* Text */}
             <div className="flex-grow p-6 flex flex-col justify-between">
               <div className="flex items-center">
-                <h3 className="text-xl font-semibold mr-3">{caregiver.name}</h3>
-                <FaMapMarkerAlt className="text-gray-600 mb-2" />
-                <span
-                  className="text-gray-600 ml-2"
-                  style={{ marginTop: "-7px" }}
-                >
+                <h3 className="text-xl font-semibold text-blue-700 mr-3">
+                  {caregiver.name}
+                </h3>
+                <FaMapMarkerAlt className="text-gray-600 mb-1" />
+                <span className="text-gray-600 ml-2">
                   {Array.isArray(caregiver.location)
                     ? caregiver.location.map((loc) => loc.label).join(", ")
                     : "无"}
                 </span>
               </div>
-              <p className="text-gray-600 mb-4 pr-6 line-clamp">
-                {caregiverAd && ( // New section for displaying ad details
+              <div className="text-gray-600 mb-8 line-clamp">
+                {caregiverAd && (
                   <div>
                     <p>{caregiverAd.title}</p>
                     <p className="line-clamp-3">{caregiverAd.description}</p>
                   </div>
                 )}
-              </p>
+              </div>
             </div>
           </Link>
 
+          {/* Edit Button */}
           {caregiver.phone === loggedInUserPhone && (
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-auto text-center"
               onClick={handleEditClick}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
             >
               编辑
             </button>
