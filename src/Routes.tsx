@@ -7,6 +7,7 @@ import CaregiverList from "./components/CaregiverList/CaregiverList";
 import CaregiverDetail from "./components/CaregiverDetails/CaregiverDetail";
 import CaregiverAds from "./components/CaregiverAds/CaregiverAds"
 import HomePage from "./components/Home/HomePage";
+import HomePage2 from "./components/Home/Homepage2";
 import { Caregiver, Careneeder } from "./types/Types";
 import Register from "./components/Register/Register";
 import SignIn from "./components/SignIn/SignIn";
@@ -61,7 +62,7 @@ const AppRoutes: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register/caregiver" element={<Register userType="caregiver" />} />
         {/* Pass updateCaregivers and getCaregivers as props to the CaregiverForm component */}
         <Route
           path="/signup_caregiver"
@@ -97,6 +98,7 @@ const AppRoutes: React.FC = () => {
           path="/signin/careneeder"
           element={<SignIn userType="careneeder" />}
         />
+        <Route path="/register/careneeder" element={<Register userType="careneeder"/>} />
         <Route path="/careneeders" element={<CareneederList />} />
         <Route path="/careneeders/:id" element={<CareneederDetail />} />
         <Route path="/mycareneeder/:phone" element={<MyCareneeders />} />

@@ -4,7 +4,11 @@ import bcrypt from "bcryptjs";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 
-const Register: React.FC = () => {
+interface RegisterProps {
+  userType: "caregiver" | "careneeder"; // Define the valid user types here
+}
+
+const Register: React.FC<RegisterProps> = ({ userType }) => {
   const [formData, setFormData] = useState({
     phone: "",
     passcode: "",
@@ -55,7 +59,13 @@ const Register: React.FC = () => {
 
         if (response.ok && data.success) {
           setSuccessMsg("创建账号成功!");
-          setTimeout(() => navigate("/signup_caregiver"), 2000);
+          setTimeout(() => {
+            if (userType === "caregiver") {
+              navigate("/signup_caregiver");
+            } else if (userType === "careneeder") {
+              navigate("/signup_careneeder");
+            }
+          }, 2000);
         } else {
           setErrorMsg("注册失败: " + (data.error || "Unknown Error"));
         }

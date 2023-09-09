@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 
 interface SignInProps {
-    userType: "caregiver" | "careneeder"; // Define the valid user types here
-  }
+  userType: "caregiver" | "careneeder"; // Define the valid user types here
+}
 
-const SignIn: React.FC<SignInProps> = ({userType}) => {
+const SignIn: React.FC<SignInProps> = ({ userType }) => {
   const [formData, setFormData] = useState({
     phone: "",
     passcode: "",
@@ -131,7 +131,10 @@ const SignIn: React.FC<SignInProps> = ({userType}) => {
         </button>
       </form>
       <div className="text-center mt-4">
-        <Link to="/register" className="text-blue-600 hover:text-blue-800">
+        <Link
+          to={`/register/${userType}`}
+          className="text-blue-600 hover:text-blue-800"
+        >
           没有账号? 注册
         </Link>
       </div>
