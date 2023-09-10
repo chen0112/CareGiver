@@ -5,6 +5,9 @@ import { AiOutlineClose } from "react-icons/ai";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
 import AD1 from "./ad1.png";
 import AD2 from "./ad2.png";
+import AD3 from "./ad3.png";
+import AD4 from "./ad4.png";
+import AD5 from "./ad5.png";
 import User1 from "./user1.png";
 import User2 from "./user2.png";
 import User3 from "./user3.png";
@@ -106,27 +109,30 @@ const HomePage: React.FC = () => {
 
             <li>
               <Link to="/signin/caregiverr" className="text-black">
-              护工登陆
+                护工登陆
               </Link>
             </li>
             <li>
               <Link to="/signin/careneeder" className="text-black">
-              雇主登陆
+                雇主登陆
               </Link>
             </li>
             <li>
               <Link to="/signin/caregiver" className="text-black">
-              护工注册
+                护工注册
               </Link>
             </li>
             <li>
               <Link to="/register/careneeder" className="text-black">
-              雇主注册
+                雇主注册
               </Link>
             </li>
           </ul>
         </div>
       </header>
+      
+      <hr className="border-t border-black-300 mx-1 my-1" />
+
       {/* New Image Container */}
       <div className="flex flex-wrap justify-between items-center my-0">
         <div className="w-full md:w-1/2 p-2">
@@ -149,11 +155,7 @@ const HomePage: React.FC = () => {
           to="/signin/caregiver"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img
-            src="https://useprd-cdn-w.care.com/assets/img/welcomePage/vertical-senior-care-01def31346e44e1816bd822e8f4ee587.svg"
-            alt="Senior Care"
-            className="w-16 h-16 mb-2"
-          />
+          <img src={AD3} alt="Senior Care" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">成为护工</span>
         </Link>
 
@@ -161,19 +163,23 @@ const HomePage: React.FC = () => {
           to="/signin/careneeder"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img
-            src="https://useprd-cdn-w.care.com/assets/img/welcomePage/vertical-special-needs-a5c4bd25cdfc6c3b3511b155c6da929e.svg"
-            alt="Senior Care"
-            className="w-16 h-16 mb-2"
-          />
+          <img src={AD4} alt="Senior Care" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">雇主发布</span>
+        </Link>
+
+        <Link
+          to="/animalcaregiver"
+          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
+        >
+          <img src={AD5} alt="Senior Care" className="w-16 h-12 mb-2" />
+          <span className="text-black text-sm no-underline">宠物照顾</span>
         </Link>
 
         <Link
           to="/caregivers"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img src={AD2} alt="Senior Care" className="w-16 h-16 mb-2" />
+          <img src={AD2} alt="Senior Care" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">护工展示</span>
         </Link>
 
@@ -181,7 +187,7 @@ const HomePage: React.FC = () => {
           to="/careneeders"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img src={AD1} alt="Senior Care" className="w-16 h-16 mb-2" />
+          <img src={AD1} alt="Senior Care" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">雇主广告</span>
         </Link>
       </div>

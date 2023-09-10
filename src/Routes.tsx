@@ -5,9 +5,8 @@ import { useCareneederContext } from "./context/CareneederContext";
 import CaregiverForm from "./components/CaregiverForm/CaregiverForm";
 import CaregiverList from "./components/CaregiverList/CaregiverList";
 import CaregiverDetail from "./components/CaregiverDetails/CaregiverDetail";
-import CaregiverAds from "./components/CaregiverAds/CaregiverAds"
+import CaregiverAds from "./components/CaregiverAds/CaregiverAds";
 import HomePage from "./components/Home/HomePage";
-import HomePage2 from "./components/Home/Homepage2";
 import { Caregiver, Careneeder } from "./types/Types";
 import Register from "./components/Register/Register";
 import SignIn from "./components/SignIn/SignIn";
@@ -16,8 +15,9 @@ import CareneederForm from "./components/CareneederForm/CareneederForm";
 import CareneederList from "./components/CareneederList/CareneederList";
 import CareneederDetail from "./components/CareneederDetail/CareneederDetail";
 import MyCareneeders from "./components/MyCardneeder/MyCareneeder";
-import CareneederSchedule from "./components/CareneederSchedule/CareneederSchedule"
+import CareneederSchedule from "./components/CareneederSchedule/CareneederSchedule";
 import CareneederAds from "./components/CareneederAds/CareneederAds";
+import AnimalCaregiver from "./components/AnimalCaregiver/AnimalCaregiver";
 
 const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
 
@@ -62,7 +62,10 @@ const AppRoutes: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/register/caregiver" element={<Register userType="caregiver" />} />
+        <Route
+          path="/register/caregiver"
+          element={<Register userType="caregiver" />}
+        />
         {/* Pass updateCaregivers and getCaregivers as props to the CaregiverForm component */}
         <Route
           path="/signup_caregiver"
@@ -98,13 +101,25 @@ const AppRoutes: React.FC = () => {
           path="/signin/careneeder"
           element={<SignIn userType="careneeder" />}
         />
-        <Route path="/register/careneeder" element={<Register userType="careneeder"/>} />
+        <Route
+          path="/register/careneeder"
+          element={<Register userType="careneeder" />}
+        />
         <Route path="/careneeders" element={<CareneederList />} />
         <Route path="/careneeders/:id" element={<CareneederDetail />} />
         <Route path="/mycareneeder/:phone" element={<MyCareneeders />} />
-        <Route path="/signup_careneeder/schedule" element={<CareneederSchedule />} />
+        <Route
+          path="/signup_careneeder/schedule"
+          element={<CareneederSchedule />}
+        />
         {/* `/signup_careneeder/schedule?careneederId=${careneederId}` */}
-        <Route path="/signup_careneeder/schedule/ads" element={<CareneederAds />} />
+        <Route
+          path="/signup_careneeder/schedule/ads"
+          element={<CareneederAds />}
+        />
+
+        {/* pet care */}
+        <Route path="/animalcaregiver" element={<AnimalCaregiver />} />
       </Routes>
     </BrowserRouter>
   );
