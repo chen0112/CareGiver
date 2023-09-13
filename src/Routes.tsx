@@ -2,12 +2,13 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCaregiverContext } from "./context/CaregiverContext";
 import { useCareneederContext } from "./context/CareneederContext";
+import { useAnimalCaregiverFormContext } from "./context/AnimalCaregiverFormContext";
 import CaregiverForm from "./components/CaregiverForm/CaregiverForm";
 import CaregiverList from "./components/CaregiverList/CaregiverList";
 import CaregiverDetail from "./components/CaregiverDetails/CaregiverDetail";
 import CaregiverAds from "./components/CaregiverAds/CaregiverAds";
 import HomePage from "./components/Home/HomePage";
-import { Caregiver, Careneeder } from "./types/Types";
+import { Caregiver, Careneeder, AnimalCaregiverForm } from "./types/Types";
 import Register from "./components/Register/Register";
 import SignIn from "./components/SignIn/SignIn";
 import MyCaregivers from "./components/MyCaregiver/MyCaregiver";
@@ -18,6 +19,9 @@ import MyCareneeders from "./components/MyCardneeder/MyCareneeder";
 import CareneederSchedule from "./components/CareneederSchedule/CareneederSchedule";
 import CareneederAds from "./components/CareneederAds/CareneederAds";
 import AnimalCaregiver from "./components/AnimalCaregiver/AnimalCaregiver";
+import AnimalCaregiverWebForm from "./components/AnimalCaregiverForm/AnimalCaregiverForm";
+import AnimalCaregiverAd from "./components/AnimalCaregiverAd/AnimalCaregiverAd"
+import AnimalCaregiverList from "./components/AnimalCaregiverList/AnimalCaregiverList";
 
 const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
 
@@ -26,9 +30,12 @@ const API_URL_UPLOAD = "https://nginx.yongxinguanai.com/api/upload";
 const API_URL_careneeders =
   "https://nginx.yongxinguanai.com/api/all_careneeders";
 
+const API_URL_animalcaregiver = "https://nginx.yongxinguanai.com/api/all_animalcaregivers";
+
 const AppRoutes: React.FC = () => {
   const { caregivers, setCaregivers } = useCaregiverContext();
   const { careneeders, setCareneeders } = useCareneederContext();
+  const { animalcaregiversForm, setanimalcaregiversForm } = useAnimalCaregiverFormContext();
 
   const updateCaregivers = (newCaregiver: Caregiver) => {
     console.log("Updating caregivers with:", caregivers); // Debugging log
@@ -45,17 +52,31 @@ const AppRoutes: React.FC = () => {
   };
 
   const updateCareneeders = (newCareNeeder: Careneeder) => {
-    console.log("Updating care needers with:", newCareNeeder); // Debugging log
+    console.log("Updating care needers with:", careneeders); // Debugging log
     setCareneeders((prevData) => {
       return [...(prevData || []), newCareNeeder];
     });
   };
 
   const getCareneeders = () => {
-    fetch(API_URL)
+    fetch(API_URL_careneeders)
       .then((response) => response.json())
       .then((data) => setCareneeders(data))
       .catch((error) => console.error("Error fetching care needers:", error));
+  };
+
+  const updateAnimalCaregiverForm = (newCareNeeder: AnimalCaregiverForm) => {
+    console.log("Updating animalcaregiversForm with:", animalcaregiversForm); // Debugging log
+    setanimalcaregiversForm((prevData) => {
+      return [...(prevData || []), newCareNeeder];
+    });
+  };
+
+  const getAnimalCaregiverForm = () => {
+    fetch(API_URL_animalcaregiver)
+      .then((response) => response.json())
+      .then((data) => setCareneeders(data))
+      .catch((error) => console.error("Error fetching animalcaregiversForm:", error));
   };
 
   return (
@@ -86,6 +107,9 @@ const AppRoutes: React.FC = () => {
         <Route path="/caregivers/:id" element={<CaregiverDetail />} />
         <Route path="/mycaregiver/:phone" element={<MyCaregivers />} />
         <Route path="/signup_caregiver/ads" element={<CaregiverAds />} />
+
+        {/* careneeder */}
+
         <Route
           path="/signup_careneeder"
           element={
@@ -112,14 +136,37 @@ const AppRoutes: React.FC = () => {
           path="/signup_careneeder/schedule"
           element={<CareneederSchedule />}
         />
-        {/* `/signup_careneeder/schedule?careneederId=${careneederId}` */}
         <Route
           path="/signup_careneeder/schedule/ads"
           element={<CareneederAds />}
         />
 
         {/* pet care */}
-        <Route path="/animalcaregiver" element={<AnimalCaregiver />} />
+        <Route
+          path="/signin/animalcaregiver"
+          element={<SignIn userType="animalcaregiver" />}
+        />
+        <Route
+          path="/register/animalcaregiver"
+          element={<Register userType="animalcaregiver" />}
+        />
+        <Route
+          path="/signup_animalcaregiver"
+          element={
+            <AnimalCaregiverWebForm
+              updateCaregivers={updateAnimalCaregiverForm}
+              getCaregivers={getAnimalCaregiverForm}
+              API_URL={API_URL_animalcaregiver}
+              API_URL_UPLOAD={API_URL_UPLOAD}
+            />
+          }
+        />
+          <Route
+          path="/signup_animalcaregiver/details"
+          element={<AnimalCaregiver />}
+        />
+         <Route path="/signup_animalcaregiver/details/ads" element={<AnimalCaregiverAd />} />
+         <Route path="/animalcaregivers" element={<AnimalCaregiverList />} />
       </Routes>
     </BrowserRouter>
   );

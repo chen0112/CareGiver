@@ -168,7 +168,7 @@ const HomePage: React.FC = () => {
         </Link>
 
         <Link
-          to="/animalcaregiver"
+          to="/signin/animalcaregiver"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
           <img src={AD5} alt="Senior Care" className="w-16 h-12 mb-2" />

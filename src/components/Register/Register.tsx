@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 
 interface RegisterProps {
-  userType: "caregiver" | "careneeder"; // Define the valid user types here
+  userType: "caregiver" | "careneeder" | "animalcaregiver"; // Define the valid user types here
 }
 
 const Register: React.FC<RegisterProps> = ({ userType }) => {
@@ -64,6 +64,8 @@ const Register: React.FC<RegisterProps> = ({ userType }) => {
               navigate("/signup_caregiver");
             } else if (userType === "careneeder") {
               navigate("/signup_careneeder");
+            } else if (userType === "animalcaregiver") {
+              navigate("/signup_animalcaregiver");
             }
           }, 2000);
         } else {

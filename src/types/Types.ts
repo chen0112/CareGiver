@@ -59,7 +59,7 @@ export interface CaregiverFormData {
 }
 
 export interface Schedule {
-  id: number
+  id: number;
   scheduletype: string;
   totalhours: string;
   frequency: string;
@@ -70,18 +70,43 @@ export interface Schedule {
 }
 
 export interface Ads {
-  id: number
+  id: number;
   title: string;
   description: string;
   careneeder_id: number;
 }
 
 export interface CaregiverAds {
-  id: number
+  id: number;
   title: string;
   description: string;
   caregiver_id: number;
 }
 
+export interface AnimalCaregiverAds {
+  id: number;
+  title: string;
+  description: string;
+  animalcaregiverid: number;
+}
 
+export interface AnimalCaregiverForm {
+  id: number;
+  name: string;
+  phone: string;
+  location: Option[];
+  imageurl?: string; // Change property name to "imageurl"
+  years_of_experience?: number | null;
+  age?: number | null;
+  education?: string;
+  gender?: string;
+  // Add other properties as needed
+}
 
+export interface AnimalCaregiver {
+  id: number;
+  animalcaregiverid: string | number; // Assuming the ID could be string or number
+  selectedservices: string[];
+  selectedanimals: string[];
+  hourlycharge: string;
+}

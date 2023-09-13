@@ -4,8 +4,11 @@ import CaregiverProvider from "./context/CaregiverContext";
 import CareneederProvider from "./context/CareneederContext"; // Import CareneederProvider
 import CareneederScheduleProvider from "./context/CareneederScheduleContext"; // Import CareneederScheduleProvider
 import CareneederAdsProvider from "./context/CareneederAdsContext";
-import CaregiverAdsProvider from "./context/CaregiverAdsContext"; 
+import CaregiverAdsProvider from "./context/CaregiverAdsContext";
 import "./index.css";
+import AnimalCaregiverFormProvider from "./context/AnimalCaregiverFormContext";
+import AnimalCaregiverProvider from "./context/AnimalCaregiverContext";
+import AnimalCaregiverAdsProvider from "./context/AnimalCaregiverAdsContext";
 
 const App: React.FC = () => {
   return (
@@ -15,7 +18,13 @@ const App: React.FC = () => {
           <CareneederScheduleProvider>
             <CareneederAdsProvider>
               <CaregiverAdsProvider>
-              <Routes />
+                <AnimalCaregiverFormProvider>
+                  <AnimalCaregiverProvider>
+                    <AnimalCaregiverAdsProvider>
+                      <Routes />
+                    </AnimalCaregiverAdsProvider>
+                  </AnimalCaregiverProvider>
+                </AnimalCaregiverFormProvider>
               </CaregiverAdsProvider>
             </CareneederAdsProvider>
           </CareneederScheduleProvider>
