@@ -80,7 +80,7 @@ const AnimalCaregiverCard: React.FC<AnimalcaregiverCardProps> = ({
 
   const handleSave = () => {
     fetch(
-      `https://nginx.yongxinguanai.com/api/mycareneeder/${editedanimalcaregiverForm.id}/ad`,
+      `https://nginx.yongxinguanai.com/api/myanimalcaregiver/${editedanimalcaregiverForm.id}/ad`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -155,7 +155,7 @@ const AnimalCaregiverCard: React.FC<AnimalcaregiverCardProps> = ({
         <div className="flex flex-col items-center mb-6 mx-4 sm:mx-6">
           {/* Add horizontal margin */}
           <Link
-            to={`/careneeders/${animalcaregiversForm.id}`}
+            to={`/animalcaregivers/${animalcaregiversForm.id}`}
             className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
           >
             {/* Image Container */}

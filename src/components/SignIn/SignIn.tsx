@@ -51,9 +51,8 @@ const SignIn: React.FC<SignInProps> = ({ userType }) => {
             navigate(`/mycaregiver/${formData.phone}`);
           } else if (userType === "careneeder") {
             navigate(`/mycareneeder/${formData.phone}`);
-          }
-          else if (userType === "animalcaregiver") {
-            navigate(`/myanimalcaregiver/${formData.phone}`);
+          } else if (userType === "animalcaregiver") {
+            navigate(`/myanimalcaregiverform/${formData.phone}`);
           }
         } else {
           // Use dynamic navigation paths based on userType
