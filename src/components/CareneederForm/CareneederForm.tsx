@@ -79,16 +79,43 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("handleImageChange called");
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImageDataUrl(event.target?.result as string); // Use this to preview image
-      };
-      reader.readAsDataURL(file);
+  const MIN_WIDTH = 1000; // Replace with your minimum width
+  const MIN_HEIGHT = 1000; // Replace with your minimum height
+
+  const [showSizeErrorModal, setShowSizeErrorModal] = useState(false);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      console.log("No file selected");
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const image = new Image();
+      image.onload = function () {
+        const imgElement = this as HTMLImageElement; // Correcting the type here
+
+        if (imgElement.width < MIN_WIDTH || imgElement.height < MIN_HEIGHT) {
+          console.log(
+            `Image dimensions should be at least ${MIN_WIDTH}x${MIN_HEIGHT}`
+          );
+          // Show some message to the user that their image is too small
+          setShowSizeErrorModal(true);
+          return;
+        }
+
+        // Continue with setting the image data URL
+        const dataURL = e.target?.result;
+        if (typeof dataURL === "string") {
+          setImageDataUrl(dataURL);
+          setShowSizeErrorModal(false);
+        }
+      };
+      image.src = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleButtonClick = async () => {
@@ -309,6 +336,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
                     onCropChange={setCrop}
                     onCropComplete={onCropComplete}
                     onZoomChange={setZoom}
+                    objectFit="cover"
                   />
                 </div>
               </div>
@@ -364,6 +392,22 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
               </Modal>
             </div>
           )}
+
+          <Modal
+            show={showSizeErrorModal}
+            onHide={() => setShowSizeErrorModal(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>图片大小错误</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>上传的图片不符合最低大小要求，请上传更大的图片。</p>
+              <p>图片大小至少在 {`${MIN_WIDTH}x${MIN_HEIGHT}`} 像素</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={() => setShowSizeErrorModal(false)}>关闭</Button>
+            </Modal.Footer>
+          </Modal>
           {/* Display the previewImage here */}
           {croppedImage && (
             <div className="mt-4">

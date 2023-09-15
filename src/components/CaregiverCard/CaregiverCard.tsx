@@ -28,7 +28,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
-    height: "80%",
+    height: "60%",
   };
 
   const [isEditing, setIsEditing] = useState(false);

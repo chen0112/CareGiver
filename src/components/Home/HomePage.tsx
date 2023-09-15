@@ -8,6 +8,7 @@ import AD2 from "./ad2.png";
 import AD3 from "./ad3.png";
 import AD4 from "./ad4.png";
 import AD5 from "./ad5.png";
+import AD6 from "./ad7.png";
 import User1 from "./user1.png";
 import User2 from "./user2.png";
 import User3 from "./user3.png";
@@ -155,7 +156,7 @@ const HomePage: React.FC = () => {
           to="/signin/caregiver"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img src={AD3} alt="Senior Care" className="w-16 h-12 mb-2" />
+          <img src={AD3} alt="caregiver" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">成为护工</span>
         </Link>
 
@@ -163,7 +164,7 @@ const HomePage: React.FC = () => {
           to="/signin/careneeder"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img src={AD4} alt="Senior Care" className="w-16 h-12 mb-2" />
+          <img src={AD4} alt="careneder post" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">雇主发布</span>
         </Link>
 
@@ -171,7 +172,7 @@ const HomePage: React.FC = () => {
           to="/signin/animalcaregiver"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img src={AD5} alt="Senior Care" className="w-16 h-12 mb-2" />
+          <img src={AD5} alt="Aninmal Care" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">宠物照顾</span>
         </Link>
 
@@ -179,7 +180,7 @@ const HomePage: React.FC = () => {
           to="/caregivers"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img src={AD2} alt="Senior Care" className="w-16 h-12 mb-2" />
+          <img src={AD2} alt="caregivers display" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">护工展示</span>
         </Link>
 
@@ -187,8 +188,16 @@ const HomePage: React.FC = () => {
           to="/careneeders"
           className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
         >
-          <img src={AD1} alt="Senior Care" className="w-16 h-12 mb-2" />
+          <img src={AD1} alt="Careneeder Ads" className="w-16 h-12 mb-2" />
           <span className="text-black text-sm no-underline">雇主广告</span>
+        </Link>
+
+        <Link
+          to="/animalcaregivers"
+          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
+        >
+          <img src={AD6} alt="Animal Care display" className="w-16 h-12 mb-2" />
+          <span className="text-black text-sm no-underline">宠物照顾广告</span>
         </Link>
       </div>
 
