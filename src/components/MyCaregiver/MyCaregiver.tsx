@@ -73,7 +73,9 @@ const MyCaregivers: React.FC = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center space-y-8">
+
+      <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
         {myCaregivers.map((caregiver) => {
           // Find all the associated careneederAds for this careneeder
           const associatedAds = caregiverAds.find(
@@ -87,9 +89,11 @@ const MyCaregivers: React.FC = () => {
               caregiverAd={associatedAds}
               onUpdateCaregiver={handleCaregiverUpdate}
               loggedInUserPhone={phone}
+              className="w-full"
             />
           );
         })}
+      </div>
       </div>
     </div>
   );

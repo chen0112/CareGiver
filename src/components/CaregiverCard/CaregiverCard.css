@@ -1,48 +1,55 @@
 .description-container {
-    position: relative;
-    max-height: 4em; /* Adjust this value based on your needs */
-    overflow: hidden;
-  }
-  
+  position: relative;
+  max-height: 4em; /* Adjust this value based on your needs */
+  overflow: hidden;
+}
+
 .description-container::after {
-    content: "...";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: #ffffff; /* Assumes a white background. Adjust accordingly */
-    padding-left: 4px; /* Some padding to ensure it doesn't overlap with the text */
-  }
-  
+  content: "...";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #ffffff; /* Assumes a white background. Adjust accordingly */
+  padding-left: 4px; /* Some padding to ensure it doesn't overlap with the text */
+}
+
 .more-link {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: #ffffff; /* Ensures the link is visible on top of the text */
-    padding-left: 8px; /* Creates some spacing between ... and more */
-  }
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #ffffff; /* Ensures the link is visible on top of the text */
+  padding-left: 8px; /* Creates some spacing between ... and more */
+}
 
 .line-clamp {
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Number of lines to display before truncating */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Number of lines to display before truncating */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .edit-button {
-    position: absolute;
-    bottom: -30px; /* Adjust this value based on your needs */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    font-size: 16px;
-    transition: 0.3s;
-  }
- 
-  
-  
+  position: absolute;
+  bottom: -30px; /* Adjust this value based on your needs */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.aspect-w-1 {
+  --tw-aspect-w: 1;
+}
+.aspect-h-1 {
+  --tw-aspect-h: 1;
+}
+.aspect-1\/1 {
+  padding-bottom: 100%;
+}

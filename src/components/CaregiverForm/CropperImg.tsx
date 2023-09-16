@@ -46,6 +46,9 @@ interface Flip {
   vertical: boolean;
 }
 
+const TARGET_WIDTH = 600; // New constant for target width
+const TARGET_HEIGHT = 600; // New constant for target height
+
 export default async function getCroppedImg(
   imageSrc: string,
   pixelCrop: Crop,
@@ -106,9 +109,34 @@ export default async function getCroppedImg(
     pixelCrop.height
   );
 
-  // As a blob
+  // New code for resizing the cropped image to a constant size
+  const finalCanvas = document.createElement("canvas");
+  const finalCtx = finalCanvas.getContext("2d");
+
+  if (!finalCtx) {
+    return null;
+  }
+
+  // Set the dimensions for the final image
+  finalCanvas.width = TARGET_WIDTH;
+  finalCanvas.height = TARGET_HEIGHT;
+
+  // Draw the cropped image onto the final canvas, scaling it to fit
+  finalCtx.drawImage(
+    croppedCanvas,
+    0,
+    0,
+    croppedCanvas.width,
+    croppedCanvas.height, // Source dimensions
+    0,
+    0,
+    TARGET_WIDTH,
+    TARGET_HEIGHT // Destination dimensions
+  );
+
+  // Convert the final canvas to a blob
   return new Promise((resolve, reject) => {
-    croppedCanvas.toBlob((blob) => {
+    finalCanvas.toBlob((blob) => {
       if (blob) {
         resolve(blob);
       } else {

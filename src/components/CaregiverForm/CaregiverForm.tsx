@@ -586,7 +586,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             <p>表单提交成功！</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => setShowSuccessModal(false)}>Close</Button>
+            <Button onClick={() => setShowSuccessModal(false)}>关闭</Button>
           </Modal.Footer>
         </Modal>
       </form>

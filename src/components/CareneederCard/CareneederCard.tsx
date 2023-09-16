@@ -15,6 +15,7 @@ interface CareneederCardProps {
   careneederAd: Ads | undefined;
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
   onUpdateCareneeder?: (updatedCareneeder: Careneeder) => void; // New prop for handling updates
+  className?: string; // Add this line
 }
 
 interface Option {
@@ -152,15 +153,16 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
             className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
           >
             {/* Image Container */}
-            <div className="flex-shrink-0 flex items-center justify-center w-1/3">
+            <div className="flex flex-row md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
               <img
                 src={careneeder.imageurl || defaultImageUrl} // Use the imageurl if available, otherwise use defaultImageUrl
                 alt={careneeder.name}
                 style={imageStyle}
+                className="rounded"
               />
             </div>
             {/* Text Container */}
-            <div className="flex-grow p-6 flex flex-col justify-between">
+            <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
                 <h3 className="text-xl font-semibold mr-3">
                   {careneeder.name}

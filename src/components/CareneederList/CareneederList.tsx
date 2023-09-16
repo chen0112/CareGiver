@@ -7,7 +7,7 @@ import { BiHeart } from "react-icons/bi";
 import { useCareneederScheduleContext } from "../../context/CareneederScheduleContext";
 import { useCareneederAdsContext } from "../../context/CareneederAdsContext";
 import CareneederFilter from "../CareneederFilter/CareneederFilter"; // Import the filter component
-import "./CareneederList.css"
+import "./CareneederList.css";
 
 const CareneederList: React.FC = () => {
   const { careneeders } = useCareneederContext();
@@ -62,30 +62,33 @@ const CareneederList: React.FC = () => {
 
       <hr className="border-t border-black-300 mx-1 my-2" />
 
-      <div className="flex justify-end">
-        <CareneederFilter onFilterChange={handleFilterChange} />
-      </div>
+      <div className="flex flex-col items-center space-y-8">
+        <div className="flex justify-center w-full mb-8">
+          <CareneederFilter onFilterChange={handleFilterChange} />
+        </div>
 
-      <div className="flex flex-col items-center">
-        {filteredCareneeders.map((careneeder) => {
-          // Find the associated careneederschedule for this careneeder
-          const associatedSchedule = careneedersSchedule.find(
-            (schedule) => schedule.careneeder_id === careneeder.id
-          );
-          // Find all the associated careneederAds for this careneeder
-          const associatedAds = careneederAds.find(
-            (ad) => ad.careneeder_id === careneeder.id
-          );
+        <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
+          {filteredCareneeders.map((careneeder) => {
+            // Find the associated careneederschedule for this careneeder
+            const associatedSchedule = careneedersSchedule.find(
+              (schedule) => schedule.careneeder_id === careneeder.id
+            );
+            // Find all the associated careneederAds for this careneeder
+            const associatedAds = careneederAds.find(
+              (ad) => ad.careneeder_id === careneeder.id
+            );
 
-          return (
-            <CareneederCard
-              key={careneeder.id}
-              careneeder={careneeder}
-              careneederSchedule={associatedSchedule} // Pass the associated schedule as a prop
-              careneederAd={associatedAds}
-            />
-          );
-        })}
+            return (
+              <CareneederCard
+                key={careneeder.id}
+                careneeder={careneeder}
+                careneederSchedule={associatedSchedule} // Pass the associated schedule as a prop
+                careneederAd={associatedAds}
+                className="w-full"
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

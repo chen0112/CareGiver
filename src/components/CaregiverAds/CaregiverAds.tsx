@@ -121,9 +121,9 @@ const CaregiverAds: React.FC = () => {
       </div>
       <hr className="border-t border-black-300 mx-1 my-2" />
 
-      <h1 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4">
+      <h2 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4">
         发布广告
-      </h1>
+      </h2>
 
       <form onSubmit={handlePostAd}>
         <div className="container mx-auto px-4 py-6">

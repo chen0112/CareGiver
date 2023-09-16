@@ -109,26 +109,29 @@ const CaregiverList: React.FC = () => {
 
       <hr className="border-t border-black-300 mx-1 my-2" />
 
-      <div className="flex justify-end">
-        <CaregiverFilter onFilterChange={handleFilterChange} />{" "}
-        {/* Insert the CaregiverFilter here */}
-      </div>
+      <div className="flex flex-col items-center space-y-8">
+        {/* Add spacing between elements */}
+        <div className="flex justify-center w-full mb-8">
+          {/* Centered and margin added */}
+          <CaregiverFilter onFilterChange={handleFilterChange} />
+        </div>
+        <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
+          {/* Changed to 3/5 width of the parent */}
+          {filteredCaregivers.map((caregiver) => {
+            const associatedAds = caregiverAds.find(
+              (ad) => ad.caregiver_id === caregiver.id
+            );
 
-      <div className="flex flex-col items-center">
-        {filteredCaregivers.map((caregiver) => {
-          // Use filteredCaregivers here
-          const associatedAds = caregiverAds.find(
-            (ad) => ad.caregiver_id === caregiver.id
-          );
-
-          return (
-            <CaregiverCard
-              key={caregiver.id}
-              caregiver={caregiver}
-              caregiverAd={associatedAds}
-            />
-          );
-        })}
+            return (
+              <CaregiverCard
+                key={caregiver.id}
+                caregiver={caregiver}
+                caregiverAd={associatedAds}
+                className="w-full" // 100% width of the parent div which is 3/5 of the screen
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -77,7 +77,9 @@ const MyAnimalCaregiver: React.FC = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center space-y-8">
+
+      <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
         {myAnimalCaregiverForms.map((myAnimalCaregiverForm) => {
           // Find the associated myAnimalCaregiverdetail for this AnimalCaregiverForm
           const associatedanimalcaregiversDetail = animalcaregivers.find(
@@ -97,9 +99,11 @@ const MyAnimalCaregiver: React.FC = () => {
               animalcaregiverAds={associatedAds}
               onUpdateanimalcaregiverForm={handleAnimalCaregiverFormUpdate}
               loggedInUserPhone={phone}
+              className="w-full"
             />
           );
         })}
+      </div>
       </div>
     </div>
   );

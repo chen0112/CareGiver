@@ -77,7 +77,8 @@ const MyCareneeders: React.FC = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center space-y-8">
+      <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
         {myCareneeders.map((careneeder) => {
           // Find the associated careneederschedule for this careneeder
           const associatedSchedule = careneedersSchedule.find(
@@ -97,9 +98,11 @@ const MyCareneeders: React.FC = () => {
               careneederAd={associatedAds}
               onUpdateCareneeder={handleCareneederUpdate}
               loggedInUserPhone={phone}
+              className="w-full"
             />
           );
         })}
+      </div>
       </div>
     </div>
   );

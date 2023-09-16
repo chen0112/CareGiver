@@ -11,6 +11,7 @@ interface CaregiverCardProps {
   caregiverAd: CaregiverAds | undefined;
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
   onUpdateCaregiver?: (updatedCaregiver: Caregiver) => void; // New prop for handling updates
+  className?: string; // Add this line
 }
 
 interface Option {
@@ -28,7 +29,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
-    height: "60%",
+    height: "80%",
   };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -151,22 +152,23 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
             className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}
-            <div className="flex-shrink-0 flex items-center justify-center w-1/3">
+            <div className="flex flex-row md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
               <img
                 src={caregiver.imageurl}
                 alt={caregiver.name}
                 style={imageStyle}
+                className="rounded"
               />
             </div>
 
             {/* Text */}
-            <div className="flex-grow p-6 flex flex-col justify-between">
+            <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
                 <h3 className="text-xl font-semibold text-blue-700 mr-3">
                   {caregiver.name}
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />
-                <span className="text-gray-600 ml-2">
+                <span className="text-gray-600 ml-2 mb-1">
                   {Array.isArray(caregiver.location)
                     ? caregiver.location.map((loc) => loc.label).join(", ")
                     : "无"}

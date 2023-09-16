@@ -28,7 +28,12 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
 
   return (
     <div>
-      <Button onClick={() => setShowModal(true)}>筛选</Button>
+      <Button
+        style={{ backgroundColor: "#FF5733", color: "white" }}
+        onClick={() => setShowModal(true)}
+      >
+        筛选
+      </Button>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
