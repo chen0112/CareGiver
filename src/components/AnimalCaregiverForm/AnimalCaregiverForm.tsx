@@ -175,6 +175,15 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
     const target = e.target;
     const { name, value, type } = target;
 
+    // Check for maximum length of 'name'
+    if (name === "name") {
+      if (value.length > 7) {
+        alert("请确保名字在5个字内");
+        e.target.value = value.substring(0, 7);
+        return;
+      }
+    }
+
     // New check for years_of_experience
     if (name === "years_of_experience") {
       const numValue = parseInt(value);

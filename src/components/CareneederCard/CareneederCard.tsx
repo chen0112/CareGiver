@@ -146,39 +146,36 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center mb-6 mx-4 sm:mx-6">
-          {/* Add horizontal margin */}
+        <div className="flex flex-col items-center mb-6 mx-2 md:mx-6">
+          {/* Link to Careneeder's Profile */}
           <Link
             to={`/careneeders/${careneeder.id}`}
-            className="no-underline w-full sm:w-11/12 md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100"
+            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
-            {/* Image Container */}
-            <div className="flex flex-row md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
+            {/* Image */}
+            <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
               <img
-                src={careneeder.imageurl || defaultImageUrl} // Use the imageurl if available, otherwise use defaultImageUrl
+                src={careneeder.imageurl || defaultImageUrl}
                 alt={careneeder.name}
                 style={imageStyle}
-                className="rounded"
+                className="rounded w-1/2 md:w-full"
               />
             </div>
-            {/* Text Container */}
+            {/* Text */}
             <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
-                <h3 className="text-xl font-semibold mr-3">
+                <h3 className="text-xl font-semibold text-blue-700 mr-3">
                   {careneeder.name}
                 </h3>
-                <FaMapMarkerAlt className="text-gray-600 mb-2" />
-                <span
-                  className="text-gray-600 ml-2"
-                  style={{ marginTop: "-7px" }}
-                >
+                <FaMapMarkerAlt className="text-gray-600 mb-1" />
+                <span className="text-gray-600 ml-2 mb-1">
                   {Array.isArray(careneeder.location)
                     ? careneeder.location.map((loc) => loc.label).join(", ")
                     : "无"}
                 </span>
               </div>
-              <div className="text-gray-600 mb-3 pr-6">
-                {careneederAd && ( // New section for displaying ad details
+              <div className="text-gray-600 mb-8 line-clamp">
+                {careneederAd && (
                   <div>
                     <p>{careneederAd.title}</p>
                     <p className="line-clamp-3">{careneederAd.description}</p>
@@ -187,11 +184,11 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
               </div>
             </div>
           </Link>
-
+          {/* Edit Button */}
           {careneeder.phone === loggedInUserPhone && (
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-auto text-center"
               onClick={handleEditClick}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
             >
               编辑
             </button>
