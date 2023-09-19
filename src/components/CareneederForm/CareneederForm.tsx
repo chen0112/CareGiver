@@ -182,6 +182,15 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
     const target = e.target;
     const { name, value, type } = target;
 
+    // Check for maximum length of 'name'
+    if (name === "name") {
+      if (value.length > 7) {
+        alert("请确保名字在5个字内");
+        e.target.value = value.substring(0, 7);
+        return;
+      }
+    }
+
     if (type === "select-multiple") {
       const select = target as HTMLSelectElement;
       const values = Array.from(select.selectedOptions).map(
@@ -267,6 +276,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
       .then((newCareneeder) => {
         console.log("NewCareneeder:------", newCareneeder);
         updateCareneeder(newCareneeder);
+        getCareneeder();
 
         // After successfully creating the careneeder, navigate to the schedule page
         // by extracting the careneeder's ID from the response and including it in the URL

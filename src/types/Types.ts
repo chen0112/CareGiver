@@ -11,6 +11,7 @@ export interface Caregiver {
   age?: number | null;
   education?: string;
   gender?: string;
+  hourlycharge: string;
   // Add other properties as needed
 }
 

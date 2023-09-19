@@ -34,6 +34,7 @@ const initialFormData: Partial<Caregiver> = {
   education: "",
   gender: "",
   years_of_experience: null,
+  hourlycharge: "",
 };
 
 interface Option {
@@ -174,6 +175,15 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
   ) => {
     const target = e.target;
     const { name, value, type } = target;
+
+    // Check for maximum length of 'name'
+    if (name === "name") {
+      if (value.length > 7) {
+        alert("请确保名字在5个字内");
+        e.target.value = value.substring(0, 7);
+        return;
+      }
+    }
 
     // New check for years_of_experience
     if (name === "years_of_experience") {
@@ -417,18 +427,11 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
               <Modal.Title>图片大小错误</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <p>
-                上传的图片不符合最低大小要求，请上传更大的图片。
-              </p>
-              <p>
-                图片大小至少在{" "}
-                {`${MIN_WIDTH}x${MIN_HEIGHT}`} 像素
-              </p>
+              <p>上传的图片不符合最低大小要求，请上传更大的图片。</p>
+              <p>图片大小至少在 {`${MIN_WIDTH}x${MIN_HEIGHT}`} 像素</p>
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={() => setShowSizeErrorModal(false)}>
-              关闭
-              </Button>
+              <Button onClick={() => setShowSizeErrorModal(false)}>关闭</Button>
             </Modal.Footer>
           </Modal>
           {/* Display the previewImage here */}
@@ -566,6 +569,31 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
             value={formData.years_of_experience || ""}
             onChange={handleChange}
           />
+        </div>
+
+        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
+          <label className="mb-2 text-gray-700" htmlFor="hourlyCharge">
+            每小时收费：
+          </label>
+          <select
+            id="hourlycharge"
+            name="hourlycharge"
+            value={formData.hourlycharge || ""}
+            onChange={handleChange}
+            className="border border-gray-300 rounded-md p-2 w-full"
+          >
+            <option value="" disabled>
+              选择每小时收费
+            </option>
+            {[...Array(81)].map((_, i) => {
+              const charge = i + 20; // Start from 20
+              return (
+                <option key={charge} value={charge}>
+                  {`${charge} 元`}
+                </option>
+              );
+            })}
+          </select>
         </div>
 
         <button
