@@ -24,6 +24,7 @@ import AnimalCaregiverAd from "./components/AnimalCaregiverComponent/AnimalCareg
 import AnimalCaregiverList from "./components/AnimalCaregiverComponent/AnimalCaregiverList/AnimalCaregiverList";
 import AnimalCaregiverDetail from "./components/AnimalCaregiverComponent/AnimalCaregiverDetail/AnimalCaregiverDetail";
 import MyAnimalCaregiver from "./components/AnimalCaregiverComponent/MyAnimalCaregiver/MyAnimalCaregiver";
+import ChatWindow from "./components/ChatWindow/ChatWindow";
 
 const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
 
@@ -183,6 +184,12 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/myanimalcaregiverform/:phone"
           element={<MyAnimalCaregiver />}
+        />
+
+        {/* chat window */}
+        <Route
+          path="/caregivers/:id/message"
+          element={<ChatWindow />}
         />
       </Routes>
     </BrowserRouter>

@@ -169,9 +169,16 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />
                 <span className="text-gray-600 ml-2 mb-1">
-                  {Array.isArray(careneeder.location)
+                  {careneeder.location &&
+                  Array.isArray(careneeder.location) &&
+                  careneeder.location.length > 0
                     ? careneeder.location.map((loc) => loc.label).join(", ")
                     : "无"}
+                </span>
+                <span className="mb-1 ml-3 text-black">
+                  {careneeder?.hourlycharge
+                    ? `¥ ${careneeder.hourlycharge}元/小时`
+                    : "¥ 收费不详"}
                 </span>
               </div>
               <div className="text-gray-600 mb-8 line-clamp">

@@ -170,7 +170,9 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />
                 <span className="text-gray-600 ml-2 mb-1">
-                  {Array.isArray(caregiver.location)
+                  {caregiver.location &&
+                  Array.isArray(caregiver.location) &&
+                  caregiver.location.length > 0
                     ? caregiver.location.map((loc) => loc.label).join(", ")
                     : "无"}
                 </span>

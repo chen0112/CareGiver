@@ -245,13 +245,18 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
     setImageDataUrl(null);
   };
 
+  const [showMissingFieldsModal, setShowMissingFieldsModal] = useState(false);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     console.log("formData:", formData);
     console.log("imageurl:", imageurl);
+    console.log("isSubmitting:", isSubmitting); // Debugging log
 
     if (isSubmitting) {
+      console.log("Exiting handleSubmit due to isSubmitting");
       return;
     }
 
@@ -261,8 +266,8 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
     if (!imageurl) missingFields.push("照片");
 
     if (missingFields.length > 0) {
-      const missingFieldsString = missingFields.join(", ");
-      alert(`请输入必要信息：${missingFieldsString}!`);
+      setMissingFields(missingFields);
+      setShowMissingFieldsModal(true);
       return;
     }
 
@@ -342,7 +347,7 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
             ref={imageInputRef}
             className="hidden"
             type="file"
-            required={true}
+            // required={true}
             id="image"
             accept="image/*"
             onChange={handleImageChange}
@@ -435,6 +440,29 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
               <Button onClick={() => setShowSizeErrorModal(false)}>关闭</Button>
             </Modal.Footer>
           </Modal>
+
+          <Modal
+            show={showMissingFieldsModal}
+            onHide={() => setShowMissingFieldsModal(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>缺少信息</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>以下信息缺失:</p>
+              <ul>
+                {missingFields.map((field, index) => (
+                  <li key={index}>{field}</li>
+                ))}
+              </ul>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={() => setShowMissingFieldsModal(false)}>
+                关闭
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
           {/* Display the previewImage here */}
           {croppedImage && (
             <div className="mt-4">
@@ -590,7 +618,7 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
             <p>表单提交成功！</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => setShowSuccessModal(false)}>Close</Button>
+            <Button onClick={() => setShowSuccessModal(false)}>关闭</Button>
           </Modal.Footer>
         </Modal>
       </form>

@@ -131,16 +131,16 @@ const HomePage: React.FC = () => {
           </ul>
         </div>
       </header>
-      
+
       <hr className="border-t border-black-300 mx-1 my-1" />
 
       {/* New Image Container */}
       <div className="flex flex-wrap justify-between items-center my-0">
-        <div className="w-full md:w-1/2 p-2">
+        <div className="w-full md:w-1/2 p-0 md:p-2">
           <img
             src="https://cdn.animaapp.com/projects/64fb8a71af563afc18530806/releases/64fb8af17216e74c07a20a05/img/screenshot-2023-09-08-at-1-06-1.png"
             alt="Description of First Image"
-            className="w-full h-[300px] md:h-[400px] object-contain object-top rounded"
+            className="w-full h-full object-cover rounded flex-grow"
           />
         </div>
         <div className="hidden md:w-1/2 md:block p-2">
@@ -246,6 +246,88 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <footer className="bg-gray-200 text-black py-4 mt-8">
+        <div className="container mx-auto flex flex-wrap">
+          {/* About Section */}
+          <div className="w-full md:w-1/4 text-center md:text-left ">
+            <h5 className="uppercase mb-6 font-bold">关于关爱网</h5>
+            <ul className="mb-4">
+              <li className="mt-2">
+                <Link to="/" className="hover:underline">
+                  关于我们
+                </Link>
+              </li>
+              <li className="mt-2">
+                <Link to="/" className="hover:underline">
+                  联系我们
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Quick Links */}
+          <div className="w-full md:w-1/4 text-center md:text-left">
+            <h5 className="uppercase mb-6 font-bold">快速链接</h5>
+            <ul className="mb-4">
+              <li className="mt-2">
+                <Link to="/signin/caregiver" className="hover:underline">
+                  护工登陆
+                </Link>
+              </li>
+              <li className="mt-2">
+                <Link to="/signin/careneeder" className="hover:underline">
+                  雇主登陆
+                </Link>
+              </li>
+              <li className="mt-2">
+                <Link to="/register/caregiver" className="hover:underline">
+                  护工注册
+                </Link>
+              </li>
+              <li className="mt-2">
+                <Link to="/register/careneeder" className="hover:underline">
+                  雇主注册
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Media */}
+          <div className="w-full md:w-1/4 text-center md:text-left">
+            <h5 className="uppercase mb-6 font-bold">社交媒体</h5>
+            <ul className="mb-4">
+              <li className="mt-2">
+                <a href="#" className="hover:underline">
+                  Facebook
+                </a>
+              </li>
+              <li className="mt-2">
+                <a href="#" className="hover:underline">
+                  Twitter
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact Us */}
+          <div className="w-full md:w-1/4 text-center md:text-left">
+            <h5 className="uppercase mb-6 font-bold">联系方式</h5>
+            <ul className="mb-4">
+              <li className="mt-2">
+                <span>Email: info@guanaiwang.com</span>
+              </li>
+              <li className="mt-2">
+                <span>电话: +1 (555) 123-4567</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="text-center mt-8">
+          <p className="text-sm">©2023 关爱网. All Rights Reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };

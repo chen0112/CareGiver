@@ -34,6 +34,7 @@ interface Option {
 const initialFormData: Partial<Careneeder> = {
   name: "",
   phone: "",
+  hourlycharge: "",
   location: [],
   live_in_care: false,
   live_out_care: false,
@@ -284,7 +285,9 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
         resetForm();
 
         // Navigate to the schedule page with the careneeder's ID as a query parameter
-        navigate(`/signup_careneeder/schedule?careneederId=${careneederId}`);
+        setTimeout(() => {
+          navigate(`/signup_careneeder/schedule?careneederId=${careneederId}`);
+        }, 2000);
       })
       .catch((error) => console.error("Error adding careneeder:", error));
   };
@@ -464,6 +467,31 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
         </div>
 
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
+          <label className="mb-2 text-gray-700" htmlFor="hourlyCharge">
+            每小时收费：
+          </label>
+          <select
+            id="hourlycharge"
+            name="hourlycharge"
+            value={formData.hourlycharge || ""}
+            onChange={handleChange}
+            className="border border-gray-300 rounded-md p-2 w-full"
+          >
+            <option value="" disabled>
+              选择每小时收费
+            </option>
+            {[...Array(81)].map((_, i) => {
+              const charge = i + 20; // Start from 20
+              return (
+                <option key={charge} value={charge}>
+                  {`${charge} 元`}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+
+        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="location">
             地点 (必选，可多选):
           </label>
@@ -611,7 +639,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
             <p>表单提交成功！</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => setShowSuccessModal(false)}>Close</Button>
+            <Button onClick={() => setShowSuccessModal(false)}>关闭</Button>
           </Modal.Footer>
         </Modal>
       </form>

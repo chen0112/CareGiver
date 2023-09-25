@@ -86,25 +86,36 @@ const CareneederDetail: React.FC = () => {
       <div className="flex flex-col items-center justify-start min-h-screen space-y-6 px-4 md:px-0">
         {/* Top section */}
         <div className="max-w-4xl w-full flex flex-col md:flex-row items-center p-4 bg-blue-100 shadow-lg rounded-lg">
-          {/* Image and Details */}
+          {/* Image section */}
           <img
             className="w-32 h-32 rounded-full border-4 border-blue-300 mb-4 md:mb-0 md:mr-4"
             src={careneeder?.imageurl || defaultImageUrl}
             alt={careneeder?.name}
           />
+
+          {/* Details section */}
           <div className="flex flex-col space-y-2">
             <h2 className="text-xl md:text-2xl font-semibold text-blue-600">
               {careneeder?.name}
             </h2>
             <div className="flex items-center space-x-2">
               <FaMapMarkerAlt className="text-blue-600 mb-2" />
-              <p className="text-blue-500">
+              <p className="text-black font-semibold mb-2">
                 {careneeder?.location &&
-                  careneeder?.location.map((loc) => loc.label).join(", ")}
+                Array.isArray(careneeder.location) &&
+                careneeder.location.length > 0
+                  ? careneeder.location.map((loc) => loc.label).join(", ")
+                  : "无"}
               </p>
             </div>
-            <p>
-              <strong>电话:</strong> {careneeder?.phone}
+            <p className="text-black font-semibold">
+              电话: {careneeder?.phone}
+            </p>
+            <p className="text-black font-semibold">
+              收费：
+              {careneeder?.hourlycharge
+                ? `¥ ${careneeder.hourlycharge}元/小时`
+                : "¥ 收费不详"}
             </p>
           </div>
         </div>
@@ -124,13 +135,75 @@ const CareneederDetail: React.FC = () => {
                 : "日期未定义"}
             </p>
             <p>
-              选择的时间段:{" "}
-              {selectedSchedule.selectedtimeslots &&
-              selectedSchedule.selectedtimeslots.length > 0
-                ? selectedSchedule.selectedtimeslots.join(", ")
-                : "时间段未定义"}
+              持续天数:{" "}
+              {selectedSchedule.durationdays
+                ? `${selectedSchedule.durationdays}天`
+                : "无"}
             </p>
-            <p>持续天数: {selectedSchedule.durationdays}天</p>
+          </div>
+        )}
+
+        <div className="max-w-4xl w-full p-4 bg-blue-100 shadow-lg rounded-lg">
+          <h4 className="text-lg font-semibold text-blue-600">服务信息</h4>
+          <ul className="list-disc list-inside pl-1">
+            {careneeder?.live_in_care && <li>居家照护: ✔️</li>}
+            {careneeder?.live_out_care && <li>非居家照护: ✔️</li>}
+            {careneeder?.domestic_work && <li>家务: ✔️</li>}
+            {careneeder?.meal_preparation && <li>餐食准备: ✔️</li>}
+            {careneeder?.companionship && <li>陪伴: ✔️</li>}
+            {careneeder?.washing_dressing && <li>洗浴与穿着: ✔️</li>}
+            {careneeder?.nursing_health_care && <li>护理与医疗护理: ✔️</li>}
+            {careneeder?.mobility_support && <li>行动支持: ✔️</li>}
+            {careneeder?.transportation && <li>交通: ✔️</li>}
+            {careneeder?.errands_shopping && <li>外出购物: ✔️</li>}
+          </ul>
+        </div>
+
+        {selectedSchedule && selectedSchedule.selectedtimeslots && (
+          <div className="max-w-4xl w-full p-4 bg-blue-100 shadow-lg rounded-lg overflow-x-auto">
+            <h4 className="text-lg font-semibold text-blue-600">日程表</h4>
+            <table className="w-full border-collapse border border-black">
+              <thead>
+                <tr>
+                  <th className="border-t border-l border-black"></th>
+                  <th className="text-center border border-black">周一</th>
+                  <th className="text-center border border-black">周二</th>
+                  <th className="text-center border border-black">周三</th>
+                  <th className="text-center border border-black">周四</th>
+                  <th className="text-center border border-black">周五</th>
+                  <th className="text-center border border-black">周六</th>
+                  <th className="text-center border border-black">周天</th>
+                </tr>
+              </thead>
+              <tbody>
+                {["早上", "下午", "晚上"].map((period) => (
+                  <tr key={period}>
+                    <td className="font-bold border border-black">{period}</td>
+                    {[
+                      "周一",
+                      "周二",
+                      "周三",
+                      "周四",
+                      "周五",
+                      "周六",
+                      "周天",
+                    ].map((day) => (
+                      <td key={day} className="text-center border border-black">
+                        <div
+                          className={`circle ${
+                            selectedSchedule.selectedtimeslots.includes(
+                              `${day}_${period}`
+                            )
+                              ? "selected"
+                              : ""
+                          }`}
+                        ></div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
         {/* Associated Ads */}

@@ -24,6 +24,7 @@ export interface Careneeder {
   id: number;
   name: string;
   phone: string;
+  hourlycharge: string;
   imageurl?: string; // Change property name to "imageurl"
   location: Option[];
   live_in_care: boolean;

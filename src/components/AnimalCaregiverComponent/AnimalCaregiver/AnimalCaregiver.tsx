@@ -29,7 +29,7 @@ const AnimalCaregiver: React.FC = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  
+
   const location = useLocation();
 
   // Extract the animalcaregiverId from the query parameters
@@ -135,14 +135,12 @@ const AnimalCaregiver: React.FC = () => {
       // Handle success
       const data = await response.json();
       console.log("New_Animal_Caregiver_Details:------", data);
-      
+
       const animalcaregiverid = data.animalcaregiverid;
 
-      setTimeout(() => {
-        navigate(
-          `/signup_animalcaregiver/details/ads?animalcaregiverId=${animalcaregiverid}`
-        );
-      }, 1000);
+      navigate(
+        `/signup_animalcaregiver/details/ads?animalcaregiverId=${animalcaregiverid}`
+      );
     } else {
       // Handle error
       console.error("Failed to submit data");

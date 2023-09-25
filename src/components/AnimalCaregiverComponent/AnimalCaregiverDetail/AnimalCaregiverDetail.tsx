@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
+import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
 
 const AnimalCaregiverDetail: React.FC = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ const AnimalCaregiverDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { animalcaregiverAds } = useAnimalCaregiverAdsContext();
+  const { animalcaregivers } = useAnimalCaregiverContext();
 
   console.log("Context animalcaregiverAds state:", animalcaregiverAds);
 
@@ -49,6 +51,12 @@ const AnimalCaregiverDetail: React.FC = () => {
       )
     : null;
 
+  const associatedDetails = AnimalCaregiverForm
+    ? animalcaregivers.find(
+        (details) => details.animalcaregiverid === AnimalCaregiverForm.id
+      )
+    : null;
+
   return (
     <div>
       <div className="flex items-center mx-9 py-3">
@@ -67,53 +75,80 @@ const AnimalCaregiverDetail: React.FC = () => {
 
       <div className="flex flex-col items-center justify-start min-h-screen space-y-6 px-4 md:px-0">
         {/* Top section */}
-        <div className="max-w-4xl w-full flex flex-col md:flex-row items-start p-4 bg-white shadow-md rounded-lg">
+        <div className="max-w-4xl w-full flex flex-col md:flex-row items-center p-4 bg-blue-100 shadow-lg rounded-lg">
           {/* Image section */}
-          <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
-            <img
-              className="w-32 h-32 rounded-full"
-              src={AnimalCaregiverForm?.imageurl}
-              alt={AnimalCaregiverForm?.name}
-            />
-          </div>
+          <img
+            className="w-32 h-32 rounded-full border-4 border-blue-300 mb-4 md:mb-0 md:mr-4"
+            src={AnimalCaregiverForm?.imageurl}
+            alt={AnimalCaregiverForm?.name}
+          />
 
           {/* Details section */}
           <div className="flex flex-col space-y-2">
             <div className="flex items-center space-x-2">
-              <h2 className="text-xl md:text-2xl font-semibold mr-6">
+              <h2 className="text-xl md:text-2xl font-semibold mr-8">
                 {AnimalCaregiverForm?.name}
               </h2>
-              <FaMapMarkerAlt className="text-gray-600 mb-2" />
-              <p className="text-gray-600 font-semibold mt-2">
-                {AnimalCaregiverForm?.location &&
-                  AnimalCaregiverForm?.location
-                    .map((loc) => loc.label)
-                    .join(", ")}
-              </p>
+              <div className="flex items-center space-x-2">
+                <FaMapMarkerAlt className="text-black mb-2" />
+                <p className="text-black font-semibold mt-2">
+                  {AnimalCaregiverForm?.location &&
+                  Array.isArray(AnimalCaregiverForm.location) &&
+                  AnimalCaregiverForm.location.length > 0
+                    ? AnimalCaregiverForm.location
+                        .map((loc) => loc.label)
+                        .join(", ")
+                    : "无"}
+                </p>
+              </div>
             </div>
 
             {/* Age and Gender */}
-            <div className="flex" style={{ gap: "1.5rem" }}>
-              <p>
-                <strong>年龄:</strong> {AnimalCaregiverForm?.age}
+            <div className="flex space-x-10">
+              <p className="text-black font-semibold">
+                年龄: {AnimalCaregiverForm?.age}
               </p>
-              <p>
-                <strong>性别:</strong> {AnimalCaregiverForm?.gender}
+              <p className="text-black font-semibold">
+                性别:{" "}
+                {AnimalCaregiverForm?.gender
+                  ? AnimalCaregiverForm?.gender
+                  : "不详"}
               </p>
             </div>
 
             {/* Education, Experience, Phone */}
-            <div className="flex flex-wrap space-x-4 md:space-x-10">
-              <p>
-                <strong>教育程度:</strong> {AnimalCaregiverForm?.education}
-              </p>
-              <p>
-                <strong>工作经验:</strong>{" "}
-                {AnimalCaregiverForm?.years_of_experience} 年
-              </p>
-              <p>
-                <strong>电话:</strong> {AnimalCaregiverForm?.phone}
-              </p>
+            <div className="flex flex-wrap md:space-x-10">
+              <div className="w-full md:w-auto mb-2">
+                <p className="text-black font-semibold">
+                  <span>每小时费用:</span>
+                  <span className="ml-4">
+                    {associatedDetails?.hourlycharge
+                      ? `${associatedDetails.hourlycharge}元/小时`
+                      : "收费不详"}
+                  </span>
+                </p>
+              </div>
+              <div className="w-full md:w-auto mb-2">
+                <p className="text-black font-semibold">
+                <span>教育程度:</span>
+                  {AnimalCaregiverForm?.education
+                    ? AnimalCaregiverForm?.education
+                    : "不详"}
+                </p>
+              </div>
+              <div className="w-full md:w-auto mb-2">
+                <p className="text-black font-semibold">
+                  工作经验:{" "}
+                  {AnimalCaregiverForm?.years_of_experience !== null
+                    ? `${AnimalCaregiverForm?.years_of_experience} 年`
+                    : "不详"}
+                </p>
+              </div>
+              <div className="w-full md:w-auto mb-2">
+                <p className="text-black font-semibold">
+                  电话: {AnimalCaregiverForm?.phone}
+                </p>
+              </div>
             </div>
           </div>
         </div>
