@@ -1,21 +1,20 @@
-// CaregiverList.tsx
 import React, { useState } from "react";
-import AnimalCaregiverCard from "../AnimalCaregiverCard/AnimalCaregiverCard";
+import AnimalCareneederCard from "../AnimalCareneederCard/AnimalCareneederCard";
 import { Link, useParams } from "react-router-dom";
-import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
 import { BiHeart } from "react-icons/bi";
-import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
-import { useAnimalCaregiverFormContext } from "../../../context/AnimalCaregiverFormContext";
+import { useAnimalCareneederFormContext } from "../../../context/AnimalCareneederFormContext";
+import { useAnimalCareneederAdsContext } from "../../../context/AnimalCareneederAdsContext";
+import { useAnimalCareneederContext} from "../../../context/AnimalCareneederContext"
 import CareneederFilter from "../../CareneederComponent/CareneederFilter/CareneederFilter"; // Import the filter component
 
-const AnimalCaregiverList: React.FC = () => {
-  const { animalcaregivers } = useAnimalCaregiverContext();
-  const { animalcaregiversForm } = useAnimalCaregiverFormContext();
-  const { animalcaregiverAds } = useAnimalCaregiverAdsContext();
+const AnimalCareneederList: React.FC = () => {
+  const { animalcareneeders } = useAnimalCareneederContext();
+  const { animalcareneedersForm } = useAnimalCareneederFormContext();
+  const { animalcareneederAds } = useAnimalCareneederAdsContext();
 
-  console.log("Context animalcaregiverAds  state:", animalcaregiverAds);
-  console.log("Context animalcaregivers state:", animalcaregivers);
-  console.log("Context animalcaregiversForm state:", animalcaregiversForm);
+  console.log("Context animalcareneederAds  state:", animalcareneederAds);
+  console.log("Context animalcareneeders state:", animalcareneeders);
+  console.log("Context animalcareneedersForm state:", animalcareneedersForm);
 
   const { phone } = useParams<{ phone: string }>();
 
@@ -29,19 +28,19 @@ const AnimalCaregiverList: React.FC = () => {
   };
 
   // Your filtered careneeders
-  const filteredanimalcaregiversForm = animalcaregiversForm.filter(
-    (animalcaregiverForm) => {
+  const filteredanimalcareneedersForm = animalcareneedersForm.filter(
+    (animalcareneederForm) => {
       // console.log("Careneeder Location: ", careneeder.location);
       // Check if a filter for location is applied
       if (filter.location) {
         // Check if careneeder.location is not null or undefined
-        if (!animalcaregiverForm.location) {
+        if (!animalcareneederForm.location) {
           return false; // If it's null, don't include this careneeder in the filtered list
         }
 
         // Check if careneeder.location does not match the selected location
         if (
-          !animalcaregiverForm.location.some(
+          !animalcareneederForm.location.some(
             (option) => option.value === filter.location
           )
         ) {
@@ -72,7 +71,7 @@ const AnimalCaregiverList: React.FC = () => {
 
         <div>
           <Link
-            to={`/myanimalcaregiverform/phone/${phone}`} //this phone number is from animalcareneeder loggin phone number which wont be available in animalcaregiverform
+            to={`/myanimalcaregiverform/phone/${phone}`}
             className="no-underline py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
           >
             我的广告
@@ -92,22 +91,22 @@ const AnimalCaregiverList: React.FC = () => {
 
       <div className="flex flex-col items-center space-y-8">
         <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
-          {filteredanimalcaregiversForm.map((animalcaregiversForm) => {
+          {filteredanimalcareneedersForm.map((animalcareneedersForm) => {
             // Find the associated careneederschedule for this careneeder
-            const associatedDetails = animalcaregivers.find(
-              (details) => details.animalcaregiverid === animalcaregiversForm.id
+            const associatedDetails = animalcareneeders.find(
+              (details) => details.animalcareneederid === animalcareneedersForm.id
             );
             // Find all the associated careneederAds for this careneeder
-            const associatedAds = animalcaregiverAds.find(
-              (ad) => ad.animalcaregiverid === animalcaregiversForm.id
+            const associatedAds = animalcareneederAds.find(
+              (ad) => ad.animalcareneederid === animalcareneedersForm.id
             );
 
             return (
-              <AnimalCaregiverCard
-                key={animalcaregiversForm.id}
-                animalcaregiversForm={animalcaregiversForm}
-                animalcaregiver={associatedDetails} // Pass the associated schedule as a prop
-                animalcaregiverAds={associatedAds}
+              <AnimalCareneederCard
+                key={animalcareneedersForm.id}
+                animalcareneedersForm={animalcareneedersForm}
+                animalcareneeder={associatedDetails} // Pass the associated schedule as a prop
+                animalcareneederAds={associatedAds}
                 className="w-full"
               />
             );
@@ -118,4 +117,4 @@ const AnimalCaregiverList: React.FC = () => {
   );
 };
 
-export default AnimalCaregiverList;
+export default AnimalCareneederList;

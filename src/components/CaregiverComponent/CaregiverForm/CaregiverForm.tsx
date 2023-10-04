@@ -262,9 +262,13 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
     }
 
     const missingFields = [];
-    if (!formData.name) missingFields.push("名字");
-    if (!formData.phone) missingFields.push("电话");
+    if (!formData.name || formData.name.length === 0)
+      missingFields.push("名字");
+    if (!formData.phone || formData.phone.length === 0)
+      missingFields.push("电话");
     if (!imageurl) missingFields.push("照片");
+    if (!formData.location || formData.location.length === 0)
+      missingFields.push("地址");
 
     if (missingFields.length > 0) {
       setMissingFields(missingFields);
@@ -304,7 +308,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
 
         resetForm();
         setTimeout(() => {
-          navigate(`/signup_caregiver/ads?caregiverId=${caregiverId}`);
+          navigate(`/signup_caregiver/ads?caregiverId=${caregiverId}&phone=${formData.phone }`);
         }, 2000);
       })
       .catch((error) => console.error("Error adding caregiver:", error));

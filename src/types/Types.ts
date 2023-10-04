@@ -112,3 +112,32 @@ export interface AnimalCaregiver {
   selectedanimals: string[];
   hourlycharge: string;
 }
+
+
+export interface AnimalCareneederForm {
+  id: number;
+  name: string;
+  phone: string;
+  location: Option[];
+  imageurl?: string; // Change property name to "imageurl"
+  years_of_experience?: number | null;
+  age?: number | null;
+  education?: string;
+  gender?: string;
+  // Add other properties as needed
+}
+
+export interface AnimalCareneeder {
+  id: number;
+  animalcareneederid: string | number; // Assuming the ID could be string or number
+  selectedservices: string[];
+  selectedanimals: string[];
+  hourlycharge: string;
+}
+
+export interface AnimalCareneederAds {
+  id: number;
+  title: string;
+  description: string;
+  animalcareneederid: number;
+}

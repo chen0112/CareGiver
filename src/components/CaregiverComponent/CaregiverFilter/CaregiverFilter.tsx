@@ -31,7 +31,7 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
   return (
     <div>
       <Button
-        style={{ backgroundColor: "#FF5733", color: "white" }}
+        className="w-auto inline-block no-underline py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
         onClick={() => setShowModal(true)}
       >
         筛选

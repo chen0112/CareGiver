@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal"; // Import the Modal component
 import Button from "react-bootstrap/Button"; // Import the Button component
 
-const CareneederAds: React.FC = () => {
+const AnimalCareneederAds: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State for the success modal
@@ -14,9 +14,9 @@ const CareneederAds: React.FC = () => {
 
   const location = useLocation();
 
-  // Extract the careneederId from the query parameters
+  // Extract the caregiverId from the query parameters
   const queryParams = new URLSearchParams(location.search);
-  const careneederId = queryParams.get("careneederId");
+  const animalcareneederid = queryParams.get("animalcareneederId");
   const phoneNumber = queryParams.get("phone");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -62,16 +62,16 @@ const CareneederAds: React.FC = () => {
 
     // Create an object with the data to send to the backend
     const requestData = {
-      careneeder_id: careneederId,
+      animalcareneederid: animalcareneederid,
       title: title,
       description: description,
     };
 
     // Replace with your actual API URL
-    const API_URL = "https://nginx.yongxinguanai.com/api/careneeder_ads";
+    const API_URL = "https://nginx.yongxinguanai.com/api/animalcareneeder_ads";
 
-    if (!careneederId) {
-      console.error("Missing careneederId");
+    if (!animalcareneederid) {
+      console.error("Missing animalcareneederid");
       return;
     }
 
@@ -96,11 +96,11 @@ const CareneederAds: React.FC = () => {
       })
       .then((data) => {
         // Handle success response here
-        console.log("Success:", data);
+        console.log("Success of adding animalcareneederads:", data);
         // Show the success modal
         setShowSuccessModal(true);
         setTimeout(() => {
-          navigate(`/caregivers/phone/${phoneNumber}`);
+          navigate(`/animalcaregivers/phone/${phoneNumber}`);
         }, 2000);
       })
       .catch((error) => {
@@ -138,7 +138,7 @@ const CareneederAds: React.FC = () => {
               value={title}
               required={true} // Make the title input mandatory
               onChange={handleTitleChange}
-              placeholder="请包括您招工的具体信息，比如：需要做饭，照顾老人在中环路."
+              placeholder="请保持简介的标题，比如遛狗小时工."
             />
             {titleError && <p className="text-red-500">{titleError}</p>}
           </div>
@@ -154,7 +154,7 @@ const CareneederAds: React.FC = () => {
               required={true} // Make the description input mandatory
               rows={5}
               onChange={handleDescriptionChange}
-              placeholder="请让您的广告尽量简洁，但包括一些重要信息， 比如：照顾内容，特殊需求。这样能让护工们很快了解他们的工作内容."
+              placeholder="请让您的广告尽量简洁，但包括一些重要信息， 比如：照顾内容，你的经验等等。这样能让雇主们很快了解您能提供的服务."
             />
             {descriptionError && (
               <p className="text-red-500">{descriptionError}</p>
@@ -188,4 +188,4 @@ const CareneederAds: React.FC = () => {
   );
 };
 
-export default CareneederAds;
+export default AnimalCareneederAds;

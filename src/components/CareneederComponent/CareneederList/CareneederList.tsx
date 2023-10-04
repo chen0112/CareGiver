@@ -1,7 +1,7 @@
 // CaregiverList.tsx
 import React, { useState, useEffect } from "react";
 import CareneederCard from "../CareneederCard/CareneederCard";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCareneederContext } from "../../../context/CareneederContext";
 import { BiHeart } from "react-icons/bi";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
@@ -17,6 +17,8 @@ const CareneederList: React.FC = () => {
   console.log("Context careneeders state:", careneeders);
   console.log("Context careneederSchedule state:", careneedersSchedule);
   console.log("Context careneederAd state:", careneederAds);
+
+  const { phone } = useParams<{ phone: string }>();
 
   // State for filter
   const [filter, setFilter] = useState<{ location: string | null }>({
@@ -50,7 +52,39 @@ const CareneederList: React.FC = () => {
   });
 
   return (
-    <div>
+    <div className="relative">
+      <div className="fixed top-1/4 right-8 z-50">
+        <div>
+          <CareneederFilter onFilterChange={handleFilterChange} />
+        </div>
+
+        <div>
+          <Link
+            to="/signup_caregiver"
+            className="no-underline py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            发布新广告
+          </Link>
+        </div>
+
+        <div>
+          <Link
+            to={`/mycaregiver/phone/${phone}`}
+            className="no-underline py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            我的广告
+          </Link>
+        </div>
+
+        <div className="w-full">
+          <Link
+            to={`/caregivers/phone/${phone}`}
+            className="no-underline py-2 px-4 w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            所有护工广告
+          </Link>
+        </div>
+      </div>
       <div className="flex items-center mx-9 py-3">
         <Link to="/" className="flex items-center text-black no-underline ml-0">
           <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
@@ -63,10 +97,9 @@ const CareneederList: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <div className="flex flex-col items-center space-y-8">
-        <div className="flex justify-center w-full mb-8">
-          <CareneederFilter onFilterChange={handleFilterChange} />
+        <div className="text-center w-full text-2xl font-semibold mb-3">
+          雇主广告
         </div>
-
         <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
           {filteredCareneeders.map((careneeder) => {
             // Find the associated careneederschedule for this careneeder

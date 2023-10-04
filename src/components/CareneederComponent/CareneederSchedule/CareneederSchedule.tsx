@@ -40,6 +40,7 @@ const CareneederSchedule: React.FC = () => {
   // Extract the careneederId from the query parameters
   const queryParams = new URLSearchParams(location.search);
   const careneederId = queryParams.get("careneederId");
+  const phoneNumber = queryParams.get("phone");
 
   const handleSlotSelection = (slot: string) => {
     // Check if the slot is already selected
@@ -107,7 +108,7 @@ const CareneederSchedule: React.FC = () => {
         // You can show a success message to the user or navigate to another page
 
         navigate(
-          `/signup_careneeder/schedule/ads?careneederId=${careneederId}`
+          `/signup_careneeder/schedule/ads?careneederId=${careneederId}&phone=${phoneNumber}`
         );
       })
       .catch((error) => {

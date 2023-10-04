@@ -14,7 +14,7 @@ const services = [
   "美容",
 ];
 
-const AnimalCaregiver: React.FC = () => {
+const AnimalCareneeder: React.FC = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
   const [selectedAnimals, setSelectedAnimals] = useState<string[]>([]);
@@ -36,7 +36,7 @@ const AnimalCaregiver: React.FC = () => {
 
   // Extract the animalcaregiverId from the query parameters
   const queryParams = new URLSearchParams(location.search);
-  const animalcaregiverId = queryParams.get("animalcaregiverId");
+  const animalcareneederId = queryParams.get("animalcareneederId");
   const phoneNumber = queryParams.get("phone");
 
   const toggleService = (service: string) => {
@@ -96,20 +96,20 @@ const AnimalCaregiver: React.FC = () => {
 
     // Data to send to the server
     const payload = {
-      animalcaregiverid: animalcaregiverId,
+      animalcareneederid: animalcareneederId,
       selectedservices: selectedServices,
       selectedanimals: selectedAnimals,
       hourlycharge: hourlyCharge,
     };
 
-    if (!animalcaregiverId) {
-      console.error("Missing animalcaregiverId");
+    if (!animalcareneederId) {
+      console.error("Missing animalcareneederId");
       return;
     }
 
     // Send a POST request to the Flask backend
     const response = await fetch(
-      "https://nginx.yongxinguanai.com/api/animalcaregiver_details",
+      "https://nginx.yongxinguanai.com/api/animalcareneeder_details",
       {
         method: "POST",
         headers: {
@@ -122,12 +122,12 @@ const AnimalCaregiver: React.FC = () => {
     if (response.ok) {
       // Handle success
       const data = await response.json();
-      console.log("New_Animal_Caregiver_Details:------", data);
+      console.log("New_Animal_Careneeder_Details:------", data);
 
-      const animalcaregiverid = data.animalcaregiverid;
+      const animalcareneederid = data.animalcareneederid;
 
       navigate(
-        `/signup_animalcaregiver/details/ads?animalcaregiverId=${animalcaregiverid}&phone=${phoneNumber}`
+        `/signup_animalcareneeder/details/ads?animalcareneederId=${animalcareneederid}&phone=${phoneNumber}`
       );
     } else {
       // Handle error
@@ -176,7 +176,7 @@ const AnimalCaregiver: React.FC = () => {
 
         <div className="text-center my-4">
           <h2 className="text-2xl font-bold" style={{ color: "#0ABAB5" }}>
-            找到你最喜欢的宠物照顾工作
+            请描述您需要的宠物托管
           </h2>
         </div>
 
@@ -185,7 +185,7 @@ const AnimalCaregiver: React.FC = () => {
             className="col-span-full text-lg md:text-center ml-4 md:ml-0 mr-4 md:mr-0"
             style={{ color: "#0ABAB5" }}
           >
-            请选择你能提供的服务:
+            请选择你您需要的服务:
           </h4>
         </div>
 
@@ -215,7 +215,7 @@ const AnimalCaregiver: React.FC = () => {
             className="col-span-full text-lg md:text-center ml-4 md:ml-0 mr-4 md:mr-0"
             style={{ color: "#0ABAB5" }}
           >
-            请选择你喜欢照顾的动物：
+            请选择您的托管宠物：
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 justify-items-start mx-auto w-full md:w-1/2">
             {["宠物狗", "宠物猫", "宠物鸟", "宠物鱼", "宠物爬行动物"].map(
@@ -291,4 +291,4 @@ const AnimalCaregiver: React.FC = () => {
   );
 };
 
-export default AnimalCaregiver;
+export default AnimalCareneeder;

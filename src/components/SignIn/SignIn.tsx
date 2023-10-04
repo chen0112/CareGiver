@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 
 interface SignInProps {
-  userType: "caregiver" | "careneeder" | "animalcaregiver"; // Define the valid user types here
+  userType: "caregiver" | "careneeder" | "animalcaregiver" | "animalcareneeder"; // Define the valid user types here
 }
 
 const SignIn: React.FC<SignInProps> = ({ userType }) => {
@@ -48,11 +48,13 @@ const SignIn: React.FC<SignInProps> = ({ userType }) => {
         if (data.hasPostedAds) {
           // Use dynamic navigation paths based on userType
           if (userType === "caregiver") {
-            navigate(`/mycaregiver/${formData.phone}`);
+            navigate(`/careneeders/phone/${formData.phone}`);
           } else if (userType === "careneeder") {
-            navigate(`/mycareneeder/${formData.phone}`);
+            navigate(`/caregivers/phone/${formData.phone}`);
           } else if (userType === "animalcaregiver") {
-            navigate(`/myanimalcaregiverform/${formData.phone}`);
+            navigate(`/animalcareneeders/phone/${formData.phone}`);
+          } else if (userType === "animalcareneeder") {
+            navigate(`/animalcaregivers/phone/${formData.phone}`);
           }
         } else {
           // Use dynamic navigation paths based on userType

@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal"; // Import the Modal component
 import Button from "react-bootstrap/Button"; // Import the Button component
 
-const CaregiverAds: React.FC = () => {
+const AnimalCaregiverAds: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State for the success modal
@@ -17,6 +17,7 @@ const CaregiverAds: React.FC = () => {
   // Extract the caregiverId from the query parameters
   const queryParams = new URLSearchParams(location.search);
   const animalcaregiverid = queryParams.get("animalcaregiverId");
+  const phoneNumber = queryParams.get("phone")
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const titleText = e.target.value;
@@ -99,7 +100,7 @@ const CaregiverAds: React.FC = () => {
         // Show the success modal
         setShowSuccessModal(true);
         setTimeout(() => {
-          navigate("/animalcaregivers");
+          navigate(`/animalcareneeders/phone/${phoneNumber}`);
         }, 2000);
       })
       .catch((error) => {
@@ -187,4 +188,4 @@ const CaregiverAds: React.FC = () => {
   );
 };
 
-export default CaregiverAds;
+export default AnimalCaregiverAds;

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 
 interface RegisterProps {
-  userType: "caregiver" | "careneeder" | "animalcaregiver"; // Define the valid user types here
+  userType: "caregiver" | "careneeder" | "animalcaregiver" | "animalcareneeder"; // Define the valid user types here
 }
 
 const Register: React.FC<RegisterProps> = ({ userType }) => {
@@ -59,15 +59,16 @@ const Register: React.FC<RegisterProps> = ({ userType }) => {
 
         if (response.ok && data.success) {
           setSuccessMsg("创建账号成功!");
-          setTimeout(() => {
-            if (userType === "caregiver") {
-              navigate("/signup_caregiver");
-            } else if (userType === "careneeder") {
-              navigate("/signup_careneeder");
-            } else if (userType === "animalcaregiver") {
-              navigate("/signup_animalcaregiver");
-            }
-          }, 2000);
+          // Navigate immediately without delay
+          if (userType === "caregiver") {
+            navigate(`/careneeders/phone/${formData.phone}`);
+          } else if (userType === "careneeder") {
+            navigate(`/caregivers/phone/${formData.phone}`);
+          } else if (userType === "animalcaregiver") {
+            navigate(`/animalcaregivers/phone/${formData.phone}`);
+          } else if (userType === "animalcareneeder") {
+            navigate(`/animalcareneeder/phone/${formData.phone}`);
+          }
         } else {
           setErrorMsg("注册失败: " + (data.error || "Unknown Error"));
         }

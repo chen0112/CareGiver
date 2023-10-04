@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CaregiverCard from "../CaregiverCard/CaregiverCard";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCaregiverContext } from "../../../context/CaregiverContext";
 import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
 import "./CaregiverList.css";
@@ -10,6 +10,8 @@ import CaregiverFilter from "../CaregiverFilter/CaregiverFilter";
 const CaregiverList: React.FC = () => {
   const { caregivers } = useCaregiverContext();
   const { caregiverAds } = useCaregiverAdsContext();
+
+  const { phone } = useParams<{ phone: string }>();
 
   // State for filter
   const [filter, setFilter] = useState<{
@@ -124,7 +126,41 @@ const CaregiverList: React.FC = () => {
   });
 
   return (
-    <div>
+    <div className="relative">
+      <div className="fixed top-1/4 right-8 z-50 space-y-4">
+        <div className="w-full">
+          <CaregiverFilter onFilterChange={handleFilterChange} />
+        </div>
+
+        <div className="w-full">
+          <Link
+            to="/signup_careneeder"
+            className="no-underline py-2 px-4 w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            发布新广告
+          </Link>
+        </div>
+
+        <div className="w-full">
+          <Link
+            to={`/mycareneeder/phone/${phone}`}
+            className="no-underline py-2 px-4 w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            我的广告
+          </Link>
+        </div>
+
+        <div className="w-full">
+          <Link
+            to={`/careneeders/phone/${phone}`}
+            className="no-underline py-2 px-4 w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            所有雇主广告
+          </Link>
+        </div>
+
+      </div>
+
       <div className="flex items-center mx-9 py-3">
         <Link to="/" className="flex items-center text-black no-underline ml-0">
           <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
@@ -137,10 +173,8 @@ const CaregiverList: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <div className="flex flex-col items-center space-y-8">
-        {/* Add spacing between elements */}
-        <div className="flex justify-center w-full mb-8">
-          {/* Centered and margin added */}
-          <CaregiverFilter onFilterChange={handleFilterChange} />
+        <div className="text-center w-full text-2xl font-semibold mb-3">
+          护工广告
         </div>
         <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
           {/* Changed to 3/5 width of the parent */}

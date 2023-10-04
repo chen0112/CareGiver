@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Caregiver, CaregiverAds } from "../../../types/Types";
+import {
+  AnimalCareneeder,
+  AnimalCareneederAds,
+  AnimalCareneederForm,
+} from "../../../types/Types";
 import { Link } from "react-router-dom";
-import "./CaregiverCard.css";
-import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { LOCATION_OPTIONS } from "../../../types/Constant";
 
-interface CaregiverCardProps {
-  caregiver: Caregiver;
-  caregiverAd: CaregiverAds | undefined;
+const defaultImageUrl =
+  "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+
+interface AnimalcareneederCardProps {
+  animalcareneeder: AnimalCareneeder | undefined;
+  animalcareneedersForm: AnimalCareneederForm;
+  animalcareneederAds: AnimalCareneederAds | undefined;
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
-  onUpdateCaregiver?: (updatedCaregiver: Caregiver) => void; // New prop for handling updates
-  onUpdateCaregiverAd?: (updatedCaregiverAd: CaregiverAds) => void; // New prop for handling ads updates
+  onUpdateanimalcareneederForm?: (
+    updatedanimalcareneederForm: AnimalCareneederForm
+  ) => void; // New prop for handling updates
   className?: string; // Add this line
 }
 
@@ -22,11 +29,12 @@ interface Option {
 
 const locationOptions = LOCATION_OPTIONS;
 
-const CaregiverCard: React.FC<CaregiverCardProps> = ({
-  caregiver,
-  caregiverAd,
+const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
+  animalcareneeder,
+  animalcareneedersForm,
+  animalcareneederAds,
   loggedInUserPhone,
-  onUpdateCaregiver, // Receive the update function from the parent component
+  onUpdateanimalcareneederForm, // Receive the update function from the parent component
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
@@ -34,14 +42,18 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
   };
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editedCaregiver, setEditedCaregiver] = useState(caregiver);
-  const [editedCaregiverAd, setEditedCaregiverAd] = useState(
-    caregiverAd || { title: "", description: "" }
+  const [editedanimalcareneederForm, setEditedanimalcareneederForm] = useState(
+    animalcareneedersForm
+  );
+  const [editedanimalcareneederAds, setEditedanimalcareneederAds] = useState(
+    animalcareneederAds || { title: "", description: "" }
   );
 
   useEffect(() => {
-    setEditedCaregiverAd(caregiverAd || { title: "", description: "" });
-  }, [caregiverAd]);
+    setEditedanimalcareneederAds(
+      animalcareneederAds || { title: "", description: "" }
+    );
+  }, [animalcareneederAds]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -49,7 +61,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
 
   const handleLocationChange = (newLocation: Option[]) => {
     if (newLocation && newLocation.length <= 2) {
-      setEditedCaregiver((prev) => ({
+      setEditedanimalcareneederForm((prev) => ({
         ...prev,
         location: newLocation,
       }));
@@ -62,43 +74,42 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setEditedCaregiverAd({
-      ...editedCaregiverAd,
+    setEditedanimalcareneederAds({
+      ...editedanimalcareneederAds,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleSave = () => {
     fetch(
-      `https://nginx.yongxinguanai.com/api/mycaregiver/${editedCaregiver.id}/ad`,
+      `https://nginx.yongxinguanai.com/api/myanimalcareneeder/${editedanimalcareneederForm.id}/ad`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editedCaregiverAd),
+        body: JSON.stringify(editedanimalcareneederAds),
       }
     )
       .then((response) => response.json())
       .then((data) => {
         console.log("Response data:", data);
-        if (onUpdateCaregiver) {
-          onUpdateCaregiver(editedCaregiver); // Call the update function provided by the parent component
+        if (onUpdateanimalcareneederForm) {
+          onUpdateanimalcareneederForm(editedanimalcareneederForm); // Call the update function provided by the parent component
         }
         setIsEditing(false);
       })
       .catch((error) => {
-        console.error("Error updating caregiverAd:", error);
+        console.error("Error updating careneederAd:", error);
       });
   };
 
   return (
     <div>
       {isEditing ? (
-        <div className="bg-white p-4 md:p-6 rounded shadow-lg">
-          {/* Title */}
+        <div className="bg-white p-6 rounded-lg shadow-lg">
           <div className="mb-4">
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-blue-700"
+              className="block text-sm font-medium text-gray-700"
             >
               标题
             </label>
@@ -106,40 +117,37 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
               type="text"
               name="title"
               id="title"
-              value={editedCaregiverAd.title}
+              value={editedanimalcareneederAds.title}
               onChange={handleInputChange}
               className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
-
-          {/* Description */}
           <div className="mb-4">
             <label
               htmlFor="description"
-              className="block text-sm font-medium text-blue-700"
+              className="block text-sm font-medium text-gray-700"
             >
               描述
             </label>
             <textarea
               name="description"
               id="description"
-              value={editedCaregiverAd.description}
+              value={editedanimalcareneederAds.description}
               onChange={handleInputChange}
               className="mt-1 p-2 w-full border rounded-md shadow-sm"
             />
           </div>
 
-          {/* Save and Cancel Buttons */}
           <div className="flex justify-end">
             <button
               onClick={handleSave}
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="inline-flex items-center justify-center px-4 py-2 text-white bg-green-500 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
               保存
             </button>
             <button
               onClick={handleEditClick}
-              className="ml-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              className="ml-2 inline-flex items-center justify-center px-4 py-2 text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               取消
             </button>
@@ -147,16 +155,16 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
         </div>
       ) : (
         <div className="flex flex-col items-center mb-6 mx-2 md:mx-6">
-          {/* Link to Caregiver's Profile */}
+          {/* Link to Animal Careneeder's Profile */}
           <Link
-            to={`/caregivers/id/${caregiver.id}`}
+            to={`/animalcareneeders/id/${animalcareneedersForm.id}`}
             className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}
             <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
               <img
-                src={caregiver.imageurl}
-                alt={caregiver.name}
+                src={animalcareneedersForm.imageurl || defaultImageUrl}
+                alt={animalcareneedersForm.name}
                 style={imageStyle}
                 className="rounded w-1/2 md:w-full"
               />
@@ -166,35 +174,38 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
             <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
                 <h3 className="text-xl font-semibold text-blue-700 mr-3">
-                  {caregiver.name}
+                  {animalcareneedersForm.name}
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />
                 <span className="text-gray-600 ml-2 mb-1">
-                  {caregiver.location &&
-                  Array.isArray(caregiver.location) &&
-                  caregiver.location.length > 0
-                    ? caregiver.location.map((loc) => loc.label).join(", ")
+                  {animalcareneedersForm.location &&
+                  Array.isArray(animalcareneedersForm.location) &&
+                  animalcareneedersForm.location.length > 0
+                    ? animalcareneedersForm.location
+                        .map((loc) => loc.label)
+                        .join(", ")
                     : "无"}
                 </span>
                 <span className="mb-1 ml-3 text-black">
-                  {caregiver?.hourlycharge
-                    ? `¥ ${caregiver.hourlycharge}元/小时`
+                  {animalcareneeder?.hourlycharge
+                    ? `¥ ${animalcareneeder.hourlycharge}元/小时`
                     : "¥ 收费不详"}
                 </span>
               </div>
               <div className="text-gray-600 mb-8 line-clamp">
-                {caregiverAd && (
+                {editedanimalcareneederAds && (
                   <div>
-                    <p>{caregiverAd.title}</p>
-                    <p className="line-clamp-3">{caregiverAd.description}</p>
+                    <p>{editedanimalcareneederAds.title}</p>
+                    <p className="line-clamp-3">
+                      {editedanimalcareneederAds.description}
+                    </p>
                   </div>
                 )}
               </div>
             </div>
           </Link>
 
-          {/* Edit Button */}
-          {caregiver.phone === loggedInUserPhone && (
+          {animalcareneedersForm.phone === loggedInUserPhone && (
             <button
               onClick={handleEditClick}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
@@ -208,4 +219,4 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
   );
 };
 
-export default CaregiverCard;
+export default AnimalCareneederCard;

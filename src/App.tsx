@@ -9,6 +9,9 @@ import "./index.css";
 import AnimalCaregiverFormProvider from "./context/AnimalCaregiverFormContext";
 import AnimalCaregiverProvider from "./context/AnimalCaregiverContext";
 import AnimalCaregiverAdsProvider from "./context/AnimalCaregiverAdsContext";
+import AnimalCareneederProvider from "./context/AnimalCareneederContext";
+import AnimalCareneederFormProvider from "./context/AnimalCareneederFormContext";
+import AnimalCareneederAdsProvider from "./context/AnimalCareneederAdsContext";
 
 const App: React.FC = () => {
   return (
@@ -21,7 +24,13 @@ const App: React.FC = () => {
                 <AnimalCaregiverFormProvider>
                   <AnimalCaregiverProvider>
                     <AnimalCaregiverAdsProvider>
-                      <Routes />
+                      <AnimalCareneederAdsProvider>
+                        <AnimalCareneederProvider>
+                          <AnimalCareneederFormProvider>
+                            <Routes />
+                          </AnimalCareneederFormProvider>
+                        </AnimalCareneederProvider>
+                      </AnimalCareneederAdsProvider>
                     </AnimalCaregiverAdsProvider>
                   </AnimalCaregiverProvider>
                 </AnimalCaregiverFormProvider>

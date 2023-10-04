@@ -4,7 +4,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal"; // Import the Modal component
 import Button from "react-bootstrap/Button"; // Import the Button component
 
-
 const CaregiverAds: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -19,6 +18,7 @@ const CaregiverAds: React.FC = () => {
   // Extract the caregiverId from the query parameters
   const queryParams = new URLSearchParams(location.search);
   const caregiverId = queryParams.get("caregiverId");
+  const phoneNumber = queryParams.get("phone");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const titleText = e.target.value;
@@ -53,12 +53,16 @@ const CaregiverAds: React.FC = () => {
     }
   };
 
-
   const handlePostAd = (e: React.FormEvent) => {
     e.preventDefault(); // Prevent the default form submission behavior
 
     if (titleError || descriptionError) {
       // If there are errors in either the title or description, don't submit the form
+      return;
+    }
+
+    if (!caregiverId || isNaN(Number(caregiverId))) {
+      console.error("Invalid or missing caregiverId");
       return;
     }
 
@@ -101,7 +105,7 @@ const CaregiverAds: React.FC = () => {
         // Show the success modal
         setShowSuccessModal(true);
         setTimeout(() => {
-          navigate("/caregivers");
+          navigate(`/careneeders/phone/${phoneNumber}`);
         }, 2000);
       })
       .catch((error) => {
