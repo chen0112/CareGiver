@@ -27,7 +27,9 @@ import MyAnimalCaregiver from "./components/AnimalCaregiverComponent/MyAnimalCar
 import AnimalCareneederWebForm from "./components/AnimalCareneederComponent/AnimalCareneederForm/AnimalCareneederForm";
 import AnimalCareneeder from "./components/AnimalCareneederComponent/AnimalCareneeder/AnimalCareneeder";
 import AnimalCareneederAds from "./components/AnimalCareneederComponent/AnimalCareneederAd/AnimalCareneederAd";
-import AnimalCareneederList from "./components/AnimalCareneederComponent/AnimalCareneederList/AnimalCareneederList"
+import AnimalCareneederList from "./components/AnimalCareneederComponent/AnimalCareneederList/AnimalCareneederList";
+import AnimalCareneederDetail from "./components/AnimalCareneederComponent/AnimalCareneederDetail/AnimalCareneederDetail";
+import MyAnimalCareneeder from "./components/AnimalCareneederComponent/MyAnimalCareneeder/MyAnimalCareneeder"
 import ChatWindow from "./components/ChatWindow/ChatWindow";
 
 const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
@@ -202,7 +204,7 @@ const AppRoutes: React.FC = () => {
           path="/signin/animalcareneeder"
           element={<SignIn userType="animalcareneeder" />}
         />
-         <Route
+        <Route
           path="/register/animalcareneeder"
           element={<Register userType="animalcareneeder" />}
         />
@@ -228,6 +230,14 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/signup_animalcareneeders/details/ads"
           element={<AnimalCareneederAds />}
+        />
+        <Route
+          path="/animalcareneeders/id/:id"
+          element={<AnimalCareneederDetail />}
+        />
+        <Route
+          path="/myanimalcareneederform/phone/:phone"
+          element={<MyAnimalCareneeder />}
         />
 
         {/* chat window */}

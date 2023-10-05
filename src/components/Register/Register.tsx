@@ -67,7 +67,7 @@ const Register: React.FC<RegisterProps> = ({ userType }) => {
           } else if (userType === "animalcaregiver") {
             navigate(`/animalcaregivers/phone/${formData.phone}`);
           } else if (userType === "animalcareneeder") {
-            navigate(`/animalcareneeder/phone/${formData.phone}`);
+            navigate(`/animalcareneeders/phone/${formData.phone}`);
           }
         } else {
           setErrorMsg("注册失败: " + (data.error || "Unknown Error"));

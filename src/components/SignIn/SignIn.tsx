@@ -52,7 +52,7 @@ const SignIn: React.FC<SignInProps> = ({ userType }) => {
           } else if (userType === "careneeder") {
             navigate(`/caregivers/phone/${formData.phone}`);
           } else if (userType === "animalcaregiver") {
-            navigate(`/animalcareneeders/phone/${formData.phone}`);
+            navigate(`/animalcareneeders/phone/${formData.phone}`); 
           } else if (userType === "animalcareneeder") {
             navigate(`/animalcaregivers/phone/${formData.phone}`);
           }

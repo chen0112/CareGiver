@@ -63,7 +63,7 @@ const AnimalCaregiverList: React.FC = () => {
 
         <div>
           <Link
-            to="/signup_animalcaregiver"
+            to="/signup_animalcareneeder"
             className="no-underline py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
           >
             发布新广告
@@ -72,12 +72,22 @@ const AnimalCaregiverList: React.FC = () => {
 
         <div>
           <Link
-            to={`/myanimalcaregiverform/phone/${phone}`} //this phone number is from animalcareneeder loggin phone number which wont be available in animalcaregiverform
+            to={`/myanimalcareneederform/phone/${phone}`}
             className="no-underline py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
           >
             我的广告
           </Link>
         </div>
+
+        <div className="w-full">
+          <Link
+            to={`/animalcareneeders/phone/${phone}`}
+            className="no-underline py-2 px-4 w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            宠托师雇主广告
+          </Link>
+        </div>
+
       </div>
       <div className="flex items-center mx-9 py-3">
         <Link to="/" className="flex items-center text-black no-underline ml-0">
@@ -91,6 +101,9 @@ const AnimalCaregiverList: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <div className="flex flex-col items-center space-y-8">
+        <div className="text-center w-full text-2xl font-semibold mb-3">
+          宠托师广告
+        </div>
         <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
           {filteredanimalcaregiversForm.map((animalcaregiversForm) => {
             // Find the associated careneederschedule for this careneeder
