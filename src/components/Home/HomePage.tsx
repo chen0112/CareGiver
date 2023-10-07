@@ -152,61 +152,38 @@ const HomePage: React.FC = () => {
           />
         </div>
       </div>
+
       <div className="flex flex-col md:flex-row justify-between">
         <Link
           to="/signin/caregiver"
-          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
+          className="flex-none p-6 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md"
         >
-          <img src={AD3} alt="caregiver" className="w-16 h-12 mb-2" />
+          <img src={AD3} alt="caregiver" className="w-20 h-16 mb-3" />
           <span className="text-black text-sm no-underline">成为护工</span>
         </Link>
 
         <Link
           to="/signin/careneeder"
-          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
+          className="flex-none p-6 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md"
         >
-          <img src={AD4} alt="careneder post" className="w-16 h-12 mb-2" />
+          <img src={AD4} alt="careneeder post" className="w-20 h-16 mb-3" />
           <span className="text-black text-sm no-underline">雇主发布</span>
         </Link>
 
         <Link
           to="/signin/animalcaregiver"
-          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
+          className="flex-none p-6 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md"
         >
-          <img src={AD5} alt="Aninmal Care" className="w-16 h-12 mb-2" />
+          <img src={AD5} alt="Animal Care" className="w-20 h-16 mb-3" />
           <span className="text-black text-sm no-underline">成为宠托师</span>
         </Link>
 
         <Link
           to="/signin/animalcareneeder"
-          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
+          className="flex-none p-6 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md"
         >
-          <img src={AD8} alt="Aninmal Careneder" className="w-16 h-12 mb-2" />
+          <img src={AD8} alt="Animal Careneeder" className="w-20 h-16 mb-3" />
           <span className="text-black text-sm no-underline">宠物托管</span>
-        </Link>
-
-        <Link
-          to="/caregivers"
-          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
-        >
-          <img src={AD2} alt="caregivers display" className="w-16 h-12 mb-2" />
-          <span className="text-black text-sm no-underline">护工展示</span>
-        </Link>
-
-        <Link
-          to="/careneeders"
-          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
-        >
-          <img src={AD1} alt="Careneeder Ads" className="w-16 h-12 mb-2" />
-          <span className="text-black text-sm no-underline">雇主广告</span>
-        </Link>
-
-        <Link
-          to="/animalcaregivers"
-          className="flex-none p-4 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-2 shadow-md"
-        >
-          <img src={AD6} alt="Animal Care display" className="w-16 h-12 mb-2" />
-          <span className="text-black text-sm no-underline">宠物照顾广告</span>
         </Link>
       </div>
 
