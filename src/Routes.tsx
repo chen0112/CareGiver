@@ -31,19 +31,21 @@ import AnimalCareneederList from "./components/AnimalCareneederComponent/AnimalC
 import AnimalCareneederDetail from "./components/AnimalCareneederComponent/AnimalCareneederDetail/AnimalCareneederDetail";
 import MyAnimalCareneeder from "./components/AnimalCareneederComponent/MyAnimalCareneeder/MyAnimalCareneeder"
 import ChatWindow from "./components/ChatWindow/ChatWindow";
+import {BASE_URL} from "./types/Constant"
 
-const API_URL = "https://nginx.yongxinguanai.com/api/all_caregivers";
+const API_URL = `${BASE_URL}/api/all_caregivers`;
 
-const API_URL_UPLOAD = "https://nginx.yongxinguanai.com/api/upload";
+const API_URL_UPLOAD = `${BASE_URL}/api/upload`;
+
 
 const API_URL_careneeders =
-  "https://nginx.yongxinguanai.com/api/all_careneeders";
+  `${BASE_URL}/api/all_careneeders`;
 
 const API_URL_animalcaregivers =
-  "https://nginx.yongxinguanai.com/api/all_animalcaregivers";
+  `${BASE_URL}/api/all_animalcaregivers`;
 
 const API_URL_animalcareneeders =
-  "https://nginx.yongxinguanai.com/api/all_animalcareneeders";
+  `${BASE_URL}/api/all_animalcareneeders`;
 
 const AppRoutes: React.FC = () => {
   const { caregivers, setCaregivers } = useCaregiverContext();
@@ -241,7 +243,7 @@ const AppRoutes: React.FC = () => {
         />
 
         {/* chat window */}
-        <Route path="/caregivers/:id/message" element={<ChatWindow />} />
+        <Route path="/caregivers/message" element={<ChatWindow />} />
       </Routes>
     </BrowserRouter>
   );

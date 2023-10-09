@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { Careneeder } from "../types/Types";
+import { BASE_URL } from "../types/Constant";
 
 interface CareneederProviderProps {
   children: React.ReactNode;
@@ -23,7 +24,7 @@ const CareneederProvider: React.FC<CareneederProviderProps> = ({
   const [careneeders, setCareneeders] = useState<Careneeder[]>([]);
 
   const getCareneeders = () => {
-    fetch("https://nginx.yongxinguanai.com/api/all_careneeders") // Adjust URL
+    fetch(`${BASE_URL}/api/all_careneeders`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setCareneeders(data))
       .catch((error) => console.error("Error fetching care needers:", error));
@@ -36,10 +37,15 @@ const CareneederProvider: React.FC<CareneederProviderProps> = ({
   const updateCareneeders = (updatedCareneeders: Careneeder) => {
     console.log("Previous careneeder:", careneeders);
     setCareneeders((prevData) => {
-      console.log("Updating careneeder with new careneeder:", updatedCareneeders);
+      console.log(
+        "Updating careneeder with new careneeder:",
+        updatedCareneeders
+      );
       // Map through the previous caregivers and replace the one with the updated ID
       return prevData.map((Careneeder) =>
-      Careneeder.id === updatedCareneeders.id ? updatedCareneeders : Careneeder
+        Careneeder.id === updatedCareneeders.id
+          ? updatedCareneeders
+          : Careneeder
       );
     });
   };

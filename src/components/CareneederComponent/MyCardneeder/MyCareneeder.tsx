@@ -5,6 +5,7 @@ import { Careneeder } from "../../../types/Types"; // Adjust the import for Care
 import { Link, useParams } from "react-router-dom";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
 import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
+import { BASE_URL } from "../../../types/Constant";
 
 const MyCareneeders: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -19,7 +20,7 @@ const MyCareneeders: React.FC = () => {
   console.log("Context careneederAds state:", careneederAds);
 
   useEffect(() => {
-    fetch(`https://nginx.yongxinguanai.com/api/mycareneeder/${phone}`) // Adjust the API endpoint
+    fetch(`${BASE_URL}/api/mycareneeder/${phone}`) // Adjust the API endpoint
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

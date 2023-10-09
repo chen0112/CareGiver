@@ -6,7 +6,7 @@ import {
 } from "../../../types/Types";
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { LOCATION_OPTIONS } from "../../../types/Constant";
+import { BASE_URL, LOCATION_OPTIONS } from "../../../types/Constant";
 
 const defaultImageUrl =
   "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
@@ -82,7 +82,7 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
 
   const handleSave = () => {
     fetch(
-      `https://nginx.yongxinguanai.com/api/myanimalcareneeder/${editedanimalcareneederForm.id}/ad`,
+      `${BASE_URL}/api/myanimalcareneeder/${editedanimalcareneederForm.id}/ad`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

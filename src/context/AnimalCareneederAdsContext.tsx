@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { AnimalCareneederAds } from "../types/Types"; // Import your Ad type definition
+import { BASE_URL } from "../types/Constant";
 
 interface AnimalCareneederAdsProviderProps {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ const AnimalCareneederAdsProvider: React.FC<
   >([]);
 
   const getanimalcareneederAds = () => {
-    fetch("https://nginx.yongxinguanai.com/api/all_animal_careneeder_ads") // Adjust URL
+    fetch(`${BASE_URL}/api/all_animal_careneeder_ads`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setanimalcareneederAds(data))
       .catch((error) =>

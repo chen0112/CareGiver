@@ -5,6 +5,7 @@ import { AnimalCaregiverForm } from "../../../types/Types"; // Adjust the import
 import { Link, useParams } from "react-router-dom";
 import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
+import { BASE_URL } from "../../../types/Constant";
 
 const MyAnimalCaregiver: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -21,7 +22,7 @@ const MyAnimalCaregiver: React.FC = () => {
   console.log("Context animalcaregiverAds state:", animalcaregiverAds);
 
   useEffect(() => {
-    fetch(`https://nginx.yongxinguanai.com/api/myanimalcaregiverform/${phone}`) // Adjust the API endpoint
+    fetch( `${BASE_URL}/api/myanimalcaregiverform/${phone}`) // Adjust the API endpoint
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

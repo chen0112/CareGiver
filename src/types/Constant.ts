@@ -42,3 +42,4 @@ export const LOCATION_OPTIONS = [
   
   // You can also export other constant values here
   
+  export const BASE_URL = "https://nginx.yongxinguanai.com";

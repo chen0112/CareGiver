@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
+import { BASE_URL } from "../../types/Constant";
 
 interface SignInProps {
   userType: "caregiver" | "careneeder" | "animalcaregiver" | "animalcareneeder"; // Define the valid user types here
@@ -30,35 +31,26 @@ const SignIn: React.FC<SignInProps> = ({ userType }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://nginx.yongxinguanai.com/api/signin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // Check if the user has posted ads before
-        if (data.hasPostedAds) {
-          // Use dynamic navigation paths based on userType
-          if (userType === "caregiver") {
-            navigate(`/careneeders/phone/${formData.phone}`);
-          } else if (userType === "careneeder") {
-            navigate(`/caregivers/phone/${formData.phone}`);
-          } else if (userType === "animalcaregiver") {
-            navigate(`/animalcareneeders/phone/${formData.phone}`);
-          } else if (userType === "animalcareneeder") {
-            navigate(`/animalcaregivers/phone/${formData.phone}`);
-          }
-        } else {
-          // Use dynamic navigation paths based on userType
-          navigate(`/signup_${userType}`);
+        // Use dynamic navigation paths based on userType
+        if (userType === "caregiver") {
+          navigate(`/careneeders/phone/${formData.phone}`);
+        } else if (userType === "careneeder") {
+          navigate(`/caregivers/phone/${formData.phone}`);
+        } else if (userType === "animalcaregiver") {
+          navigate(`/animalcareneeders/phone/${formData.phone}`);
+        } else if (userType === "animalcareneeder") {
+          navigate(`/animalcaregivers/phone/${formData.phone}`);
         }
       } else {
         // Handle error

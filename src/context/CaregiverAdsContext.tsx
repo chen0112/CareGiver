@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { CaregiverAds } from "../types/Types"; // Import your CaregiverAds type definition
+import { BASE_URL } from "../types/Constant";
 
 interface CaregiverAdsProviderProps {
   children: React.ReactNode;
@@ -23,7 +24,7 @@ const CaregiverAdsProvider: React.FC<CaregiverAdsProviderProps> = ({
   const [caregiverAds, setCaregiverAds] = useState<CaregiverAds[]>([]);
 
   const getCaregiverAds = () => {
-    fetch("https://nginx.yongxinguanai.com/api/all_caregiverads") // Temporary URL
+    fetch(`${BASE_URL}/api/all_caregiverads`) // Temporary URL
       .then((response) => response.json())
       .then((data) => setCaregiverAds(data))
       .catch((error) => console.error("Error fetching caregiver ads:", error));
@@ -35,9 +36,7 @@ const CaregiverAdsProvider: React.FC<CaregiverAdsProviderProps> = ({
 
   const updateCaregiverAds = (newAd: CaregiverAds) => {
     setCaregiverAds((prevAds) => {
-      return prevAds.map((ad) =>
-        ad.id === newAd.id ? newAd : ad
-      );
+      return prevAds.map((ad) => (ad.id === newAd.id ? newAd : ad));
     });
   };
 

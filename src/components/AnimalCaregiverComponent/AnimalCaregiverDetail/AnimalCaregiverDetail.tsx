@@ -6,6 +6,7 @@ import { BiHeart } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
 import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
+import { BASE_URL } from "../../../types/Constant";
 
 const AnimalCaregiverDetail: React.FC = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ const AnimalCaregiverDetail: React.FC = () => {
   console.log("Context animalcaregiverAds state:", animalcaregiverAds);
 
   useEffect(() => {
-    fetch(`https://nginx.yongxinguanai.com/api/all_animalcaregiverform/${id}`)
+    fetch( `${BASE_URL}/api/all_animalcaregiverform/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { AnimalCaregiverAds } from "../types/Types"; // Import your Ad type definition
+import { BASE_URL } from "../types/Constant";
 
 interface AnimalCaregiverAdsProviderProps {
   children: React.ReactNode;
@@ -22,13 +23,17 @@ export const AnimalCaregiverAdsContext = createContext<{
 const AnimalCaregiverAdsProvider: React.FC<AnimalCaregiverAdsProviderProps> = ({
   children,
 }) => {
-  const [animalcaregiverAds, setanimalcaregiverAds] = useState<AnimalCaregiverAds[]>([]);
+  const [animalcaregiverAds, setanimalcaregiverAds] = useState<
+    AnimalCaregiverAds[]
+  >([]);
 
   const getanimalcaregiverAds = () => {
-    fetch("https://nginx.yongxinguanai.com/api/all_animal_caregiver_ads") // Adjust URL
+    fetch(`${BASE_URL}/api/all_animal_caregiver_ads`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setanimalcaregiverAds(data))
-      .catch((error) => console.error("Error fetching AnimalCaregiver Ads:", error));
+      .catch((error) =>
+        console.error("Error fetching AnimalCaregiver Ads:", error)
+      );
   };
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { AnimalCaregiverForm } from "../types/Types";
+import { BASE_URL } from "../types/Constant";
 
 interface CaregiverProviderProps {
   children: React.ReactNode;
@@ -7,44 +8,64 @@ interface CaregiverProviderProps {
 
 export const AnimalCaregiverFormContext = createContext<{
   animalcaregiversForm: AnimalCaregiverForm[];
-  setanimalcaregiversForm: React.Dispatch<React.SetStateAction<AnimalCaregiverForm[]>>;
+  setanimalcaregiversForm: React.Dispatch<
+    React.SetStateAction<AnimalCaregiverForm[]>
+  >;
   updateanimalcaregivers: (newCaregiver: AnimalCaregiverForm) => void;
   getanimalcaregivers: () => void;
 }>({
-    animalcaregiversForm: [],
-    setanimalcaregiversForm: () => {},
+  animalcaregiversForm: [],
+  setanimalcaregiversForm: () => {},
   updateanimalcaregivers: () => {},
   getanimalcaregivers: () => {},
 });
 
-const AnimalCaregiverFormProvider: React.FC<CaregiverProviderProps> = ({ children }) => {
-  const [animalcaregiversForm, setanimalcaregiversForm] = useState<AnimalCaregiverForm[]>([]);
+const AnimalCaregiverFormProvider: React.FC<CaregiverProviderProps> = ({
+  children,
+}) => {
+  const [animalcaregiversForm, setanimalcaregiversForm] = useState<
+    AnimalCaregiverForm[]
+  >([]);
 
   const getanimalcaregivers = () => {
-    fetch("https://nginx.yongxinguanai.com/api/all_animalcaregivers")
+    fetch(`${BASE_URL}/api/all_animalcaregivers`)
       .then((response) => response.json())
       .then((data) => setanimalcaregiversForm(data))
-      .catch((error) => console.error("Error fetching animalcaregiversForm:", error));
+      .catch((error) =>
+        console.error("Error fetching animalcaregiversForm:", error)
+      );
   };
 
   useEffect(() => {
     getanimalcaregivers();
   }, []); // Empty array indicates that this effect should only run once on mount, not on updates
 
-  const updateanimalcaregivers = (updatedanimalcaregivers: AnimalCaregiverForm) => {
+  const updateanimalcaregivers = (
+    updatedanimalcaregivers: AnimalCaregiverForm
+  ) => {
     console.log("Previous animalcaregiversForm:", animalcaregiversForm);
     setanimalcaregiversForm((prevData) => {
-      console.log("Updating animalcaregiversForm with new animalcaregiverForm:", updatedanimalcaregivers);
+      console.log(
+        "Updating animalcaregiversForm with new animalcaregiverForm:",
+        updatedanimalcaregivers
+      );
       // Map through the previous caregivers and replace the one with the updated ID
       return prevData.map((animalcaregiversForm) =>
-      animalcaregiversForm.id === updatedanimalcaregivers.id ? updatedanimalcaregivers : animalcaregiversForm
+        animalcaregiversForm.id === updatedanimalcaregivers.id
+          ? updatedanimalcaregivers
+          : animalcaregiversForm
       );
     });
   };
 
   return (
     <AnimalCaregiverFormContext.Provider
-      value={{ animalcaregiversForm, setanimalcaregiversForm, updateanimalcaregivers, getanimalcaregivers }}
+      value={{
+        animalcaregiversForm,
+        setanimalcaregiversForm,
+        updateanimalcaregivers,
+        getanimalcaregivers,
+      }}
     >
       {children}
     </AnimalCaregiverFormContext.Provider>

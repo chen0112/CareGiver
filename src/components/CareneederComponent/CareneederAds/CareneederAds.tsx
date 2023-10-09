@@ -3,6 +3,7 @@ import { BiHeart } from "react-icons/bi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal"; // Import the Modal component
 import Button from "react-bootstrap/Button"; // Import the Button component
+import { BASE_URL } from "../../../types/Constant";
 
 const CareneederAds: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -68,7 +69,7 @@ const CareneederAds: React.FC = () => {
     };
 
     // Replace with your actual API URL
-    const API_URL = "https://nginx.yongxinguanai.com/api/careneeder_ads";
+    const API_URL = `${BASE_URL}/api/careneeder_ads`;
 
     if (!careneederId) {
       console.error("Missing careneederId");

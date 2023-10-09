@@ -4,6 +4,7 @@ import { BiHeart } from "react-icons/bi";
 import { Caregiver } from "../../../types/Types";
 import { Link, useParams } from "react-router-dom";
 import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
+import { BASE_URL } from "../../../types/Constant";
 
 const MyCaregivers: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -15,7 +16,7 @@ const MyCaregivers: React.FC = () => {
   console.log("Context careneederAds state:", caregiverAds);
 
   useEffect(() => {
-    fetch(`https://nginx.yongxinguanai.com/api/mycaregiver/${phone}`)
+    fetch(`${BASE_URL}/api/mycaregiver/${phone}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

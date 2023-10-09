@@ -3,6 +3,7 @@ import { BiHeart } from "react-icons/bi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal"; // Import the Modal component
 import Button from "react-bootstrap/Button"; // Import the Button component
+import { BASE_URL } from "../../../types/Constant";
 
 const CaregiverAds: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -73,7 +74,7 @@ const CaregiverAds: React.FC = () => {
       description: description,
     };
 
-    const API_URL = "https://nginx.yongxinguanai.com/api/caregiver_ads";
+    const API_URL = `${BASE_URL}/api/caregiver_ads`;
 
     if (!caregiverId) {
       console.error("Missing caregiverId");

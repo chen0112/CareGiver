@@ -3,6 +3,7 @@ import { BiHeart } from "react-icons/bi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "antd";
+import { BASE_URL } from "../../../types/Constant";
 
 const services = [
   "遛宠物/刷街",
@@ -109,7 +110,7 @@ const AnimalCareneeder: React.FC = () => {
 
     // Send a POST request to the Flask backend
     const response = await fetch(
-      "https://nginx.yongxinguanai.com/api/animalcareneeder_details",
+      `${BASE_URL}/api/animalcareneeder_details`,
       {
         method: "POST",
         headers: {

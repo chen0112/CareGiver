@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./CaregiverCard.css";
 import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { LOCATION_OPTIONS } from "../../../types/Constant";
+import { BASE_URL, LOCATION_OPTIONS } from "../../../types/Constant";
 
 interface CaregiverCardProps {
   caregiver: Caregiver;
@@ -13,6 +13,7 @@ interface CaregiverCardProps {
   onUpdateCaregiver?: (updatedCaregiver: Caregiver) => void; // New prop for handling updates
   onUpdateCaregiverAd?: (updatedCaregiverAd: CaregiverAds) => void; // New prop for handling ads updates
   className?: string; // Add this line
+  phoneNumber?: string;
 }
 
 interface Option {
@@ -27,6 +28,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
   caregiverAd,
   loggedInUserPhone,
   onUpdateCaregiver, // Receive the update function from the parent component
+  phoneNumber
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
@@ -70,7 +72,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
 
   const handleSave = () => {
     fetch(
-      `https://nginx.yongxinguanai.com/api/mycaregiver/${editedCaregiver.id}/ad`,
+      `${BASE_URL}/api/mycaregiver/${editedCaregiver.id}/ad`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -149,7 +151,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
         <div className="flex flex-col items-center mb-6 mx-2 md:mx-6">
           {/* Link to Caregiver's Profile */}
           <Link
-            to={`/caregivers/id/${caregiver.id}`}
+            to={`/caregivers/id/${caregiver.id}?phoneNumber=${phoneNumber}`}
             className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}

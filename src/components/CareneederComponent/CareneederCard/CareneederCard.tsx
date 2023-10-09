@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import dayjs from "dayjs";
-import { LOCATION_OPTIONS } from "../../../types/Constant";
+import { BASE_URL, LOCATION_OPTIONS } from "../../../types/Constant";
 
 const defaultImageUrl =
   "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
@@ -73,14 +73,11 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
   };
 
   const handleSave = () => {
-    fetch(
-      `https://nginx.yongxinguanai.com/api/mycareneeder/${editedCareneeder.id}/ad`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editedCareneederAd),
-      }
-    )
+    fetch(`${BASE_URL}/api/mycareneeder/${editedCareneeder.id}/ad`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editedCareneederAd),
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Response data:", data);

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { Schedule } from "../types/Types";
+import { BASE_URL } from "../types/Constant";
 
 interface CareneederScheduleProviderProps {
   children: React.ReactNode;
@@ -25,10 +26,9 @@ const CareneederScheduleProvider: React.FC<CareneederScheduleProviderProps> = ({
   );
 
   const getCareneedersSchedule = () => {
-    fetch("https://nginx.yongxinguanai.com/api/all_careneederschedule") // Adjust URL
+    fetch(`${BASE_URL}/api/all_careneederschedule`) // Adjust URL
       .then((response) => response.json())
-      .then((data) => 
-      setCareneedersSchedule(data))
+      .then((data) => setCareneedersSchedule(data))
       .catch((error) =>
         console.error("Error fetching care needers schedule:", error)
       );

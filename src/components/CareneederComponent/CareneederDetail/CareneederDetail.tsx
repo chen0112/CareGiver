@@ -7,6 +7,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
 import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
+import { BASE_URL } from "../../../types/Constant";
 
 const defaultImageUrl =
   "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
@@ -28,7 +29,7 @@ const CareneederDetail: React.FC = () => {
 
   useEffect(() => {
     // Fetch careneeder data
-    fetch(`https://nginx.yongxinguanai.com/api/all_careneeders/${id}`)
+    fetch(`${BASE_URL}/api/all_careneeders/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

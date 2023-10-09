@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { Caregiver } from "../types/Types";
+import { BASE_URL } from "../types/Constant";
 
 interface CaregiverProviderProps {
   children: React.ReactNode;
@@ -21,7 +22,7 @@ const CaregiverProvider: React.FC<CaregiverProviderProps> = ({ children }) => {
   const [caregivers, setCaregivers] = useState<Caregiver[]>([]);
 
   const getCaregivers = () => {
-    fetch("https://nginx.yongxinguanai.com/api/all_caregivers")
+    fetch(`${BASE_URL}/api/all_caregivers`)
       .then((response) => response.json())
       .then((data) => setCaregivers(data))
       .catch((error) => console.error("Error fetching caregivers:", error));

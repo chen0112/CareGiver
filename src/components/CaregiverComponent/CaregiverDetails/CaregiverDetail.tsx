@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { Caregiver } from "../../../types/Types";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
@@ -7,6 +7,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaEnvelope } from "react-icons/fa";
 import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
 import "./CaregiverDetail.css";
+import { BASE_URL } from "../../../types/Constant";
 
 const CaregiverDetail: React.FC = () => {
   const { id } = useParams();
@@ -17,8 +18,12 @@ const CaregiverDetail: React.FC = () => {
   const { caregiverAds } = useCaregiverAdsContext();
   console.log("Context careneederAds state:", caregiverAds);
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const phoneNumber = queryParams.get("phoneNumber");
+
   useEffect(() => {
-    fetch(`https://nginx.yongxinguanai.com/api/all_caregivers/${id}`)
+    fetch( `${BASE_URL}/api/all_caregivers/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -49,25 +54,25 @@ const CaregiverDetail: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="fixed top-1/4 right-8 z-50">
-        <Link
-          to={`/caregivers/${caregiver?.id}/message`}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center"
-        >
-          <FaEnvelope className="mr-2" /> 发送消息
-        </Link>
-      </div>
-
       <div>
-        <div className="flex items-center mx-9 py-3">
+        <div className="flex items-center justify-between py-3 ml-3 w-full">
           <Link
             to="/"
-            className="flex items-center text-black no-underline ml-0" // Remove 'mx-8 py-3' and add 'ml-0' to push it to the far left
+            className="flex items-center text-black no-underline ml-0"
           >
             <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
             <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
               关爱网
             </h1>
+          </Link>
+
+          <Link
+            to={`/caregivers/message?id=${
+              caregiver?.id
+            }&phoneNumber=${phoneNumber}&userType=${"caregiver"}`}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center mr-4"
+          >
+            <FaEnvelope className="mr-2" /> 发送消息
           </Link>
         </div>
 

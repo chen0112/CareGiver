@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { AnimalCareneederForm } from "../types/Types";
+import { BASE_URL } from "../types/Constant";
 
 interface CareneederProviderProps {
   children: React.ReactNode;
@@ -29,7 +30,7 @@ const AnimalCareneederFormProvider: React.FC<CareneederProviderProps> = ({
   >([]);
 
   const getanimalcareneeders = () => {
-    fetch("https://nginx.yongxinguanai.com/api/all_animalcareneeders")
+    fetch(`${BASE_URL}/api/all_animalcareneeders`)
       .then((response) => response.json())
       .then((data) => setanimalcareneedersForm(data))
       .catch((error) =>

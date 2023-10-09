@@ -10,6 +10,7 @@ import { Schedule } from "../../../types/Types";
 
 import DatePicker, { registerLocale } from "react-datepicker";
 import { zhCN } from "date-fns/locale";
+import { BASE_URL } from "../../../types/Constant";
 
 registerLocale("zh-cn", zhCN);
 
@@ -80,7 +81,7 @@ const CareneederSchedule: React.FC = () => {
     }
 
     // Step 2: Create an API request
-    const API_URL = "https://nginx.yongxinguanai.com/api/careneeder_schedule"; // Replace with your actual API endpoint
+    const API_URL = `${BASE_URL}/api/careneeder_schedule`; // Replace with your actual API endpoint
 
     const requestData = {
       careneeder_id: careneederId,

@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { io, Socket } from "socket.io-client";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useCaregiverContext } from "../../context/CaregiverContext";
 import { useCaregiverAdsContext } from "../../context/CaregiverAdsContext";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
+import { BASE_URL } from "../../types/Constant";
 
 type Message = {
-  sender: "user" | "caregiver";
-  text: string;
+  userType?: string;
+  sender_id: string;
+  content: string;
+  recipient_id: number | null;
+  createtime?: string | null;
+  status?: "sending" | "sent" | "failed";
 };
+
+const ENDPOINT = `${BASE_URL}`;
+let socket: Socket;
 
 const imageStyle: React.CSSProperties = {
   objectFit: "cover",
@@ -22,25 +31,60 @@ const ChatWindow: React.FC = () => {
   const { caregivers } = useCaregiverContext();
   const { caregiverAds } = useCaregiverAdsContext();
 
-  const { id: idString } = useParams<{ id?: string }>(); // Note the "?" indicating it can be undefined
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idString = queryParams.get("id");
+  const phoneNumber = queryParams.get("phoneNumber");
   // Guard against undefined and NaN
-  const id = idString ? parseInt(idString, 10) : undefined;
+  const id = idString ? parseInt(idString, 10) : null;
 
   // Check that id is neither undefined nor NaN before performing the filter
   const caregiver =
-    id !== undefined && !isNaN(id)
-      ? caregivers.find((c) => c.id === id)
-      : undefined;
+    id !== null && !isNaN(id) ? caregivers.find((c) => c.id === id) : undefined;
 
   const associatedAds = caregiver
     ? caregiverAds?.find((ad) => ad.caregiver_id === caregiver.id)
     : null;
 
+  useEffect(() => {
+    socket = io(ENDPOINT, { transports: ["polling", "websocket"] });
+
+    socket.on("receive_message", (data: Message) => {
+      setMessages((prevMessages) => {
+        // Update the status of the matching message to "sent"
+        return prevMessages.map((message) =>
+          message.content === data.content && message.status === "sending"
+            ? { ...message, status: "sent", createtime: data.createtime }
+            : message
+        );
+      });
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   const sendMessage = () => {
-    setMessages([...messages, { sender: "user", text: input }]);
+    const messageData = {
+      sender_id: phoneNumber || "unknown",
+      recipient_id: id,
+      content: input,
+    };
+
+    // Add the message to the UI with a "sending" status.
+    setMessages([
+      ...messages,
+      {
+        sender_id: phoneNumber || "unknown",
+        content: input,
+        recipient_id: id,
+        status: "sending",
+      },
+    ]);
+
+    socket.emit("send_message", messageData);
     setInput("");
-    // Add your backend logic here to send the message to the caregiver and receive a reply
   };
 
   return (
@@ -57,10 +101,7 @@ const ChatWindow: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-2" />
       {/* Caregiver Info */}
       <div className="flex items-center bg-gray-100 p-4">
-        <Link
-          to={`/caregivers/${caregiver?.id}`}
-          className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
-        >
+        <div className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1">
           {/* Image */}
           <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
             <img
@@ -100,7 +141,7 @@ const ChatWindow: React.FC = () => {
               )}
             </div>
           </div>
-        </Link>
+        </div>
       </div>
 
       {/* Chat */}
@@ -109,17 +150,22 @@ const ChatWindow: React.FC = () => {
           <div
             key={index}
             className={`${
-              message.sender === "user" ? "text-right" : "text-left"
+              message.userType === "caregiver" ? "text-right" : "text-left"
             } my-2 mx-4`}
           >
             <div
               className={`inline-block p-2 rounded ${
-                message.sender === "user"
+                message.userType === "caregiver"
                   ? "bg-blue-400 text-white"
                   : "bg-gray-300 text-black"
               }`}
             >
-              {message.text}
+              {message.content}
+              <div className="mt-1 text-xs">{message.createtime}</div>
+              <span className="ml-2 text-sm">
+                {message.status === "sending" && "sending..."}
+                {message.status === "failed" && "failed"}
+              </span>
             </div>
           </div>
         ))}
@@ -136,7 +182,7 @@ const ChatWindow: React.FC = () => {
           className="ml-2 bg-blue-500 text-white p-2 rounded"
           onClick={sendMessage}
         >
-          Send
+          发送消息
         </button>
       </div>
     </div>

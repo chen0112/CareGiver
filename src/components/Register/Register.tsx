@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
+import { BASE_URL } from "../../types/Constant";
 
 interface RegisterProps {
   userType: "caregiver" | "careneeder" | "animalcaregiver" | "animalcareneeder"; // Define the valid user types here
@@ -42,16 +43,13 @@ const Register: React.FC<RegisterProps> = ({ userType }) => {
     };
 
     try {
-      const response = await fetch(
-        "https://nginx.yongxinguanai.com/api/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -65,9 +63,9 @@ const Register: React.FC<RegisterProps> = ({ userType }) => {
           } else if (userType === "careneeder") {
             navigate(`/caregivers/phone/${formData.phone}`);
           } else if (userType === "animalcaregiver") {
-            navigate(`/animalcaregivers/phone/${formData.phone}`);
-          } else if (userType === "animalcareneeder") {
             navigate(`/animalcareneeders/phone/${formData.phone}`);
+          } else if (userType === "animalcareneeder") {
+            navigate(`/animalcaregivers/phone/${formData.phone}`);
           }
         } else {
           setErrorMsg("注册失败: " + (data.error || "Unknown Error"));

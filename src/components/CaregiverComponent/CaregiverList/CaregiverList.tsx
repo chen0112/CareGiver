@@ -229,6 +229,7 @@ const CaregiverList: React.FC = () => {
                 caregiver={caregiver}
                 caregiverAd={associatedAds}
                 className="w-full" // 100% width of the parent div which is 3/5 of the screen
+                phoneNumber = {phone}
               />
             );
           })}
