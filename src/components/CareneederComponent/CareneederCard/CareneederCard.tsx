@@ -16,6 +16,7 @@ interface CareneederCardProps {
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
   onUpdateCareneeder?: (updatedCareneeder: Careneeder) => void; // New prop for handling updates
   className?: string; // Add this line
+  phoneNumber?: string;
 }
 
 interface Option {
@@ -31,6 +32,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
   careneederAd,
   loggedInUserPhone,
   onUpdateCareneeder, // Receive the update function from the parent component
+  phoneNumber
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
@@ -146,7 +148,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
         <div className="flex flex-col items-center mb-6 mx-2 md:mx-6">
           {/* Link to Careneeder's Profile */}
           <Link
-            to={`/careneeders/id/${careneeder.id}`}
+            to={`/careneeders/id/${careneeder.id}?phoneNumber=${phoneNumber}`}
             className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}

@@ -1,27 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { io, Socket } from "socket.io-client";
+import Ably from "ably";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useCaregiverContext } from "../../context/CaregiverContext";
 import { useCaregiverAdsContext } from "../../context/CaregiverAdsContext";
 import { Link, useLocation } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
-import { BASE_URL } from "../../types/Constant";
 
 type Message = {
+  id?: string; // Add this line
   userType?: string;
   sender_id: string;
   content: string;
-  recipient_id: number | null;
+  recipient_id: string | null;
   createtime?: string | null;
-  status?: "sending" | "sent" | "failed";
+  status?: "sending" | "sent" | "failed" | null;
 };
 
-const ENDPOINT = `${BASE_URL}`;
-let socket: Socket;
+// const ENDPOINT = `${BASE_URL}`;
+
+const realtime = new Ably.Realtime.Promise(
+  "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY"
+);
+
+realtime.connection.on("failed", (stateChange) => {
+  console.error("Ably realtime connection error:", stateChange.reason);
+});
 
 const imageStyle: React.CSSProperties = {
   objectFit: "cover",
   height: "80%",
+};
+
+const formatTimestamp = (timestamp: string) => {
+  if (!timestamp) return ""; // Return an empty string if no timestamp is provided
+
+  const date = new Date(timestamp);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(date.getDate()).padStart(2, "0")} ${String(
+    date.getHours()
+  ).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:${String(
+    date.getSeconds()
+  ).padStart(2, "0")}`;
 };
 
 const ChatWindow: React.FC = () => {
@@ -34,7 +55,8 @@ const ChatWindow: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const idString = queryParams.get("id");
-  const phoneNumber = queryParams.get("phoneNumber");
+  const phoneNumber_sender = queryParams.get("phoneNumber_sender");
+  const phoneNumber_recipient = queryParams.get("phoneNumber_recipient");
   // Guard against undefined and NaN
   const id = idString ? parseInt(idString, 10) : null;
 
@@ -46,46 +68,123 @@ const ChatWindow: React.FC = () => {
     ? caregiverAds?.find((ad) => ad.caregiver_id === caregiver.id)
     : null;
 
-  useEffect(() => {
-    socket = io(ENDPOINT, { transports: ["polling", "websocket"] });
+  // Constructing the channel name
+  const sortedIds = [
+    Number(phoneNumber_sender || 0),
+    Number(phoneNumber_recipient || 0),
+  ].sort((a, b) => a - b);
 
-    socket.on("receive_message", (data: Message) => {
-      setMessages((prevMessages) => {
-        // Update the status of the matching message to "sent"
-        return prevMessages.map((message) =>
-          message.content === data.content && message.status === "sending"
-            ? { ...message, status: "sent", createtime: data.createtime }
-            : message
+  const channelName = `chat_${sortedIds[0]}_${sortedIds[1]}`;
+  const channel = realtime.channels.get(channelName);
+
+  console.log("this is channel:", channel);
+
+  const sendMessage = () => {
+    const timestamp = new Date().toISOString();
+
+    const uniqueMessageId = `${new Date().getTime()}-${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
+    const messageData = {
+      sender_id: phoneNumber_sender || "unknown",
+      recipient_id: phoneNumber_recipient,
+      content: input,
+      createtime: timestamp,
+      id: uniqueMessageId,
+    };
+
+    channel
+      .publish("send_message", messageData)
+      .then(() => {
+        setMessages((prevMessages) =>
+          prevMessages.map((msg) =>
+            msg.createtime === timestamp &&
+            msg.sender_id === messageData.sender_id
+              ? { ...msg, status: "sent" }
+              : msg
+          )
         );
+
+        // Start a timer to hide the "sent" status after 5 seconds
+        setTimeout(() => {
+          setMessages((prevMessages) =>
+            prevMessages.map((msg) =>
+              msg.createtime === timestamp &&
+              msg.sender_id === messageData.sender_id
+                ? { ...msg, status: null }
+                : msg
+            )
+          );
+        }, 5000);
+      })
+      .catch((err) => {
+        console.error("Error sending message:", err);
+        // handle failed message status here
       });
+
+    setInput("");
+  };
+
+  channel.on("attached", () => {
+    console.log(`Channel ${channelName} attached.`);
+  });
+
+  channel.on("detached", (stateChange) => {
+    console.error(`Channel ${channelName} detached.`, stateChange.reason);
+  });
+
+  channel.on("failed", (stateChange) => {
+    console.error(
+      `Channel ${channelName} connection failed.`,
+      stateChange.reason
+    );
+  });
+
+  useEffect(() => {
+    channel.subscribe("send_message", (message) => {
+      const data = message.data;
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: data.id,
+            sender_id: data.sender_id,
+            content: data.content,
+            recipient_id: data.recipient_id,
+            status: "sent",
+            createtime: data.createtime,
+          },
+        ]);
     });
 
     return () => {
-      socket.disconnect();
+      channel.unsubscribe("send_message");
     };
   }, []);
 
-  const sendMessage = () => {
-    const messageData = {
-      sender_id: phoneNumber || "unknown",
-      recipient_id: id,
-      content: input,
+  useEffect(() => {
+    const onConnecting = () => {
+      console.log("Connecting to Ably...");
     };
 
-    // Add the message to the UI with a "sending" status.
-    setMessages([
-      ...messages,
-      {
-        sender_id: phoneNumber || "unknown",
-        content: input,
-        recipient_id: id,
-        status: "sending",
-      },
-    ]);
+    const onConnected = () => {
+      console.log("Successfully connected!");
+    };
 
-    socket.emit("send_message", messageData);
-    setInput("");
-  };
+    const onDisconnected = () => {
+      console.error("Disconnected from Ably.");
+    };
+
+    realtime.connection.on("connecting", onConnecting);
+    realtime.connection.on("connected", onConnected);
+    realtime.connection.on("disconnected", onDisconnected);
+
+    // Clean-up function to remove the event listeners when the component unmounts
+    return () => {
+      realtime.connection.off("connecting", onConnecting);
+      realtime.connection.off("connected", onConnected);
+      realtime.connection.off("disconnected", onDisconnected);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-full">
@@ -150,18 +249,23 @@ const ChatWindow: React.FC = () => {
           <div
             key={index}
             className={`${
-              message.userType === "caregiver" ? "text-right" : "text-left"
+              message.sender_id === (phoneNumber_sender || "")
+                ? "text-right"
+                : "text-left"
             } my-2 mx-4`}
           >
             <div
               className={`inline-block p-2 rounded ${
-                message.userType === "caregiver"
+                message.sender_id === (phoneNumber_sender || "")
                   ? "bg-blue-400 text-white"
                   : "bg-gray-300 text-black"
               }`}
             >
               {message.content}
-              <div className="mt-1 text-xs">{message.createtime}</div>
+              <div className="mt-1 text-xs">
+                {formatTimestamp(message.createtime || "")}
+              </div>
+
               <span className="ml-2 text-sm">
                 {message.status === "sending" && "sending..."}
                 {message.status === "failed" && "failed"}

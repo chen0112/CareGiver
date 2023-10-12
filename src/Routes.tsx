@@ -244,6 +244,7 @@ const AppRoutes: React.FC = () => {
 
         {/* chat window */}
         <Route path="/caregivers/message" element={<ChatWindow />} />
+        <Route path="/careneeders/message" element={<ChatWindow />} />
       </Routes>
     </BrowserRouter>
   );

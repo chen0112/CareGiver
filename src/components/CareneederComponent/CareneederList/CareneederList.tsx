@@ -154,6 +154,7 @@ const CareneederList: React.FC = () => {
                 careneederSchedule={associatedSchedule} // Pass the associated schedule as a prop
                 careneederAd={associatedAds}
                 className="w-full"
+                phoneNumber = {phone}
               />
             );
           })}
