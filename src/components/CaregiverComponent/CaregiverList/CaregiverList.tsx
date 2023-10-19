@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useCaregiverContext } from "../../../context/CaregiverContext";
 import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
 import "./CaregiverList.css";
-import { BiHeart } from "react-icons/bi";
+import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import CaregiverFilter from "../CaregiverFilter/CaregiverFilter";
 
 const CaregiverList: React.FC = () => {
@@ -12,6 +12,7 @@ const CaregiverList: React.FC = () => {
   const { caregiverAds } = useCaregiverAdsContext();
 
   const { phone } = useParams<{ phone: string }>();
+  const { userType } = useParams<{ userType: string }>();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
@@ -163,6 +164,9 @@ const CaregiverList: React.FC = () => {
           >
             所有雇主广告
           </Link>
+          <Link to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}>
+            <BiMessageDetail size={24} />
+          </Link>
         </div>
 
         {/* Hamburger menu button for smaller screens */}
@@ -229,7 +233,7 @@ const CaregiverList: React.FC = () => {
                 caregiver={caregiver}
                 caregiverAd={associatedAds}
                 className="w-full" // 100% width of the parent div which is 3/5 of the screen
-                phoneNumber = {phone}
+                phoneNumber={phone}
               />
             );
           })}

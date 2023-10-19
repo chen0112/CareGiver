@@ -44,13 +44,17 @@ const SignIn: React.FC<SignInProps> = ({ userType }) => {
       if (response.ok && data.success) {
         // Use dynamic navigation paths based on userType
         if (userType === "caregiver") {
-          navigate(`/careneeders/phone/${formData.phone}`);
+          navigate(`/careneeders/phone/${formData.phone}/userType/${userType}`);
         } else if (userType === "careneeder") {
-          navigate(`/caregivers/phone/${formData.phone}`);
+          navigate(`/caregivers/phone/${formData.phone}/userType/${userType}`);
         } else if (userType === "animalcaregiver") {
-          navigate(`/animalcareneeders/phone/${formData.phone}`);
+          navigate(
+            `/animalcareneeders/phone/${formData.phone}/userType/${userType}`
+          );
         } else if (userType === "animalcareneeder") {
-          navigate(`/animalcaregivers/phone/${formData.phone}`);
+          navigate(
+            `/animalcaregivers/phone/${formData.phone}/userType/${userType}`
+          );
         }
       } else {
         // Handle error

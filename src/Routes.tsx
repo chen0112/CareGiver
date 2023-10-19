@@ -29,23 +29,21 @@ import AnimalCareneeder from "./components/AnimalCareneederComponent/AnimalCaren
 import AnimalCareneederAds from "./components/AnimalCareneederComponent/AnimalCareneederAd/AnimalCareneederAd";
 import AnimalCareneederList from "./components/AnimalCareneederComponent/AnimalCareneederList/AnimalCareneederList";
 import AnimalCareneederDetail from "./components/AnimalCareneederComponent/AnimalCareneederDetail/AnimalCareneederDetail";
-import MyAnimalCareneeder from "./components/AnimalCareneederComponent/MyAnimalCareneeder/MyAnimalCareneeder"
-import ChatWindow from "./components/ChatWindow/ChatWindow";
-import {BASE_URL} from "./types/Constant"
+import MyAnimalCareneeder from "./components/AnimalCareneederComponent/MyAnimalCareneeder/MyAnimalCareneeder";
+import ChatWindow from "./components/ChatFeature/ChatWindow/ChatWindow";
+import ChatPage from "./components/ChatFeature/ChatPage/ChatPage";
+import ChatConversation from "./components/ChatFeature/ChatConversation/ChatConversation";
+import { BASE_URL } from "./types/Constant";
 
 const API_URL = `${BASE_URL}/api/all_caregivers`;
 
 const API_URL_UPLOAD = `${BASE_URL}/api/upload`;
 
+const API_URL_careneeders = `${BASE_URL}/api/all_careneeders`;
 
-const API_URL_careneeders =
-  `${BASE_URL}/api/all_careneeders`;
+const API_URL_animalcaregivers = `${BASE_URL}/api/all_animalcaregivers`;
 
-const API_URL_animalcaregivers =
-  `${BASE_URL}/api/all_animalcaregivers`;
-
-const API_URL_animalcareneeders =
-  `${BASE_URL}/api/all_animalcareneeders`;
+const API_URL_animalcareneeders = `${BASE_URL}/api/all_animalcareneeders`;
 
 const AppRoutes: React.FC = () => {
   const { caregivers, setCaregivers } = useCaregiverContext();
@@ -121,7 +119,7 @@ const AppRoutes: React.FC = () => {
           path="/signin/caregiver"
           element={<SignIn userType="caregiver" />}
         />
-        <Route path="/caregivers/phone/:phone" element={<CaregiverList />} />
+        <Route path="/caregivers/phone/:phone/userType/:userType" element={<CaregiverList />} />
         <Route path="/caregivers/id/:id" element={<CaregiverDetail />} />
         <Route path="/mycaregiver/phone/:phone" element={<MyCaregivers />} />
         <Route path="/signup_caregiver/ads" element={<CaregiverAds />} />
@@ -147,7 +145,7 @@ const AppRoutes: React.FC = () => {
           path="/register/careneeder"
           element={<Register userType="careneeder" />}
         />
-        <Route path="/careneeders/phone/:phone" element={<CareneederList />} />
+        <Route path="/careneeders/phone/:phone/userType/:userType" element={<CareneederList />} />
         <Route path="/careneeders/id/:id" element={<CareneederDetail />} />
         <Route path="/mycareneeder/phone/:phone" element={<MyCareneeders />} />
         <Route
@@ -188,7 +186,7 @@ const AppRoutes: React.FC = () => {
           element={<AnimalCaregiverAd />}
         />
         <Route
-          path="/animalcaregivers/phone/:phone"
+          path="/animalcaregivers/phone/:phone/userType/:userType"
           element={<AnimalCaregiverList />}
         />
         <Route
@@ -226,7 +224,7 @@ const AppRoutes: React.FC = () => {
           element={<AnimalCareneeder />}
         />
         <Route
-          path="/animalcareneeders/phone/:phone"
+          path="/animalcareneeders/phone/:phone/userType/:userType"
           element={<AnimalCareneederList />}
         />
         <Route
@@ -245,6 +243,7 @@ const AppRoutes: React.FC = () => {
         {/* chat window */}
         <Route path="/caregivers/message" element={<ChatWindow />} />
         <Route path="/careneeders/message" element={<ChatWindow />} />
+        <Route path="/chatmessagehub" element={<ChatPage />} />
       </Routes>
     </BrowserRouter>
   );

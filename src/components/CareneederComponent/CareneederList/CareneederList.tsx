@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import CareneederCard from "../CareneederCard/CareneederCard";
 import { Link, useParams } from "react-router-dom";
 import { useCareneederContext } from "../../../context/CareneederContext";
-import { BiHeart } from "react-icons/bi";
+import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
 import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
 import CareneederFilter from "../CareneederFilter/CareneederFilter"; // Import the filter component
@@ -14,11 +14,8 @@ const CareneederList: React.FC = () => {
   const { careneedersSchedule } = useCareneederScheduleContext();
   const { careneederAds } = useCareneederAdsContext();
 
-  console.log("Context careneeders state:", careneeders);
-  console.log("Context careneederSchedule state:", careneedersSchedule);
-  console.log("Context careneederAd state:", careneederAds);
-
   const { phone } = useParams<{ phone: string }>();
+  const { userType } = useParams<{ userType: string }>();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
@@ -86,6 +83,9 @@ const CareneederList: React.FC = () => {
           >
             所有护工广告
           </Link>
+          <Link to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}>
+            <BiMessageDetail size={24} />
+          </Link>
         </div>
 
         {/* Hamburger menu button for smaller screens */}
@@ -118,7 +118,10 @@ const CareneederList: React.FC = () => {
           >
             所有护工广告
           </Link>
-          <button onClick={toggleSidebar} className="text-left py-1 px-2 text-black hover:underline">
+          <button
+            onClick={toggleSidebar}
+            className="text-left py-1 px-2 text-black hover:underline"
+          >
             关闭
           </button>
         </div>
@@ -154,7 +157,7 @@ const CareneederList: React.FC = () => {
                 careneederSchedule={associatedSchedule} // Pass the associated schedule as a prop
                 careneederAd={associatedAds}
                 className="w-full"
-                phoneNumber = {phone}
+                phoneNumber={phone}
               />
             );
           })}
