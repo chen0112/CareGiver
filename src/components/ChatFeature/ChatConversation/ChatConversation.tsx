@@ -54,7 +54,7 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
   activeConversationId,
   loggedInUser_phone,
   recipientId,
-  conversations
+  conversations,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
@@ -215,14 +215,27 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     }
   }, [loggedInUser_phone, recipientId, conversation_id]);
 
-  return (
-    <div className="flex flex-col h-full bg-white p-4 overflow-x-hidden mx-auto border-l">
-      
-      <h1 className="text-lg font-bold mb-4">{conversation_id}</h1>
+  const activeConversation = conversations.find(
+    (convo) => convo.conversation_id === activeConversationId
+  );
 
-      <div className="flex-grow overflow-y-auto  border-gray-300 p-4">
+  const defaultImageUrl =
+    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+
+  return (
+    <div className="flex flex-col h-full bg-white overflow-x-hidden mx-auto border-l">
+      <h1 className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
+        <img
+          src={activeConversation?.profileImage || defaultImageUrl}
+          alt="Profile"
+          className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full mr-2"
+        />
+        {activeConversation?.name || "未知"}
+      </h1>
+
+      <div className="flex-grow overflow-y-auto  border-gray-300 p-2 sm:p-4">
         {loading ? (
-          <p>加载中...</p>
+          <p className="text-sm sm:text-base">加载中...</p>
         ) : (
           messages.map((message, index) => (
             <div
@@ -231,10 +244,10 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
                 message.sender_id === (loggedInUser_phone || "")
                   ? "text-right"
                   : "text-left"
-              } my-2 mx-4`}
+              } my-2 mx-2 sm:mx-4`}
             >
               <div
-                className={`inline-block p-3 rounded-3xl ${
+                className={`inline-block p-2 sm:p-3 rounded-3xl ${
                   message.sender_id === (loggedInUser_phone || "")
                     ? "bg-teal-400 text-white"
                     : "bg-gray-300 text-black"
@@ -242,7 +255,7 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
               >
                 {message.content}
               </div>
-              <div className="mt-1 text-xs text-gray-500">
+              <div className="mt-1 text-xs sm:text-sm text-gray-500">
                 {formatTimestamp(message.createtime || "")}
               </div>
             </div>
@@ -251,7 +264,7 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
       </div>
 
       {/* Input - Fixed at the bottom */}
-      <div className="flex items-center mt-4 border-t pt-4 w-full bottom-5">
+      <div className="flex items-center mt-2 sm:mt-4 border-t pt-2 sm:pt-4 w-full bottom-5">
         <input
           className="flex-grow rounded p-2 border border-gray-300 mr-2"
           value={newMessage}
@@ -259,10 +272,10 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
           placeholder="请在这里输入..."
         />
         <button
-          className="p-2 rounded bg-teal-400 text-white"
+          className="p-2 sm:p-3 rounded bg-teal-400 text-white"
           onClick={sendMessage}
         >
-          <BiSend size={20} />
+          <BiSend size={16} className="sm:text-xl" />
         </button>
       </div>
     </div>

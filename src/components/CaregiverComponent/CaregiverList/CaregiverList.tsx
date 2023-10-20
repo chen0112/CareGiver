@@ -158,12 +158,12 @@ const CaregiverList: React.FC = () => {
           >
             我的广告
           </Link>
-          <Link
-            to={`/careneeders/phone/${phone}`}
+          {/* <Link
+            to={`/careneeders/phone/${phone}/userType/${userType}`}
             className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
           >
             所有雇主广告
-          </Link>
+          </Link> */}
           <Link to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}>
             <BiMessageDetail size={24} />
           </Link>
@@ -193,12 +193,12 @@ const CaregiverList: React.FC = () => {
           >
             我的广告
           </Link>
-          <Link
+          {/* <Link
             to={`/careneeders/phone/${phone}`}
             className="block text-left no-underline py-1 px-2 text-black hover:underline"
           >
             所有护工广告
-          </Link>
+          </Link> */}
           <button
             onClick={toggleSidebar}
             className="text-left py-1 px-2 text-black hover:underline"

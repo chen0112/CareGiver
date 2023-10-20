@@ -4,8 +4,11 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { useCaregiverContext } from "../../../context/CaregiverContext";
 import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
 import { Link, useLocation } from "react-router-dom";
-import { BiHeart } from "react-icons/bi";
+import { BiHeart, BiSend } from "react-icons/bi";
 import { BASE_URL } from "../../../types/Constant";
+import { useCareneederContext } from "../../../context/CareneederContext";
+import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
+import { Caregiver, Careneeder, CaregiverAds, Ads } from "../../../types/Types";
 
 type Message = {
   id?: string; // Add this line
@@ -49,6 +52,9 @@ const ChatWindow: React.FC = () => {
   const { caregivers } = useCaregiverContext();
   const { caregiverAds } = useCaregiverAdsContext();
 
+  const { careneeders } = useCareneederContext();
+  const { careneederAds } = useCareneederAdsContext();
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const idString = queryParams.get("id");
@@ -57,13 +63,36 @@ const ChatWindow: React.FC = () => {
   // Guard against undefined and NaN
   const id = idString ? parseInt(idString, 10) : null;
 
-  // Check that id is neither undefined nor NaN before performing the filter
-  const caregiver =
-    id !== null && !isNaN(id) ? caregivers.find((c) => c.id === id) : undefined;
+  const adType = queryParams.get("adType");
 
-  const associatedAds = caregiver
-    ? caregiverAds?.find((ad) => ad.caregiver_id === caregiver.id)
-    : null;
+  let individual: Caregiver | Careneeder | undefined;
+  let associatedAds: CaregiverAds | Ads | null | undefined = undefined;
+
+  console.log("adType:", adType);
+  console.log("id:", id);
+
+  if (adType === "caregivers") {
+    individual =
+      id !== null && !isNaN(id)
+        ? caregivers.find((c) => c.id === id)
+        : undefined;
+
+    console.log("Fetched caregivers individual:", individual);
+    associatedAds = individual
+      ? caregiverAds?.find((ad) => ad.caregiver_id === individual!.id)
+      : null;
+    console.log("Fetched associatedAds for caregivers:", associatedAds);
+  } else if (adType === "careneeders") {
+    individual =
+      id !== null && !isNaN(id)
+        ? careneeders.find((c) => c.id === id)
+        : undefined;
+    console.log("Fetched careneeders individual:", individual);
+    associatedAds = individual
+      ? careneederAds?.find((ad) => ad.careneeder_id === individual!.id)
+      : null;
+    console.log("Fetched associatedAds for careneeders:", associatedAds);
+  }
 
   // Constructing the channel name
   const sortedIds = [
@@ -178,7 +207,7 @@ const ChatWindow: React.FC = () => {
   }, [phoneNumber_sender, phoneNumber_recipient]);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-screen">
       <div className="flex items-center mx-9 py-3">
         <Link to="/" className="flex items-center text-black no-underline ml-0">
           <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
@@ -195,8 +224,8 @@ const ChatWindow: React.FC = () => {
           {/* Image */}
           <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
             <img
-              src={caregiver?.imageurl}
-              alt={caregiver?.name}
+              src={individual?.imageurl}
+              alt={individual?.name}
               style={imageStyle}
               className="rounded w-1/2 md:w-full"
             />
@@ -206,19 +235,19 @@ const ChatWindow: React.FC = () => {
           <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
             <div className="flex items-center">
               <h3 className="text-xl font-semibold text-blue-700 mr-3">
-                {caregiver?.name}
+                {individual?.name}
               </h3>
               <FaMapMarkerAlt className="text-gray-600 mb-1" />
               <span className="text-gray-600 ml-2 mb-1">
-                {caregiver?.location &&
-                Array.isArray(caregiver.location) &&
-                caregiver.location.length > 0
-                  ? caregiver.location.map((loc) => loc.label).join(", ")
+                {individual?.location &&
+                Array.isArray(individual.location) &&
+                individual.location.length > 0
+                  ? individual.location.map((loc) => loc.label).join(", ")
                   : "无"}
               </span>
               <span className="mb-1 ml-3 text-black">
-                {caregiver?.hourlycharge
-                  ? `¥ ${caregiver.hourlycharge}元/小时`
+                {individual?.hourlycharge
+                  ? `¥ ${individual.hourlycharge}元/小时`
                   : "¥ 收费不详"}
               </span>
             </div>
@@ -261,18 +290,19 @@ const ChatWindow: React.FC = () => {
         ))}
       </div>
 
-      {/* Input */}
-      <div className="flex justify-between p-4 border-t border-gray-300">
+      {/* Input - Fixed at the bottom */}
+      <div className="flex items-center mt-2 sm:mt-4 border-t pt-2 sm:pt-4 w-full bottom-5">
         <input
-          className="w-full rounded p-2 border border-gray-300"
+          className="flex-grow rounded p-2 border border-gray-300 mr-2 ml-5 mb-2"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          placeholder="请在这里输入..."
         />
         <button
-          className="ml-2 bg-blue-500 text-white p-2 rounded"
+          className="p-2 sm:p-3 rounded bg-teal-400 text-white mr-4 mb-2"
           onClick={sendMessage}
         >
-          发送消息
+          <BiSend size={16} className="sm:text-xl" />
         </button>
       </div>
     </div>

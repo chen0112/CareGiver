@@ -69,7 +69,7 @@ const CaregiverDetail: React.FC = () => {
           <Link
             to={`/caregivers/message?id=${caregiver?.id}&phoneNumber_recipient=${
               caregiver?.phone
-            }&phoneNumber_sender=${phoneNumber}`}
+            }&phoneNumber_sender=${phoneNumber}&adType=${"caregivers"}`}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center mr-4"
           >
             <FaEnvelope className="mr-2" /> 发送消息

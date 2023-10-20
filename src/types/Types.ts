@@ -48,18 +48,6 @@ export interface Client {
   // Add other properties as needed
 }
 
-// Interface for the Form Data submitted by caregivers
-export interface CaregiverFormData {
-  name: string;
-  description: string;
-  imageurl: string;
-  years_of_experience: number;
-  age: number;
-  education: string;
-  gender: string;
-  // Add other properties as needed
-}
-
 export interface Schedule {
   id: number;
   scheduletype: string;
@@ -71,6 +59,7 @@ export interface Schedule {
   careneeder_id: number;
 }
 
+///carenederAds
 export interface Ads {
   id: number;
   title: string;
@@ -97,7 +86,7 @@ export interface AnimalCaregiverForm {
   name: string;
   phone: string;
   location: Option[];
-  imageurl?: string; // Change property name to "imageurl"
+  imageurl?: string; 
   years_of_experience?: number | null;
   age?: number | null;
   education?: string;
