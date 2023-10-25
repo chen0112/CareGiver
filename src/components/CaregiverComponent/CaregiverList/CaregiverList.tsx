@@ -123,23 +123,41 @@ const CaregiverList: React.FC = () => {
 
     // 5. Check hourly charge
     if (filter.hourlycharge) {
+      console.log("Checking hourlycharge filter");
+
       if (caregiver.hourlycharge == null) {
-        // Check if hourlycharge is null
+        console.log("Hourly charge is null for caregiver:", caregiver);
         return false;
       }
 
-      const [minCharge, maxCharge] = filter.hourlycharge.split("-").map(Number);
+      const charge = Number(caregiver.hourlycharge);
 
-      if (isNaN(maxCharge)) {
-        // If maxCharge is 'NaN', then the charge range is something like "20+"
-        if (Number(caregiver.hourlycharge) < minCharge) {
-          return false;
-        }
-      } else {
-        if (
-          Number(caregiver.hourlycharge) < minCharge ||
-          Number(caregiver.hourlycharge) > maxCharge
-        ) {
+      if (filter.hourlycharge === "<10" && charge >= 10) {
+        console.log(
+          "Filtering out caregiver with hourly charge:",
+          caregiver.hourlycharge
+        );
+        return false;
+      }
+
+      if (filter.hourlycharge === "40+" && charge < 40) {
+        console.log(
+          "Filtering out caregiver with hourly charge:",
+          caregiver.hourlycharge
+        );
+        return false;
+      }
+
+      if (filter.hourlycharge.includes("-")) {
+        const [minCharge, maxCharge] = filter.hourlycharge
+          .split("-")
+          .map(Number);
+
+        if (charge < minCharge || charge > maxCharge) {
+          console.log(
+            "Filtering out caregiver with hourly charge:",
+            caregiver.hourlycharge
+          );
           return false;
         }
       }
@@ -148,7 +166,7 @@ const CaregiverList: React.FC = () => {
     return true;
   });
 
-  console.log("Filtered careneeders:", filteredCaregivers);
+  console.log("Filtered caregivers:", filteredCaregivers);
 
   return (
     <div className="relative">
@@ -234,7 +252,10 @@ const CaregiverList: React.FC = () => {
       <div className="flex flex-row w-full">
         {/* Left sidebar for `CaregiverFilter` */}
         <div className="w-1/4 p-2 md:p-4 border-r flex justify-center">
-          <CaregiverFilter onFilterChange={handleFilterChange} filterValues={filter}/>
+          <CaregiverFilter
+            onFilterChange={handleFilterChange}
+            filterValues={filter}
+          />
         </div>
 
         {/* Right main content area */}

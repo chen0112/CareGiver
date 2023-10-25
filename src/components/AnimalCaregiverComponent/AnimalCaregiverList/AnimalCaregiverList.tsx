@@ -1,12 +1,12 @@
 // CaregiverList.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AnimalCaregiverCard from "../AnimalCaregiverCard/AnimalCaregiverCard";
 import { Link, useParams } from "react-router-dom";
 import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
 import { BiHeart } from "react-icons/bi";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
 import { useAnimalCaregiverFormContext } from "../../../context/AnimalCaregiverFormContext";
-import CareneederFilter from "../../CareneederComponent/CareneederFilter/CareneederFilter"; // Import the filter component
+import CaregiverFilter from "../../CaregiverComponent/CaregiverFilter/CaregiverFilter";
 
 const AnimalCaregiverList: React.FC = () => {
   const { animalcaregivers } = useAnimalCaregiverContext();
@@ -24,37 +24,163 @@ const AnimalCaregiverList: React.FC = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // State for filter
-  const [filter, setFilter] = useState<{ location: string | null }>({
-    location: null,
-  });
-
-  const handleFilterChange = (newFilter: { location: string | null }) => {
-    setFilter(newFilter);
+  type FilterType = {
+    location: string;
+    age: string;
+    gender: string;
+    experience: string;
+    hourlycharge: string;
   };
 
-  // Your filtered careneeders
+  const defaultFilter = {
+    location: undefined,
+    age: undefined,
+    gender: undefined,
+    experience: undefined,
+    hourlycharge: undefined,
+  };
+
+  const savedFilterState = localStorage.getItem("filterState");
+
+  const initialFilterState = savedFilterState
+    ? JSON.parse(savedFilterState)
+    : defaultFilter;
+
+  // State for filter
+  const [filter, setFilter] = useState<FilterType>(initialFilterState);
+
+  // Save the filter state to local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("filterState", JSON.stringify(filter));
+  }, [filter]);
+
+  const handleFilterChange = (newFilter: Partial<FilterType>) => {
+    // Since newFilter might not contain all properties of FilterType, we're using Partial
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      ...newFilter,
+    }));
+  };
+
+  console.log("filter:----", filter);
+
+  // Your filtered animalcaregiversForm
   const filteredanimalcaregiversForm = animalcaregiversForm.filter(
-    (animalcaregiverForm) => {
-      // console.log("Careneeder Location: ", careneeder.location);
-      // Check if a filter for location is applied
-      if (filter.location) {
-        // Check if careneeder.location is not null or undefined
-        if (!animalcaregiverForm.location) {
-          return false; // If it's null, don't include this careneeder in the filtered list
+    (animalcaregiverform) => {
+      const correspondingCaregiver = animalcaregivers.find(
+        (cg) => cg.animalcaregiverid === animalcaregiverform.id
+      );
+
+      if (!correspondingCaregiver) {
+        // If you can't find a corresponding caregiver, decide if you want to filter out or keep this entry
+        return false;
+      }
+
+      // 1. Check location
+      if (
+        filter.location &&
+        !animalcaregiverform.location?.some(
+          (option) => option.value === filter.location
+        )
+      ) {
+        return false;
+      }
+
+      // 2. Check age
+      if (filter.age) {
+        if (animalcaregiverform.age == null) {
+          // Check if age is null
+          return false;
         }
 
-        // Check if careneeder.location does not match the selected location
-        if (
-          !animalcaregiverForm.location.some(
-            (option) => option.value === filter.location
-          )
-        ) {
-          return false; // If it doesn't match, don't include this careneeder in the filtered list
+        const [minAge, maxAge] = filter.age.split("-").map(Number);
+
+        if (isNaN(maxAge)) {
+          // If maxAge is 'NaN', then the age range is something like "56+"
+          if (animalcaregiverform.age < minAge) {
+            return false;
+          }
+        } else {
+          if (
+            animalcaregiverform.age < minAge ||
+            animalcaregiverform.age > maxAge
+          ) {
+            return false;
+          }
         }
       }
 
-      // If none of the above conditions were met, include the careneeder in the filtered list
+      // 3. Check gender
+      if (filter.gender && animalcaregiverform.gender !== filter.gender) {
+        return false;
+      }
+
+      // 4. Check experience
+      if (filter.experience) {
+        if (animalcaregiverform.years_of_experience == null) {
+          // Check if years_of_experience is null
+          return false;
+        }
+
+        const [minExp, maxExp] = filter.experience.split("-").map(Number);
+
+        if (isNaN(maxExp)) {
+          // If maxExp is 'NaN', then the experience range is something like ">10"
+          if (animalcaregiverform.years_of_experience < minExp) {
+            return false;
+          }
+        } else {
+          if (
+            animalcaregiverform.years_of_experience < minExp ||
+            animalcaregiverform.years_of_experience > maxExp
+          ) {
+            return false;
+          }
+        }
+      }
+
+      // 5. Check hourly charge
+      if (filter.hourlycharge) {
+        console.log("Checking hourlycharge filter");
+
+        if (correspondingCaregiver.hourlycharge == null) {
+          console.log("Hourly charge is null for caregiver:", correspondingCaregiver);
+          return false;
+        }
+
+        const charge = Number(correspondingCaregiver.hourlycharge);
+
+        if (filter.hourlycharge === "<10" && charge >= 10) {
+          console.log(
+            "Filtering out caregiver with hourly charge:",
+            correspondingCaregiver.hourlycharge
+          );
+          return false;
+        }
+
+        if (filter.hourlycharge === "40+" && charge < 40) {
+          console.log(
+            "Filtering out caregiver with hourly charge:",
+            correspondingCaregiver.hourlycharge
+          );
+          return false;
+        }
+
+        if (filter.hourlycharge.includes("-")) {
+          const [minCharge, maxCharge] = filter.hourlycharge
+            .split("-")
+            .map(Number);
+
+          if (charge < minCharge || charge > maxCharge) {
+            console.log(
+              "Filtering out caregiver with hourly charge:",
+              correspondingCaregiver.hourlycharge
+            );
+            return false;
+          }
+        }
+      }
+
       return true;
     }
   );
@@ -85,12 +211,12 @@ const AnimalCaregiverList: React.FC = () => {
           >
             我的广告
           </Link>
-          <Link
+          {/* <Link
             to={`/animalcareneeders/phone/${phone}`}
             className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
           >
             宠托师雇主广告
-          </Link>
+          </Link> */}
         </div>
 
         {/* Hamburger menu button for smaller screens */}
@@ -117,12 +243,12 @@ const AnimalCaregiverList: React.FC = () => {
           >
             我的广告
           </Link>
-          <Link
+          {/* <Link
             to={`/animalcareneeders/phone/${phone}`}
             className="block text-left no-underline py-1 px-2 text-black hover:underline"
           >
             宠托师雇主广告
-          </Link>
+          </Link> */}
           <button
             onClick={toggleSidebar}
             className="text-left py-1 px-2 text-black hover:underline"
@@ -134,15 +260,20 @@ const AnimalCaregiverList: React.FC = () => {
 
       <hr className="border-t border-black-300 mx-1 my-2" />
 
-      <div className="flex flex-col items-center space-y-8">
-        <div className="text-center w-full text-2xl font-semibold mb-3">
-          宠托师广告
+      <div className="flex flex-row w-full">
+        {/* Left sidebar for `CaregiverFilter` */}
+        <div className="w-1/4 p-2 md:p-4 border-r flex justify-center">
+          <CaregiverFilter
+            onFilterChange={handleFilterChange}
+            filterValues={filter}
+          />
         </div>
-        <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
-          <div className="w-full lg:w-4/6 flex justify-end mb-2">
-            <div className="mr-2">
-              <CareneederFilter onFilterChange={handleFilterChange} />
-            </div>
+
+        {/* Right main content area */}
+        <div className="flex flex-col items-center space-y-2 md:space-y-4 w-3/4 p-2 md:p-4">
+          {/* Adjusted text sizes for main content */}
+          <div className="text-center w-full text-lg md:text-xl font-medium md:font-semibold mb-1 md:mb-3">
+            宠托师
           </div>
 
           {filteredanimalcaregiversForm.map((animalcaregiversForm) => {

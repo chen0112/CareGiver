@@ -85,23 +85,41 @@ const CareneederList: React.FC = () => {
 
     // 2. Check hourly charge
     if (filter.hourlycharge) {
+      console.log("Checking hourlycharge filter");
+
       if (careneeder.hourlycharge == null) {
-        // Check if hourlycharge is null
+        console.log("Hourly charge is null for caregiver:", careneeder);
         return false;
       }
 
-      const [minCharge, maxCharge] = filter.hourlycharge.split("-").map(Number);
+      const charge = Number(careneeder.hourlycharge);
 
-      if (isNaN(maxCharge)) {
-        // If maxCharge is 'NaN', then the charge range is something like "20+"
-        if (Number(careneeder.hourlycharge) < minCharge) {
-          return false;
-        }
-      } else {
-        if (
-          Number(careneeder.hourlycharge) < minCharge ||
-          Number(careneeder.hourlycharge) > maxCharge
-        ) {
+      if (filter.hourlycharge === "<10" && charge >= 10) {
+        console.log(
+          "Filtering out careneeder with hourly charge:",
+          careneeder.hourlycharge
+        );
+        return false;
+      }
+
+      if (filter.hourlycharge === "40+" && charge < 40) {
+        console.log(
+          "Filtering out careneeder with hourly charge:",
+          careneeder.hourlycharge
+        );
+        return false;
+      }
+
+      if (filter.hourlycharge.includes("-")) {
+        const [minCharge, maxCharge] = filter.hourlycharge
+          .split("-")
+          .map(Number);
+
+        if (charge < minCharge || charge > maxCharge) {
+          console.log(
+            "Filtering out caregiver with hourly charge:",
+            careneeder.hourlycharge
+          );
           return false;
         }
       }
