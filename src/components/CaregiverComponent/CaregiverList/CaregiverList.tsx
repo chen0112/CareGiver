@@ -41,7 +41,10 @@ const CaregiverList: React.FC = () => {
     experience: string;
     hourlycharge: string;
   }) => {
-    setFilter(newFilter);
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      ...newFilter,
+    }));
   };
 
   // Your filtered caregivers
@@ -164,7 +167,9 @@ const CaregiverList: React.FC = () => {
           >
             所有雇主广告
           </Link> */}
-          <Link to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}>
+          <Link
+            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+          >
             <BiMessageDetail size={24} />
           </Link>
         </div>
@@ -193,12 +198,12 @@ const CaregiverList: React.FC = () => {
           >
             我的广告
           </Link>
-          {/* <Link
-            to={`/careneeders/phone/${phone}`}
+          <Link
+            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
             className="block text-left no-underline py-1 px-2 text-black hover:underline"
           >
-            所有护工广告
-          </Link> */}
+            消息
+          </Link>
           <button
             onClick={toggleSidebar}
             className="text-left py-1 px-2 text-black hover:underline"
@@ -210,33 +215,35 @@ const CaregiverList: React.FC = () => {
 
       <hr className="border-t border-black-300 mx-1 my-2" />
 
-      <div className="flex flex-col items-center space-y-8">
-        <div className="text-center w-full text-2xl font-semibold mb-3">
-          护工广告
+      <div className="flex flex-row w-full">
+        {/* Left sidebar for `CaregiverFilter` */}
+        <div className="w-1/4 p-2 md:p-4 border-r flex justify-center">
+          <CaregiverFilter onFilterChange={handleFilterChange} />
         </div>
-        <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
-          <div className="w-full lg:w-4/6 flex justify-end mb-2">
-            <div className="mr-2">
-              <CaregiverFilter onFilterChange={handleFilterChange} />
-            </div>
+
+        {/* Right main content area */}
+        <div className="flex flex-col items-center space-y-2 md:space-y-4 w-3/4 p-2 md:p-4">
+          {/* Adjusted text sizes for main content */}
+          <div className="text-center w-full text-lg md:text-xl font-medium md:font-semibold mb-1 md:mb-3">
+            护工广告
           </div>
+          <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
+            {filteredCaregivers.map((caregiver) => {
+              const associatedAds = caregiverAds.find(
+                (ad) => ad.caregiver_id === caregiver.id
+              );
 
-          {/* Changed to 3/5 width of the parent */}
-          {filteredCaregivers.map((caregiver) => {
-            const associatedAds = caregiverAds.find(
-              (ad) => ad.caregiver_id === caregiver.id
-            );
-
-            return (
-              <CaregiverCard
-                key={caregiver.id}
-                caregiver={caregiver}
-                caregiverAd={associatedAds}
-                className="w-full" // 100% width of the parent div which is 3/5 of the screen
-                phoneNumber={phone}
-              />
-            );
-          })}
+              return (
+                <CaregiverCard
+                  key={caregiver.id}
+                  caregiver={caregiver}
+                  caregiverAd={associatedAds}
+                  className="w-full text-sm md:text-base" // Adjusted text size for cards
+                  phoneNumber={phone}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

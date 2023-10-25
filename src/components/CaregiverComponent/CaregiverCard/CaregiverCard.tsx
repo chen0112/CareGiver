@@ -28,7 +28,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
   caregiverAd,
   loggedInUserPhone,
   onUpdateCaregiver, // Receive the update function from the parent component
-  phoneNumber
+  phoneNumber,
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
@@ -71,14 +71,11 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
   };
 
   const handleSave = () => {
-    fetch(
-      `${BASE_URL}/api/mycaregiver/${editedCaregiver.id}/ad`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editedCaregiverAd),
-      }
-    )
+    fetch(`${BASE_URL}/api/mycaregiver/${editedCaregiver.id}/ad`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editedCaregiverAd),
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Response data:", data);
@@ -165,26 +162,27 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
             </div>
 
             {/* Text */}
-            <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
+            <div className="flex-grow p-3 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
-                <h3 className="text-xl font-semibold text-blue-700 mr-3">
+                <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-3">
                   {caregiver.name}
                 </h3>
-                <FaMapMarkerAlt className="text-gray-600 mb-1" />
-                <span className="text-gray-600 ml-2 mb-1">
+                <FaMapMarkerAlt className="text-gray-600 mb-1 text-xs md:text-base" />{" "}
+                {/* Adjusted size */}
+                <span className="text-gray-600 ml-2 mb-1 text-xs md:text-base">
                   {caregiver.location &&
                   Array.isArray(caregiver.location) &&
                   caregiver.location.length > 0
                     ? caregiver.location.map((loc) => loc.label).join(", ")
                     : "无"}
                 </span>
-                <span className="mb-1 ml-3 text-black">
+                <span className="mb-1 ml-3 text-xs md:text-base text-black">
                   {caregiver?.hourlycharge
                     ? `¥ ${caregiver.hourlycharge}元/小时`
                     : "¥ 收费不详"}
                 </span>
               </div>
-              <div className="text-gray-600 mb-8 line-clamp">
+              <div className="text-gray-600 mb-3 line-clamp text-xs md:text-base">
                 {caregiverAd && (
                   <div>
                     <p>{caregiverAd.title}</p>
@@ -198,9 +196,9 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
           {/* Edit Button */}
           {caregiver.phone === loggedInUserPhone && (
             <button
-              onClick={handleEditClick}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
-            >
+            onClick={handleEditClick}
+            className="bg-blue-600 hover:bg-blue-700 text-xs md:text-base text-white font-semibold py-2 px-4 rounded text-center" 
+        >
               编辑
             </button>
           )}

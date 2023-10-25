@@ -8,7 +8,9 @@ module.exports = {
     // etc.
   ],
   theme: {
-    extend: {},
+    extend: { fontSize: {
+      'customFontSize': '0.55rem'
+    }},
   },
   variants: {},
   plugins: [

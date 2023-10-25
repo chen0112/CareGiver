@@ -48,6 +48,8 @@ export interface Client {
   // Add other properties as needed
 }
 
+
+// CarenederSchedule
 export interface Schedule {
   id: number;
   scheduletype: string;
