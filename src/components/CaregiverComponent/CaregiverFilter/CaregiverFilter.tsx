@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LOCATION_OPTIONS } from "../../../types/Constant";
 
 const AGE_OPTIONS = ["18-25", "26-35", "36-45", "46-55", "56+"];
@@ -8,22 +8,35 @@ const HOURLYCHARGE_OPTIONS = ["<10", "10-20", "21-30", "31-40", "40+"];
 
 interface CaregiverFilterProps {
   onFilterChange: (filter: any) => void;
+  filterValues: FilterType;
 }
+
+type FilterType = {
+  location: string;
+  age: string;
+  gender: string;
+  experience: string;
+  hourlycharge: string;
+};
 
 const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
   onFilterChange,
+  filterValues,
 }) => {
-  const [location, setLocation] = useState("");
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
-  const [experience, setExperience] = useState("");
-  const [hourlycharge, setHourlyCharge] = useState(""); // Add this
+  const [location, setLocation] = useState(filterValues.location);
+  const [age, setAge] = useState(filterValues.age);
+  const [gender, setGender] = useState(filterValues.gender);
+  const [experience, setExperience] = useState(filterValues.experience);
+  const [hourlycharge, setHourlyCharge] = useState(filterValues.hourlycharge);
 
   const handleImmediateFilterChange = (
     stateKey: string,
     updateFunction: Function,
-    value: string
+    value: any
   ) => {
+    if (typeof value === "string" && !value) {
+      value = undefined;
+    }
     updateFunction(value);
 
     const newFilter = {
@@ -32,20 +45,29 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       gender,
       experience,
       hourlycharge,
-      [stateKey]: value, // Use the direct value here
+      [stateKey]: value,
     };
-
+    console.log("Updated Filter:", newFilter);
     onFilterChange(newFilter);
   };
+
+  useEffect(() => {
+    setLocation(filterValues.location);
+    setHourlyCharge(filterValues.hourlycharge);
+    setGender(filterValues.gender);
+    setExperience(filterValues.experience);
+    setAge(filterValues.age);
+  }, [filterValues]);
 
   return (
     <div>
       <div className="flex flex-col mb-2 md:mb-4">
         <select
           value={location}
-          onChange={(e) =>
-            handleImmediateFilterChange("location", setLocation, e.target.value)
-          }
+          onChange={(e) => {
+            const value = e.target.value || undefined;
+            handleImmediateFilterChange("location", setLocation, value);
+          }}
           className="text-xs md:text-base w-4/5 md:w-full"
         >
           <option value="">选择地点</option>
@@ -59,7 +81,10 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       <div className="flex flex-col mb-2 md:mb-4">
         <select
           value={age}
-          onChange={(e) => handleImmediateFilterChange("age", setAge, e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value || undefined;
+            handleImmediateFilterChange("age", setAge, value);
+          }}
           className="text-xs md:text-base w-4/5 md:w-full"
         >
           <option value="">选择年龄</option>
@@ -73,9 +98,10 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       <div className="flex flex-col mb-2 md:mb-4">
         <select
           value={gender}
-          onChange={(e) =>
-            handleImmediateFilterChange("gender", setGender, e.target.value)
-          }
+          onChange={(e) => {
+            const value = e.target.value || undefined;
+            handleImmediateFilterChange("gender", setGender, value);
+          }}
           className="text-xs md:text-base w-4/5 md:w-full"
         >
           <option value="">选择性别</option>
@@ -89,9 +115,10 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       <div className="flex flex-col mb-2 md:mb-4">
         <select
           value={experience}
-          onChange={(e) =>
-            handleImmediateFilterChange("experience",setExperience, e.target.value)
-          }
+          onChange={(e) => {
+            const value = e.target.value || undefined;
+            handleImmediateFilterChange("experience", setExperience, value);
+          }}
           className="text-xs md:text-base w-4/5 md:w-full"
         >
           <option value="">选择经验</option>
@@ -105,9 +132,10 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       <div className="flex flex-col mb-2 md:mb-4">
         <select
           value={hourlycharge}
-          onChange={(e) =>
-            handleImmediateFilterChange("hourlycharge", setHourlyCharge, e.target.value)
-          }
+          onChange={(e) => {
+            const value = e.target.value || undefined;
+            handleImmediateFilterChange("hourlycharge", setHourlyCharge, value);
+          }}
           className="text-xs md:text-base w-4/5 md:w-full"
         >
           <option value="">选择时薪</option>

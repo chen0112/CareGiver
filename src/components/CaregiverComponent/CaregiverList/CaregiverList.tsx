@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CaregiverCard from "../CaregiverCard/CaregiverCard";
 import { Link, useParams } from "react-router-dom";
 import { useCaregiverContext } from "../../../context/CaregiverContext";
@@ -19,33 +19,47 @@ const CaregiverList: React.FC = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // State for filter
-  const [filter, setFilter] = useState<{
+  type FilterType = {
     location: string;
     age: string;
     gender: string;
     experience: string;
     hourlycharge: string;
-  }>({
-    location: "",
-    age: "",
-    gender: "",
-    experience: "",
-    hourlycharge: "",
-  });
+  };
 
-  const handleFilterChange = (newFilter: {
-    location: string;
-    age: string;
-    gender: string;
-    experience: string;
-    hourlycharge: string;
-  }) => {
+  const defaultFilter = {
+    location: undefined,
+    age: undefined,
+    gender: undefined,
+    experience: undefined,
+    hourlycharge: undefined,
+  };
+
+  // localStorage.removeItem("filterState");
+
+  const savedFilterState = localStorage.getItem("filterState");
+
+  const initialFilterState = savedFilterState
+    ? JSON.parse(savedFilterState)
+    : defaultFilter;
+
+  // State for filter
+  const [filter, setFilter] = useState<FilterType>(initialFilterState);
+
+  // Save the filter state to local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("filterState", JSON.stringify(filter));
+  }, [filter]);
+
+  const handleFilterChange = (newFilter: Partial<FilterType>) => {
+    // Since newFilter might not contain all properties of FilterType, we're using Partial
     setFilter((prevFilter) => ({
       ...prevFilter,
       ...newFilter,
     }));
   };
+
+  console.log("filter:----", filter);
 
   // Your filtered caregivers
   const filteredCaregivers = caregivers.filter((caregiver) => {
@@ -134,6 +148,8 @@ const CaregiverList: React.FC = () => {
     return true;
   });
 
+  console.log("Filtered careneeders:", filteredCaregivers);
+
   return (
     <div className="relative">
       <div className="flex items-center justify-between py-3 w-full">
@@ -218,7 +234,7 @@ const CaregiverList: React.FC = () => {
       <div className="flex flex-row w-full">
         {/* Left sidebar for `CaregiverFilter` */}
         <div className="w-1/4 p-2 md:p-4 border-r flex justify-center">
-          <CaregiverFilter onFilterChange={handleFilterChange} />
+          <CaregiverFilter onFilterChange={handleFilterChange} filterValues={filter}/>
         </div>
 
         {/* Right main content area */}
