@@ -121,7 +121,7 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
           }}
           className="text-xs md:text-base w-4/5 md:w-full"
         >
-          <option value="">选择经验</option>
+          <option value="">选择经验(年)</option>
           {EXPERIENCE_OPTIONS.map((exp) => (
             <option key={exp} value={exp}>
               {exp}

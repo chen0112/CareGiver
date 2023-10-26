@@ -11,6 +11,8 @@ type Conversation = {
   profileImage: string;
   lastMessage: string;
   timestamp: string;
+  ad_id: number;
+  ad_type: string;
 };
 
 const ChatPage: React.FC = () => {

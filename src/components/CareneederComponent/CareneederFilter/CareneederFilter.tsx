@@ -88,7 +88,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
             const value = e.target.value || undefined;
             handleImmediateFilterChange("location", setLocation, value)
           }}
-          className="text-xs md:text-base w-4/5 md:w-full"
+          className="text-customFontSize md:text-base w-4/5 md:w-full"
         >
           <option value="">选择地点</option>
           {LOCATION_OPTIONS.map((loc) => (
@@ -110,7 +110,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
               value
             )
           }}
-          className="text-xs md:text-base w-4/5 md:w-full"
+          className="text-customFontSize md:text-base w-4/5 md:w-full"
         >
           <option value="">选择时薪</option>
           {HOURLYCHARGE_OPTIONS.map((chargeRange) => (
@@ -126,7 +126,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         <label className="text-customFontSize md:text-base w-4/5 md:w-full">
           <input
             type="checkbox"
-            className="mr-2"
+            className="mr-1"
             checked={live_in_care}
             onChange={(e) =>
               handleImmediateFilterChange(
@@ -144,7 +144,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         <label className="text-customFontSize md:text-base w-4/5 md:w-full">
           <input
             type="checkbox"
-            className="mr-2"
+            className="mr-1"
             checked={live_out_care}
             onChange={(e) =>
               handleImmediateFilterChange(
@@ -162,7 +162,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         <label className="text-customFontSize md:text-base w-4/5 md:w-full">
           <input
             type="checkbox"
-            className="mr-2"
+            className="mr-1"
             checked={domestic_work}
             onChange={(e) =>
               handleImmediateFilterChange(
@@ -179,7 +179,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         <label className="text-customFontSize md:text-base w-4/5 md:w-full">
           <input
             type="checkbox"
-            className="mr-2"
+            className="mr-1"
             checked={meal_preparation}
             onChange={(e) =>
               handleImmediateFilterChange(
@@ -196,7 +196,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         <label className="text-customFontSize md:text-base w-4/5 md:w-full">
           <input
             type="checkbox"
-            className="mr-2"
+            className="mr-1"
             checked={companionship}
             onChange={(e) =>
               handleImmediateFilterChange(
@@ -213,7 +213,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         <label className="text-customFontSize md:text-base w-4/5 md:w-full">
           <input
             type="checkbox"
-            className="mr-2"
+            className="mr-1"
             checked={mobility_support}
             onChange={(e) =>
               handleImmediateFilterChange(
@@ -230,7 +230,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         <label className="text-customFontSize md:text-base w-4/5 md:w-full">
           <input
             type="checkbox"
-            className="mr-2"
+            className="mr-1"
             checked={transportation}
             onChange={(e) =>
               handleImmediateFilterChange(
@@ -247,7 +247,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         <label className="text-customFontSize md:text-base w-4/5 md:w-full">
           <input
             type="checkbox"
-            className="mr-2"
+            className="mr-1"
             checked={errands_shopping}
             onChange={(e) =>
               handleImmediateFilterChange(

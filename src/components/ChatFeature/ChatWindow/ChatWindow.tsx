@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Ably from "ably";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useCaregiverContext } from "../../../context/CaregiverContext";
@@ -64,12 +64,13 @@ const ChatWindow: React.FC = () => {
   const id = idString ? parseInt(idString, 10) : null;
 
   const adType = queryParams.get("adType");
+  const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
   let individual: Caregiver | Careneeder | undefined;
   let associatedAds: CaregiverAds | Ads | null | undefined = undefined;
 
   console.log("adType:", adType);
-  console.log("id:", id);
+  console.log("idddddd:", id);
 
   if (adType === "caregivers") {
     individual =
@@ -143,6 +144,8 @@ const ChatWindow: React.FC = () => {
       id: uniqueMessageId,
     };
 
+    console.log("Sending ad_id:", id);
+
     channel
       .publish("send_message", messageData)
       .then(() => {
@@ -156,7 +159,9 @@ const ChatWindow: React.FC = () => {
             sender_id: phoneNumber_sender || "unknown",
             recipient_id: phoneNumber_recipient,
             content: input,
-          }), // Convert the messageData object to JSON string
+            ad_id: id,
+            ad_type: adType,
+          }),
         })
           .then((response) => response.json()) // Assuming server responds with json
           .then((data) => {
@@ -172,6 +177,13 @@ const ChatWindow: React.FC = () => {
 
     setInput("");
   };
+
+  // This effect will run every time `messages` changes, to auto-scroll to the end
+  useEffect(() => {
+    if (endOfMessagesRef.current) {
+      endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]); // Dependency on messages array
 
   useEffect(() => {
     fetchChatHistory();
@@ -219,15 +231,15 @@ const ChatWindow: React.FC = () => {
 
       <hr className="border-t border-black-300 mx-1 my-2" />
       {/* Caregiver Info */}
-      <div className="flex items-center bg-gray-100 p-4">
-        <div className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1">
+      <div className="flex items-center bg-gray-100 p-3">
+        <div className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 md:h-48 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1">
           {/* Image */}
           <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
             <img
               src={individual?.imageurl}
               alt={individual?.name}
               style={imageStyle}
-              className="rounded w-1/2 md:w-full"
+              className="rounded w-1/2 md:w-3/4"
             />
           </div>
 
@@ -251,7 +263,7 @@ const ChatWindow: React.FC = () => {
                   : "¥ 收费不详"}
               </span>
             </div>
-            <div className="text-gray-600 mb-8 line-clamp">
+            <div className="text-gray-600 line-clamp mb-1">
               {associatedAds && (
                 <div>
                   <p>{associatedAds.title}</p>
@@ -264,7 +276,7 @@ const ChatWindow: React.FC = () => {
       </div>
 
       {/* Chat */}
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-auto max-h-[calc(100vh-500px)]">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -288,6 +300,8 @@ const ChatWindow: React.FC = () => {
             </div>
           </div>
         ))}
+        <div id="endOfMessages" ref={endOfMessagesRef}></div>
+        {/* Moved inside scrollable div */}
       </div>
 
       {/* Input - Fixed at the bottom */}

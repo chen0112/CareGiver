@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import Ably from "ably";
 import { BASE_URL } from "../../../types/Constant";
 import { BiSend } from "react-icons/bi";
@@ -26,6 +26,8 @@ type Conversation = {
   profileImage: string;
   lastMessage: string;
   timestamp: string;
+  ad_id: number;
+  ad_type: string;
 };
 
 const realtime = new Ably.Realtime.Promise(
@@ -62,6 +64,8 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
   const lastFetchedConversationId = useRef<number | null>(null);
 
   const conversation_id = activeConversationId;
+
+  const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
   const sortedIds = [
     Number(loggedInUser_phone || 0),
@@ -147,6 +151,13 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     setNewMessage("");
   };
 
+  // This effect will run every time `messages` changes, to auto-scroll to the end
+  useEffect(() => {
+    if (endOfMessagesRef.current) {
+      endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]); // Dependency on messages array
+
   useEffect(() => {
     let isMounted = true;
     let currentSubscription: { unsubscribe: () => void } | null = null;
@@ -219,19 +230,25 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     (convo) => convo.conversation_id === activeConversationId
   );
 
+  console.log("activeConversation:", activeConversation);
+
   const defaultImageUrl =
     "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
 
   return (
     <div className="flex flex-col h-full bg-white overflow-x-hidden mx-auto border-l">
-      <h1 className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
-        <img
-          src={activeConversation?.profileImage || defaultImageUrl}
-          alt="Profile"
-          className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full mr-2"
-        />
-        {activeConversation?.name || "未知"}
-      </h1>
+      <Link
+        to={`/${activeConversation?.ad_type}/id/${activeConversation?.ad_id}?phoneNumber=${loggedInUser_phone}`}
+      >
+        <h1 className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
+          <img
+            src={activeConversation?.profileImage || defaultImageUrl}
+            alt="Profile"
+            className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full mr-2"
+          />
+          {activeConversation?.name || "未知"}
+        </h1>
+      </Link>
 
       <div className="flex-grow overflow-y-auto  border-gray-300 p-2 sm:p-4">
         {loading ? (
@@ -261,6 +278,7 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
             </div>
           ))
         )}
+        <div id="endOfMessages" ref={endOfMessagesRef}></div>
       </div>
 
       {/* Input - Fixed at the bottom */}
@@ -272,7 +290,7 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
           placeholder="请在这里输入..."
         />
         <button
-          className="p-2 sm:p-3 rounded bg-teal-400 text-white"
+          className="p-2 sm:p-3 rounded bg-teal-400 text-white mr-1"
           onClick={sendMessage}
         >
           <BiSend size={16} className="sm:text-xl" />
