@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AnimalCaregiverCard from "../AnimalCaregiverCard/AnimalCaregiverCard";
 import { Link, useParams } from "react-router-dom";
 import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
-import { BiHeart } from "react-icons/bi";
+import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
 import { useAnimalCaregiverFormContext } from "../../../context/AnimalCaregiverFormContext";
 import CaregiverFilter from "../../CaregiverComponent/CaregiverFilter/CaregiverFilter";
@@ -18,6 +18,7 @@ const AnimalCaregiverList: React.FC = () => {
   console.log("Context animalcaregiversForm state:", animalcaregiversForm);
 
   const { phone } = useParams<{ phone: string }>();
+  const { userType } = useParams<{ userType: string }>();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
@@ -144,7 +145,10 @@ const AnimalCaregiverList: React.FC = () => {
         console.log("Checking hourlycharge filter");
 
         if (correspondingCaregiver.hourlycharge == null) {
-          console.log("Hourly charge is null for caregiver:", correspondingCaregiver);
+          console.log(
+            "Hourly charge is null for caregiver:",
+            correspondingCaregiver
+          );
           return false;
         }
 
@@ -217,6 +221,11 @@ const AnimalCaregiverList: React.FC = () => {
           >
             宠托师雇主广告
           </Link> */}
+          <Link
+            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+          >
+            <BiMessageDetail size={24} />
+          </Link>
         </div>
 
         {/* Hamburger menu button for smaller screens */}
@@ -249,6 +258,12 @@ const AnimalCaregiverList: React.FC = () => {
           >
             宠托师雇主广告
           </Link> */}
+          <Link
+            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+            className="block text-left no-underline py-1 px-2 text-black hover:underline"
+          >
+            消息
+          </Link>
           <button
             onClick={toggleSidebar}
             className="text-left py-1 px-2 text-black hover:underline"
@@ -293,6 +308,7 @@ const AnimalCaregiverList: React.FC = () => {
                 animalcaregiver={associatedDetails} // Pass the associated schedule as a prop
                 animalcaregiverAds={associatedAds}
                 className="w-full"
+                phoneNumber={phone}
               />
             );
           })}

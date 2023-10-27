@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AnimalCareneederCard from "../AnimalCareneederCard/AnimalCareneederCard";
 import { Link, useParams } from "react-router-dom";
-import { BiHeart } from "react-icons/bi";
+import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import { useAnimalCareneederFormContext } from "../../../context/AnimalCareneederFormContext";
 import { useAnimalCareneederAdsContext } from "../../../context/AnimalCareneederAdsContext";
 import { useAnimalCareneederContext } from "../../../context/AnimalCareneederContext";
@@ -17,6 +17,7 @@ const AnimalCareneederList: React.FC = () => {
   console.log("Context animalcareneedersForm state:", animalcareneedersForm);
 
   const { phone } = useParams<{ phone: string }>();
+  const { userType } = useParams<{ userType: string }>();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
@@ -141,7 +142,10 @@ const AnimalCareneederList: React.FC = () => {
         console.log("Checking hourlycharge filter");
 
         if (correspondingCareneeder.hourlycharge == null) {
-          console.log("Hourly charge is null for caregiver:", correspondingCareneeder);
+          console.log(
+            "Hourly charge is null for caregiver:",
+            correspondingCareneeder
+          );
           return false;
         }
 
@@ -208,11 +212,16 @@ const AnimalCareneederList: React.FC = () => {
           >
             我的广告
           </Link>
-          <Link
+          {/* <Link
             to={`/animalcaregivers/phone/${phone}`}
             className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
           >
             所有宠托师广告
+          </Link> */}
+          <Link
+            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+          >
+            <BiMessageDetail size={24} />
           </Link>
         </div>
 
@@ -240,11 +249,17 @@ const AnimalCareneederList: React.FC = () => {
           >
             我的广告
           </Link>
-          <Link
+          {/* <Link
             to={`/animalcaregivers/phone/${phone}`}
             className="block text-left no-underline py-1 px-2 text-black hover:underline"
           >
             所有宠托师广告
+          </Link> */}
+          <Link
+            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+            className="block text-left no-underline py-1 px-2 text-black hover:underline"
+          >
+            消息
           </Link>
           <button
             onClick={toggleSidebar}
@@ -291,6 +306,7 @@ const AnimalCareneederList: React.FC = () => {
                 animalcareneeder={associatedDetails} // Pass the associated schedule as a prop
                 animalcareneederAds={associatedAds}
                 className="w-full"
+                phoneNumber={phone}
               />
             );
           })}

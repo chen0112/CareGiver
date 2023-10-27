@@ -11,7 +11,7 @@ import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
 import { Caregiver, Careneeder, CaregiverAds, Ads } from "../../../types/Types";
 
 type Message = {
-  id?: string; // Add this line
+  id?: string; 
   sender_id: string;
   content: string;
   recipient_id: string | null;
@@ -65,6 +65,9 @@ const ChatWindow: React.FC = () => {
 
   const adType = queryParams.get("adType");
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
+
+  const defaultImageUrl =
+    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
 
   let individual: Caregiver | Careneeder | undefined;
   let associatedAds: CaregiverAds | Ads | null | undefined = undefined;
@@ -232,19 +235,19 @@ const ChatWindow: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-2" />
       {/* Caregiver Info */}
       <div className="flex items-center bg-gray-100 p-3">
-        <div className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 md:h-48 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1">
+        <div className="no-underline w-full bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 md:h-48 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100">
           {/* Image */}
-          <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
+          <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-1 md:p-1">
             <img
-              src={individual?.imageurl}
+              src={individual?.imageurl || defaultImageUrl}
               alt={individual?.name}
               style={imageStyle}
-              className="rounded w-1/2 md:w-3/4"
+              className="rounded w-2/5 md:w-1/4"
             />
           </div>
 
           {/* Text */}
-          <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
+          <div className="flex-grow flex flex-col justify-between mx-auto md:p-5">
             <div className="flex items-center">
               <h3 className="text-xl font-semibold text-blue-700 mr-3">
                 {individual?.name}

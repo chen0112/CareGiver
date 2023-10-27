@@ -18,8 +18,9 @@ interface AnimalcareneederCardProps {
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
   onUpdateanimalcareneederForm?: (
     updatedanimalcareneederForm: AnimalCareneederForm
-  ) => void; // New prop for handling updates
-  className?: string; // Add this line
+  ) => void; 
+  className?: string; 
+  phoneNumber?: string;
 }
 
 interface Option {
@@ -34,7 +35,8 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
   animalcareneedersForm,
   animalcareneederAds,
   loggedInUserPhone,
-  onUpdateanimalcareneederForm, // Receive the update function from the parent component
+  onUpdateanimalcareneederForm, 
+  phoneNumber
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
@@ -157,7 +159,7 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
         <div className="flex flex-col items-center mb-6 mx-2 md:mx-6">
           {/* Link to Animal Careneeder's Profile */}
           <Link
-            to={`/animalcareneeders/id/${animalcareneedersForm.id}`}
+            to={`/animalcareneeders/id/${animalcareneedersForm.id}?phoneNumber=${phoneNumber}`}
             className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}

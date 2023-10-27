@@ -32,7 +32,7 @@ import AnimalCareneederDetail from "./components/AnimalCareneederComponent/Anima
 import MyAnimalCareneeder from "./components/AnimalCareneederComponent/MyAnimalCareneeder/MyAnimalCareneeder";
 import ChatWindow from "./components/ChatFeature/ChatWindow/ChatWindow";
 import ChatPage from "./components/ChatFeature/ChatPage/ChatPage";
-import ChatConversation from "./components/ChatFeature/ChatConversation/ChatConversation";
+import ChatWindowAnimal from "./components/ChatFeature/ChatWindow/ChatWindowAnimal";
 import { BASE_URL } from "./types/Constant";
 
 const API_URL = `${BASE_URL}/api/all_caregivers`;
@@ -243,6 +243,8 @@ const AppRoutes: React.FC = () => {
         {/* chat window */}
         <Route path="/caregivers/message" element={<ChatWindow />} />
         <Route path="/careneeders/message" element={<ChatWindow />} />
+        <Route path="/animalcareneeders/message" element={<ChatWindowAnimal />} />
+        <Route path="/animalcaregivers/message" element={<ChatWindowAnimal />} />
         <Route path="/chatmessagehub" element={<ChatPage />} />
       </Routes>
     </BrowserRouter>
