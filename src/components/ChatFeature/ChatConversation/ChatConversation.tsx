@@ -3,6 +3,7 @@ import { useParams, useLocation, Link } from "react-router-dom";
 import Ably from "ably";
 import { BASE_URL } from "../../../types/Constant";
 import { BiSend } from "react-icons/bi";
+import { Caregiver, Careneeder } from "../../../types/Types";
 
 type Message = {
   id?: string; // Add this line
@@ -62,6 +63,9 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
   const [newMessage, setNewMessage] = useState<string>("");
   const [loading, setLoading] = useState(false); // Added loading state
   const lastFetchedConversationId = useRef<number | null>(null);
+
+  const [caregiver, setCaregiver] = useState<Caregiver | null>(null);
+  const [careneeder, setCareneeder] = useState<Careneeder | null>(null);
 
   const conversation_id = activeConversationId;
 
@@ -232,6 +236,58 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
 
   console.log("activeConversation:", activeConversation);
 
+  //retrieve ad's profile and name using ad_id and ad_type
+
+  const fetchData = (endpoint: string, setIdFunction: (data: any) => void) => {
+    console.log("Fetching from endpoint:", endpoint);
+
+    fetch(endpoint)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Data fetched from endpoint:", endpoint, data);
+        setIdFunction(data);
+      })
+      .catch((error) => {
+        console.error(
+          "Error fetching data from endpoint:",
+          endpoint,
+          error.message
+        );
+      });
+  };
+
+  useEffect(() => {
+    console.log("Running useEffect for conversation_id:", conversation_id);
+    console.log("Active Conversation data:", activeConversation);
+    console.log("Active Conversation data:", activeConversation?.ad_id);
+    console.log("Active Conversation data:", activeConversation?.ad_type);
+    if (activeConversation?.ad_type === "careneeders") {
+      fetchData(
+        `${BASE_URL}/api/all_careneeders/${activeConversation.ad_id}`,
+        setCareneeder
+      );
+    } else if (activeConversation?.ad_type === "caregivers") {
+      fetchData(
+        `${BASE_URL}/api/all_caregivers/${activeConversation.ad_id}`,
+        setCaregiver
+      );
+    }
+  }, [conversation_id]);
+
+  const currentData =
+    activeConversation?.ad_type === "careneeders"
+      ? careneeder
+      : activeConversation?.ad_type === "caregivers"
+      ? caregiver
+      : null;
+
+  console.log("Current data:", currentData);
+
   const defaultImageUrl =
     "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
 
@@ -242,11 +298,11 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
       >
         <h1 className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
           <img
-            src={activeConversation?.profileImage || defaultImageUrl}
+            src={currentData?.imageurl || defaultImageUrl}
             alt="Profile"
             className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full mr-2"
           />
-          {activeConversation?.name || "未知"}
+          {currentData?.name || "未知"}
         </h1>
       </Link>
 

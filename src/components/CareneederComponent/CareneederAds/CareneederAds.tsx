@@ -12,6 +12,7 @@ const CareneederAds: React.FC = () => {
   const [titleError, setTitleError] = useState<string>("");
   const [descriptionError, setDescriptionError] = useState<string>("");
   const navigate = useNavigate();
+  const userType = "careneeder"
 
   const location = useLocation();
 
@@ -101,7 +102,7 @@ const CareneederAds: React.FC = () => {
         // Show the success modal
         setShowSuccessModal(true);
         setTimeout(() => {
-          navigate(`/caregivers/phone/${phoneNumber}`);
+          navigate(`/caregivers/phone/${phoneNumber}/userType/${userType}`);
         }, 2000);
       })
       .catch((error) => {

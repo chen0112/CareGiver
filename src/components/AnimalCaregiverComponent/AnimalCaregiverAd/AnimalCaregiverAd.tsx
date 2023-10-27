@@ -11,6 +11,7 @@ const AnimalCaregiverAds: React.FC = () => {
   const [titleError, setTitleError] = useState<string>("");
   const [descriptionError, setDescriptionError] = useState<string>("");
   const navigate = useNavigate();
+  const userType = "animalcareneeder"
 
   const location = useLocation();
 
@@ -100,7 +101,7 @@ const AnimalCaregiverAds: React.FC = () => {
         // Show the success modal
         setShowSuccessModal(true);
         setTimeout(() => {
-          navigate(`/animalcareneeders/phone/${phoneNumber}`);
+          navigate(`/animalcareneeders/phone/${phoneNumber}/userType/${userType}`);
         }, 2000);
       })
       .catch((error) => {

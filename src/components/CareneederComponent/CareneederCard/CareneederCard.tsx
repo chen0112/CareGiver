@@ -163,7 +163,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
             {/* Text */}
             <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
-                <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-3">
+                <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-3 mt-1">
                   {careneeder.name}
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />

@@ -20,6 +20,7 @@ const CaregiverAds: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const caregiverId = queryParams.get("caregiverId");
   const phoneNumber = queryParams.get("phone");
+  const userType = "caregiver"
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const titleText = e.target.value;
@@ -106,7 +107,7 @@ const CaregiverAds: React.FC = () => {
         // Show the success modal
         setShowSuccessModal(true);
         setTimeout(() => {
-          navigate(`/careneeders/phone/${phoneNumber}`);
+          navigate(`/careneeders/phone/${phoneNumber}/userType/${userType}`);
         }, 2000);
       })
       .catch((error) => {

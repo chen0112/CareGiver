@@ -228,7 +228,7 @@ const AppRoutes: React.FC = () => {
           element={<AnimalCareneederList />}
         />
         <Route
-          path="/signup_animalcareneeders/details/ads"
+          path="/signup_animalcareneeder/details/ads"
           element={<AnimalCareneederAds />}
         />
         <Route
