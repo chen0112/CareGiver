@@ -1,4 +1,3 @@
-// CaregiverList.tsx
 import React, { useState, useEffect } from "react";
 import CareneederCard from "../CareneederCard/CareneederCard";
 import { Link, useParams } from "react-router-dom";
@@ -226,7 +225,7 @@ const CareneederList: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="flex items-center justify-between py-3 w-full">
+      <div className="flex items-center justify-between py-3 ml-3 w-full">
         <Link to="/" className="flex items-center text-black no-underline">
           <BiHeart
             size={30}
@@ -237,8 +236,7 @@ const CareneederList: React.FC = () => {
           </h1>
         </Link>
 
-        <div className="hidden md:flex space-x-4 mr-4">
-          {/* Display user profile image and name */}
+        <div className="flex space-x-4 mr-8">
           {accountData && (
             <Dropdown>
               <Dropdown.Toggle
@@ -272,53 +270,6 @@ const CareneederList: React.FC = () => {
           >
             <BiMessageDetail size={24} />
           </Link>
-        </div>
-
-        <div
-          className="md:hidden flex items-center space-x-2 cursor-pointer mr-2 mt-2"
-          onClick={toggleSidebar}
-        >
-          {accountData && (
-            <img
-              src={accountData.imageurl || defaultImageUrl}
-              alt="Profile"
-              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full"
-            />
-          )}
-          <span className="text-black">{accountData?.name || ""}</span>
-        </div>
-
-        {/* Sidebar for mobile view */}
-        <div
-          className={`${
-            isSidebarOpen ? "translate-x-0" : "translate-x-full"
-          } md:hidden fixed top-0 right-0 h-full w-48 bg-white shadow-lg z-50 flex flex-col space-y-2 py-4 px-2 transition-transform ease-in-out duration-300`}
-        >
-          {/* Links in the sidebar */}
-          <Link
-            to="/signup_caregiver"
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            发布新广告
-          </Link>
-          <Link
-            to={`/mycaregiver/phone/${phone}`}
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            我的广告
-          </Link>
-          <Link
-            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            消息
-          </Link>
-          <button
-            onClick={toggleSidebar}
-            className="text-left py-1 px-2 text-black hover:underline"
-          >
-            关闭
-          </button>
         </div>
       </div>
 

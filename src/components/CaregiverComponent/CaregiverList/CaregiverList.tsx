@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Accounts } from "../../../types/Types";
 import { BASE_URL } from "../../../types/Constant";
+import { defaultImageUrl } from "../../../types/Constant";
 
 const CaregiverList: React.FC = () => {
   const { caregivers } = useCaregiverContext();
@@ -192,8 +193,6 @@ const CaregiverList: React.FC = () => {
   });
 
   console.log("Filtered caregivers:", filteredCaregivers);
-  const defaultImageUrl =
-    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png";
 
   return (
     <div className="relative">
@@ -208,8 +207,7 @@ const CaregiverList: React.FC = () => {
           </h1>
         </Link>
 
-        <div className="hidden md:flex space-x-4 mr-4">
-          {/* Display user profile image and name */}
+        <div className="flex space-x-4 mr-8">
           {accountData && (
             <Dropdown>
               <Dropdown.Toggle
@@ -243,44 +241,6 @@ const CaregiverList: React.FC = () => {
           >
             <BiMessageDetail size={24} />
           </Link>
-        </div>
-
-        {/* Hamburger menu button for smaller screens */}
-        <button className="md:hidden p-2" onClick={toggleSidebar}>
-          ☰
-        </button>
-
-        {/* Sidebar for mobile view */}
-        <div
-          className={`${
-            isSidebarOpen ? "translate-x-0" : "translate-x-full"
-          } md:hidden fixed top-0 right-0 h-full w-48 bg-white shadow-lg z-50 flex flex-col space-y-2 py-4 px-2 transition-transform ease-in-out duration-300`}
-        >
-          {/* Links in the sidebar */}
-          <Link
-            to="/signup_careneeder"
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            发布新广告
-          </Link>
-          <Link
-            to={`/mycareneeder/phone/${phone}`}
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            我的广告
-          </Link>
-          <Link
-            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            消息
-          </Link>
-          <button
-            onClick={toggleSidebar}
-            className="text-left py-1 px-2 text-black hover:underline"
-          >
-            关闭
-          </button>
         </div>
       </div>
 

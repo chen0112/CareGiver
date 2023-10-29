@@ -26,7 +26,7 @@ type ChatMessageHubProps = {
 const ChatMessageHub: React.FC<ChatMessageHubProps> = ({
   conversations,
   setActiveConversationKey,
-  activeConversationKey
+  activeConversationKey,
 }) => {
   const createConversationKey = (
     conversation_id: ConversationId,
@@ -75,9 +75,9 @@ const ChatMessageHub: React.FC<ChatMessageHubProps> = ({
               )
             }
           >
-            <div className="flex items-center w-full mb-2">
+            <div className="flex flex-col md:flex-row items-center justify-center w-full mb-2">
               {/* First section for image */}
-              <div className="flex-none">
+              <div className="flex-none mb-2 md:mb-0">
                 <img
                   className="w-10 h-10 rounded-full mr-3 sm:w-12 sm:h-12 md:mr-4"
                   src={conversation.profileImage}
@@ -86,11 +86,11 @@ const ChatMessageHub: React.FC<ChatMessageHubProps> = ({
               </div>
 
               {/* Second section for name and timestamp */}
-              <div className="flex-grow flex flex-col md:flex-row">
+              <div className="flex-grow flex flex-col md:flex-row items-center justify-center md:justify-start">
                 <span className="font-medium text-base mb-2 md:mb-0 md:mr-3 sm:text-lg">
                   {conversation.name}
                 </span>
-                <span className="text-xs text-gray-500 text-right flex-none md:ml-auto">
+                <span className="text-customFontSize text-gray-500 text-right flex-none md:ml-auto">
                   {conversation.timestamp}
                 </span>
               </div>

@@ -7,18 +7,22 @@ import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
 import { useAnimalCaregiverFormContext } from "../../../context/AnimalCaregiverFormContext";
 import CaregiverFilter from "../../CaregiverComponent/CaregiverFilter/CaregiverFilter";
+import { Accounts } from "../../../types/Types";
+import { BASE_URL } from "../../../types/Constant";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Dropdown from "react-bootstrap/Dropdown";
+import { defaultImageUrl } from "../../../types/Constant";
 
 const AnimalCaregiverList: React.FC = () => {
   const { animalcaregivers } = useAnimalCaregiverContext();
   const { animalcaregiversForm } = useAnimalCaregiverFormContext();
   const { animalcaregiverAds } = useAnimalCaregiverAdsContext();
 
-  console.log("Context animalcaregiverAds  state:", animalcaregiverAds);
-  console.log("Context animalcaregivers state:", animalcaregivers);
-  console.log("Context animalcaregiversForm state:", animalcaregiversForm);
-
   const { phone } = useParams<{ phone: string }>();
   const { userType } = useParams<{ userType: string }>();
+
+  const [accountData, setAccountData] = useState<Accounts | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
@@ -64,6 +68,25 @@ const AnimalCaregiverList: React.FC = () => {
   };
 
   console.log("filter:----", filter);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/account/${phone}`)
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            console.error("Server response:", text);
+            throw new Error("Network response was not ok");
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setAccountData(data);
+      })
+      .catch((error) => {
+        console.error("There was a problem fetching account data:", error);
+      });
+  }, [phone]);
 
   // Your filtered animalcaregiversForm
   const filteredanimalcaregiversForm = animalcaregiversForm.filter(
@@ -191,85 +214,51 @@ const AnimalCaregiverList: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="flex items-center justify-between py-3 w-full">
+      <div className="flex items-center justify-between py-3 ml-3 w-full">
         <Link to="/" className="flex items-center text-black no-underline">
           <BiHeart
             size={30}
-            className="text-red-500 heart-icon my-auto ml-4 hidden md:block" // Added ml-4 for more margin to the left
+            className="text-red-500 heart-icon my-auto ml-4 hidden md:block"
           />
           <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
             关爱网
           </h1>
         </Link>
-        <div className="hidden md:flex space-x-4 mr-4">
-          {/* Added mr-4 to the parent div */}
-          <Link
-            to="/signup_animalcareneeder"
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            发布新广告
-          </Link>
-          <Link
-            to={`/myanimalcareneederform/phone/${phone}`}
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            我的广告
-          </Link>
-          {/* <Link
-            to={`/animalcareneeders/phone/${phone}`}
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            宠托师雇主广告
-          </Link> */}
+
+        <div className="flex space-x-4 mr-8">
+          {accountData && (
+            <Dropdown>
+              <Dropdown.Toggle
+                as="div"
+                variant="link"
+                id="dropdown-basic"
+                className="flex items-center space-x-2 cursor-pointer"
+              >
+                <img
+                  src={accountData.imageurl || defaultImageUrl}
+                  alt="Profile"
+                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full"
+                />
+                <span className="text-black">{accountData.name}</span>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item href="/signup_animalcareneeder">
+                  发布新广告
+                </Dropdown.Item>
+                <Dropdown.Item href={`/myanimalcareneederform/phone/${phone}`}>
+                  我的广告
+                </Dropdown.Item>
+                {/* ... Add other dropdown links similarly */}
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
           <Link
             to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+            className="flex items-center justify-center"
           >
             <BiMessageDetail size={24} />
           </Link>
-        </div>
-
-        {/* Hamburger menu button for smaller screens */}
-        <button className="md:hidden p-2" onClick={toggleSidebar}>
-          ☰
-        </button>
-
-        {/* Sidebar for mobile view */}
-        <div
-          className={`${
-            isSidebarOpen ? "translate-x-0" : "translate-x-full"
-          } md:hidden fixed top-0 right-0 h-full w-48 bg-white shadow-lg z-50 flex flex-col space-y-2 py-4 px-2 transition-transform ease-in-out duration-300`}
-        >
-          {/* Links in the sidebar */}
-          <Link
-            to="/signup_animalcareneeder"
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            发布新广告
-          </Link>
-          <Link
-            to={`/myanimalcareneederform/phone/${phone}`}
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            我的广告
-          </Link>
-          {/* <Link
-            to={`/animalcareneeders/phone/${phone}`}
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            宠托师雇主广告
-          </Link> */}
-          <Link
-            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            消息
-          </Link>
-          <button
-            onClick={toggleSidebar}
-            className="text-left py-1 px-2 text-black hover:underline"
-          >
-            关闭
-          </button>
         </div>
       </div>
 
