@@ -15,10 +15,10 @@ type Conversation = {
   ad_type: string;
 };
 
+type ConversationId = number;
+type AdId = number;
+
 const ChatPage: React.FC = () => {
-  const [activeConversationId, setActiveConversationId] = useState<
-    number | null
-  >(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [recipientId, setRecipientId] = useState<string | null>(null);
   const location = useLocation();
@@ -26,8 +26,19 @@ const ChatPage: React.FC = () => {
   const user_phone = queryParams.get("loggedInUser");
   const user_type = queryParams.get("userType");
 
+  const [activeConversationKey, setActiveConversationKey] = useState<
+    string | null
+  >(null);
+
+  const splitConversationKey = (key: string): [ConversationId, AdId] => {
+    const parts = key.split("-");
+    return [Number(parts[0]), Number(parts[1])];
+  };
+
   useEffect(() => {
-    fetch(`${BASE_URL}/api/list_conversations?user_phone=${user_phone}&user_type=${user_type}`)
+    fetch(
+      `${BASE_URL}/api/list_conversations?user_phone=${user_phone}&user_type=${user_type}`
+    )
       .then((response) => {
         console.log("Raw API Response: ", response);
         return response.json();
@@ -42,28 +53,33 @@ const ChatPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const activeConversation = conversations.find(
-      (conv) => conv.conversation_id === activeConversationId
-    );
-    if (activeConversation) {
-      console.log("Active Conversation: ", activeConversation);
-      setRecipientId(activeConversation.other_user_phone);
-      console.log("Set Recipient ID: ", activeConversation.other_user_phone);
+    if (activeConversationKey) {
+      const [activeId, activeAdId] = splitConversationKey(
+        activeConversationKey
+      );
+      const activeConversation = conversations.find(
+        (conv) => conv.conversation_id === activeId && conv.ad_id === activeAdId
+      );
+      if (activeConversation) {
+        console.log("Active Conversation: ", activeConversation);
+        setRecipientId(activeConversation.other_user_phone);
+        console.log("Set Recipient ID: ", activeConversation.other_user_phone);
+      }
     }
-  }, [activeConversationId, conversations, user_phone]);
+  }, [activeConversationKey, conversations]);
 
   return (
     <div className="flex h-screen">
       <div style={{ flex: 1 }}>
         <ChatMessageHub
           conversations={conversations}
-          setActiveConversationId={setActiveConversationId}
-          activeConversationId={activeConversationId}
+          setActiveConversationKey={setActiveConversationKey}
+          activeConversationKey={activeConversationKey}
         />
       </div>
       <div style={{ flex: 2 }}>
         <ChatConversation
-          activeConversationId={activeConversationId}
+          activeConversationKey={activeConversationKey}
           loggedInUser_phone={user_phone}
           recipientId={recipientId}
           conversations={conversations}

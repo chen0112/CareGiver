@@ -132,3 +132,12 @@ export interface AnimalCareneederAds {
   description: string;
   animalcareneederid: number;
 }
+
+export interface Accounts{
+  id: number;
+  phone: string;
+  passcode: string;
+  createtime: Date;
+  name: string;
+  imageurl?: string; // Assuming imageurl can be nullable
+}

@@ -23,7 +23,7 @@ const CaregiverDetail: React.FC = () => {
   const phoneNumber = queryParams.get("phoneNumber");
 
   useEffect(() => {
-    fetch( `${BASE_URL}/api/all_caregivers/${id}`)
+    fetch(`${BASE_URL}/api/all_caregivers/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -66,14 +66,23 @@ const CaregiverDetail: React.FC = () => {
             </h1>
           </Link>
 
-          <Link
-            to={`/caregivers/message?id=${caregiver?.id}&phoneNumber_recipient=${
-              caregiver?.phone
-            }&phoneNumber_sender=${phoneNumber}&adType=${"caregivers"}`}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center mr-4"
-          >
-            <FaEnvelope className="mr-2" /> 发送消息
-          </Link>
+          {!(
+            caregiver?.phone === phoneNumber ||
+            !caregiver?.phone ||
+            !phoneNumber ||
+            phoneNumber === "undefined"
+          ) && (
+            <Link
+              to={`/caregivers/message?id=${
+                caregiver?.id
+              }&phoneNumber_recipient=${
+                caregiver?.phone
+              }&phoneNumber_sender=${phoneNumber}&adType=${"caregivers"}`}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center mr-4"
+            >
+              <FaEnvelope className="mr-2" /> 发送消息
+            </Link>
+          )}
         </div>
 
         <hr className="border-t border-black-300 mx-1 my-2" />

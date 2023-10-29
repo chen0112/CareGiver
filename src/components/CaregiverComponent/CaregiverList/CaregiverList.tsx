@@ -6,6 +6,10 @@ import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
 import "./CaregiverList.css";
 import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import CaregiverFilter from "../CaregiverFilter/CaregiverFilter";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Dropdown from "react-bootstrap/Dropdown";
+import { Accounts } from "../../../types/Types";
+import { BASE_URL } from "../../../types/Constant";
 
 const CaregiverList: React.FC = () => {
   const { caregivers } = useCaregiverContext();
@@ -13,6 +17,8 @@ const CaregiverList: React.FC = () => {
 
   const { phone } = useParams<{ phone: string }>();
   const { userType } = useParams<{ userType: string }>();
+
+  const [accountData, setAccountData] = useState<Accounts | null>(null);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
@@ -60,6 +66,25 @@ const CaregiverList: React.FC = () => {
   };
 
   console.log("filter:----", filter);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/account/${phone}`)
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            console.error("Server response:", text);
+            throw new Error("Network response was not ok");
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setAccountData(data);
+      })
+      .catch((error) => {
+        console.error("There was a problem fetching account data:", error);
+      });
+  }, [phone]);
 
   // Your filtered caregivers
   const filteredCaregivers = caregivers.filter((caregiver) => {
@@ -167,6 +192,8 @@ const CaregiverList: React.FC = () => {
   });
 
   console.log("Filtered caregivers:", filteredCaregivers);
+  const defaultImageUrl =
+    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png";
 
   return (
     <div className="relative">
@@ -182,25 +209,34 @@ const CaregiverList: React.FC = () => {
         </Link>
 
         <div className="hidden md:flex space-x-4 mr-4">
-          {/* Added mr-4 to the parent div */}
-          <Link
-            to="/signup_careneeder"
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            发布新广告
-          </Link>
-          <Link
-            to={`/mycareneeder/phone/${phone}`}
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            我的广告
-          </Link>
-          {/* <Link
-            to={`/careneeders/phone/${phone}/userType/${userType}`}
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            所有雇主广告
-          </Link> */}
+          {/* Display user profile image and name */}
+          {accountData && (
+            <Dropdown>
+              <Dropdown.Toggle
+                as="div"
+                variant="link"
+                id="dropdown-basic"
+                className="flex items-center space-x-2 cursor-pointer"
+              >
+                <img
+                  src={accountData.imageurl || defaultImageUrl}
+                  alt="Profile"
+                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full"
+                />
+                <span className="text-black">{accountData.name}</span>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item href="/signup_careneeder">
+                  发布新广告
+                </Dropdown.Item>
+                <Dropdown.Item href={`/mycareneeder/phone/${phone}`}>
+                  我的广告
+                </Dropdown.Item>
+                {/* ... Add other dropdown links similarly */}
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
           <Link
             to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
           >

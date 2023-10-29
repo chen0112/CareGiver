@@ -7,6 +7,10 @@ import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
 import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
 import CareneederFilter from "../CareneederFilter/CareneederFilter"; // Import the filter component
+import { Accounts } from "../../../types/Types";
+import { BASE_URL } from "../../../types/Constant";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const CareneederList: React.FC = () => {
   const { careneeders } = useCareneederContext();
@@ -15,6 +19,9 @@ const CareneederList: React.FC = () => {
 
   const { phone } = useParams<{ phone: string }>();
   const { userType } = useParams<{ userType: string }>();
+
+  const [accountData, setAccountData] = useState<Accounts | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
@@ -54,7 +61,9 @@ const CareneederList: React.FC = () => {
 
   const savedFilterState = localStorage.getItem("filterState");
 
-  const initialFilterState = savedFilterState ? JSON.parse(savedFilterState) : defaultFilter;
+  const initialFilterState = savedFilterState
+    ? JSON.parse(savedFilterState)
+    : defaultFilter;
 
   // State for filter
   const [filter, setFilter] = useState<FilterType>(initialFilterState);
@@ -72,7 +81,26 @@ const CareneederList: React.FC = () => {
     }));
   };
 
-  console.log("filter:----", filter)
+  console.log("filter:----", filter);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/account/${phone}`)
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            console.error("Server response:", text);
+            throw new Error("Network response was not ok");
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setAccountData(data);
+      })
+      .catch((error) => {
+        console.error("There was a problem fetching account data:", error);
+      });
+  }, [phone]);
 
   const filteredCareneeders = careneeders.filter((careneeder) => {
     // 1. Check location
@@ -193,6 +221,8 @@ const CareneederList: React.FC = () => {
   });
 
   console.log("Filtered careneeders:", filteredCareneeders);
+  const defaultImageUrl =
+    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png";
 
   return (
     <div className="relative">
@@ -208,25 +238,34 @@ const CareneederList: React.FC = () => {
         </Link>
 
         <div className="hidden md:flex space-x-4 mr-4">
-          {/* Added mr-4 to the parent div */}
-          <Link
-            to="/signup_caregiver"
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            发布新广告
-          </Link>
-          <Link
-            to={`/mycaregiver/phone/${phone}`}
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            我的广告
-          </Link>
-          {/* <Link
-            to={`/caregivers/phone/${phone}/userType/${userType}`}
-            className="no-underline py-1 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-          >
-            所有护工广告
-          </Link> */}
+          {/* Display user profile image and name */}
+          {accountData && (
+            <Dropdown>
+              <Dropdown.Toggle
+                as="div"
+                variant="link"
+                id="dropdown-basic"
+                className="flex items-center space-x-2 cursor-pointer"
+              >
+                <img
+                  src={accountData.imageurl || defaultImageUrl}
+                  alt="Profile"
+                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full"
+                />
+                <span className="text-black">{accountData.name}</span>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item href="/signup_caregiver">
+                  发布新广告
+                </Dropdown.Item>
+                <Dropdown.Item href={`/mycaregiver/phone/${phone}`}>
+                  我的广告
+                </Dropdown.Item>
+                {/* ... Add other dropdown links similarly */}
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
           <Link
             to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
           >
@@ -234,10 +273,19 @@ const CareneederList: React.FC = () => {
           </Link>
         </div>
 
-        {/* Hamburger menu button for smaller screens */}
-        <button className="md:hidden p-2" onClick={toggleSidebar}>
-          ☰
-        </button>
+        <div
+          className="md:hidden flex items-center space-x-2 cursor-pointer mr-2 mt-2"
+          onClick={toggleSidebar}
+        >
+          {accountData && (
+            <img
+              src={accountData.imageurl || defaultImageUrl}
+              alt="Profile"
+              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full"
+            />
+          )}
+          <span className="text-black">{accountData?.name || ""}</span>
+        </div>
 
         {/* Sidebar for mobile view */}
         <div
@@ -258,12 +306,6 @@ const CareneederList: React.FC = () => {
           >
             我的广告
           </Link>
-          {/* <Link
-            to={`/caregivers/phone/${phone}`}
-            className="block text-left no-underline py-1 px-2 text-black hover:underline"
-          >
-            所有护工广告
-          </Link> */}
           <Link
             to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
             className="block text-left no-underline py-1 px-2 text-black hover:underline"
@@ -283,9 +325,11 @@ const CareneederList: React.FC = () => {
 
       <div className="flex flex-row w-full">
         <div className="w-1/4 p-2 md:p-4 border-r flex justify-center">
-          <CareneederFilter onFilterChange={handleFilterChange} filterValues={filter} />
+          <CareneederFilter
+            onFilterChange={handleFilterChange}
+            filterValues={filter}
+          />
         </div>
-
 
         <div className="flex flex-col items-center space-y-2 md:space-y-4 w-3/4 p-2 md:p-4">
           <div className="text-center w-full text-2xl font-semibold mb-3">

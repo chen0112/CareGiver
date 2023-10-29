@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./ChatMessageHub.css";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
@@ -14,17 +14,27 @@ type Conversation = {
   ad_type: string;
 };
 
+type ConversationId = number;
+type AdId = number;
+
 type ChatMessageHubProps = {
   conversations: Conversation[];
-  setActiveConversationId: React.Dispatch<React.SetStateAction<number | null>>;
-  activeConversationId: number | null;
+  setActiveConversationKey: React.Dispatch<React.SetStateAction<string | null>>;
+  activeConversationKey: string | null;
 };
 
 const ChatMessageHub: React.FC<ChatMessageHubProps> = ({
   conversations,
-  setActiveConversationId,
-  activeConversationId,
+  setActiveConversationKey,
+  activeConversationKey
 }) => {
+  const createConversationKey = (
+    conversation_id: ConversationId,
+    ad_id: AdId
+  ): string => {
+    return `${conversation_id}-${ad_id}`;
+  };
+
   return (
     <div className="relative">
       <Link
@@ -43,14 +53,26 @@ const ChatMessageHub: React.FC<ChatMessageHubProps> = ({
         {/* Adjusted margins for mobile */}
         {conversations.map((conversation) => (
           <div
-            key={conversation.conversation_id}
+            key={createConversationKey(
+              conversation.conversation_id,
+              conversation.ad_id
+            )}
             className={`flex flex-col mb-4 p-3 shadow-md rounded-lg h-auto ${
-              activeConversationId === conversation.conversation_id
+              activeConversationKey ===
+              createConversationKey(
+                conversation.conversation_id,
+                conversation.ad_id
+              )
                 ? "bg-blue-200"
                 : "bg-white"
             } cursor-pointer`}
             onClick={() =>
-              setActiveConversationId(conversation.conversation_id)
+              setActiveConversationKey(
+                createConversationKey(
+                  conversation.conversation_id,
+                  conversation.ad_id
+                )
+              )
             }
           >
             <div className="flex items-center w-full mb-2">

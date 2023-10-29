@@ -11,11 +11,13 @@ import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
 import { Caregiver, Careneeder, CaregiverAds, Ads } from "../../../types/Types";
 
 type Message = {
-  id?: string; 
+  id?: string;
   sender_id: string;
   content: string;
   recipient_id: string | null;
   createtime?: string | null;
+  ad_id?: number;
+  ad_type?: string;
 };
 
 const realtime = new Ably.Realtime.Promise(
@@ -112,7 +114,7 @@ const ChatWindow: React.FC = () => {
 
   const fetchChatHistory = () => {
     fetch(
-      `${BASE_URL}/api/fetch_messages?sender_id=${phoneNumber_sender}&recipient_id=${phoneNumber_recipient}`
+      `${BASE_URL}/api/fetch_messages?sender_id=${phoneNumber_sender}&recipient_id=${phoneNumber_recipient}&ad_id=${id}&ad_type=${adType}`
     )
       .then((response) => response.json())
       .then((data: Message[]) => {

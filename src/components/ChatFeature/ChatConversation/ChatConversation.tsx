@@ -11,14 +11,19 @@ type Message = {
   content: string;
   recipient_id: string | null;
   createtime?: string | null;
+  ad_id?: number;
+  ad_type?: string;
 };
 
 type ChatConversationProps = {
-  activeConversationId: number | null;
+  activeConversationKey: string | null;
   loggedInUser_phone: string | null;
   recipientId: string | null;
   conversations: Conversation[];
 };
+
+type ConversationId = number;
+type AdId = number;
 
 type Conversation = {
   conversation_id: number;
@@ -54,20 +59,40 @@ const formatTimestamp = (timestamp: string) => {
 };
 
 const ChatConversation: React.FC<ChatConversationProps> = ({
-  activeConversationId,
+  activeConversationKey,
   loggedInUser_phone,
   recipientId,
   conversations,
 }) => {
+  console.log("ChatConversation rerendered with activeConversationKey:", activeConversationKey);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
   const [loading, setLoading] = useState(false); // Added loading state
-  const lastFetchedConversationId = useRef<number | null>(null);
+  const lastFetchedConversationId = useRef<string | null>(null);
 
   const [caregiver, setCaregiver] = useState<Caregiver | null>(null);
   const [careneeder, setCareneeder] = useState<Careneeder | null>(null);
 
-  const conversation_id = activeConversationId;
+  const [ActiveConversationId, setActiveConversationId] = useState<
+    number | null
+  >(null);
+  const [ActiveAdId, setActiveAdId] = useState<number | null>(null);
+
+  const splitConversationKey = (key: string): [ConversationId, AdId] => {
+    const parts = key.split("-");
+    return [Number(parts[0]), Number(parts[1])];
+  };
+
+  // Extracting the conversation ID and Ad ID from the activeConversationKey
+  useEffect(() => {
+    if (activeConversationKey) {
+      const [activeConvId, activeAdId] = splitConversationKey(
+        activeConversationKey
+      );
+      setActiveConversationId(activeConvId);
+      setActiveAdId(activeAdId);
+    }
+  }, [activeConversationKey]);
 
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
@@ -82,21 +107,36 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
 
   console.log("this is channel:", channel);
 
+  console.log(
+    "this is activeconversationid and activeadId:",
+    ActiveConversationId,
+    ActiveAdId
+  );
+
   const fetchChatHistory = async () => {
+    setMessages([]);
     if (
       lastFetchedConversationId.current === null ||
-      lastFetchedConversationId.current === conversation_id
+      lastFetchedConversationId.current === activeConversationKey
     ) {
       setLoading(true); // Start loading
       fetch(
-        `${BASE_URL}/api/fetch_messages_chat_conversation?conversation_id=${conversation_id}`
+        `${BASE_URL}/api/fetch_messages_chat_conversation?conversation_id=${ActiveConversationId}&ad_id=${ActiveAdId}`
       )
         .then((response) => response.json())
         .then((data: Message[]) => {
+          if (!Array.isArray(data)) {
+            console.error("Data from server is not an array:", data);
+            setLoading(false);
+            return;
+          }
+          console.log("Parsed chatconversation data from server:", data);
           // Create a Set from existing message ids
           const existingMessageIds = new Set(
             messages.map((message) => message.id)
           );
+
+          console.log("Existing message IDs:", existingMessageIds);
 
           // Filter out duplicates
           const uniqueNewMessages = data.filter(
@@ -110,49 +150,6 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
           setLoading(false); // Stop loading even if there's an error
         });
     }
-  };
-
-  const sendMessage = () => {
-    const timestamp = new Date().toISOString();
-
-    const uniqueMessageId = `${new Date().getTime()}-${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
-    // Implement your sending logic here using fetch and /api/handle_message
-    const payload = {
-      sender_id: loggedInUser_phone,
-      recipient_id: recipientId,
-      content: newMessage,
-      createtime: timestamp,
-      id: uniqueMessageId,
-    };
-    channel
-      .publish("send_message", payload)
-      .then(() => {
-        // Now send the message data to your backend
-        fetch(`${BASE_URL}/api/handle_message`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sender_id: loggedInUser_phone || "unknown",
-            recipient_id: recipientId,
-            content: newMessage,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Message stored in backend:", data);
-          })
-          .catch((error) => {
-            console.error("There was an error sending the message", error);
-          });
-      })
-      .catch((err) => {
-        console.error("Error sending message:", err);
-      });
-    setNewMessage("");
   };
 
   // This effect will run every time `messages` changes, to auto-scroll to the end
@@ -193,9 +190,10 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
         });
       }
     };
+    console.log("useEffect activeConversationKey:", activeConversationKey);
 
-    if (conversation_id) {
-      setMessages([]);
+    if (activeConversationKey) {
+      
       setLoading(true);
 
       fetchChatHistory()
@@ -203,7 +201,7 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
           // After successfully fetching the chat history,
           // update the last fetched conversation ID to the current active one.
           if (isMounted) {
-            lastFetchedConversationId.current = conversation_id;
+            lastFetchedConversationId.current = activeConversationKey;
             setLoading(false); // Turn off loading
           }
         })
@@ -215,7 +213,8 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
 
       // Unsubscribe from previous subscription if any
       if (currentSubscription) {
-        channel.unsubscribe(currentSubscription);
+        channel.unsubscribe();
+        currentSubscription = null;
       }
 
       // Subscribe to new messages on the channel
@@ -224,16 +223,21 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
       return () => {
         if (currentSubscription) {
           currentSubscription.unsubscribe();
+          currentSubscription = null;
         }
         isMounted = false;
       };
     }
-  }, [loggedInUser_phone, recipientId, conversation_id]);
+  }, [loggedInUser_phone, recipientId, activeConversationKey, ActiveAdId]);
+
 
   const activeConversation = conversations.find(
-    (convo) => convo.conversation_id === activeConversationId
+    //this ActiveConversationId will be the same
+    (convo) =>
+      convo.conversation_id === ActiveConversationId &&
+      convo.ad_id === ActiveAdId
   );
-
+  console.log("conversations---", conversations);
   console.log("activeConversation:", activeConversation);
 
   //retrieve ad's profile and name using ad_id and ad_type
@@ -262,10 +266,10 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
   };
 
   useEffect(() => {
-    console.log("Running useEffect for conversation_id:", conversation_id);
+    console.log("Running useEffect for conversation_id:", ActiveConversationId);
     console.log("Active Conversation data:", activeConversation);
-    console.log("Active Conversation data:", activeConversation?.ad_id);
-    console.log("Active Conversation data:", activeConversation?.ad_type);
+    console.log("Active Conversation ad_id:", activeConversation?.ad_id);
+    console.log("Active Conversation ad_type:", activeConversation?.ad_type);
     if (activeConversation?.ad_type === "careneeders") {
       fetchData(
         `${BASE_URL}/api/all_careneeders/${activeConversation.ad_id}`,
@@ -277,7 +281,7 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
         setCaregiver
       );
     }
-  }, [conversation_id]);
+  }, [activeConversationKey]);
 
   const currentData =
     activeConversation?.ad_type === "careneeders"
@@ -288,23 +292,76 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
 
   console.log("Current data:", currentData);
 
-  const defaultImageUrl =
-    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+  const sendMessage = () => {
+    const timestamp = new Date().toISOString();
+
+    const uniqueMessageId = `${new Date().getTime()}-${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
+    // Implement your sending logic here using fetch and /api/handle_message
+    const payload = {
+      sender_id: loggedInUser_phone,
+      recipient_id: recipientId,
+      content: newMessage,
+      createtime: timestamp,
+      id: uniqueMessageId,
+    };
+    channel
+      .publish("send_message", payload)
+      .then(() => {
+        // Now send the message data to your backend
+        fetch(`${BASE_URL}/api/handle_message`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sender_id: loggedInUser_phone || "unknown",
+            recipient_id: recipientId,
+            content: newMessage,
+            ad_id: activeConversation?.ad_id,
+            ad_type: activeConversation?.ad_type,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Message stored in backend:", data);
+          })
+          .catch((error) => {
+            console.error("There was an error sending the message", error);
+          });
+      })
+      .catch((err) => {
+        console.error("Error sending message:", err);
+      });
+    setNewMessage("");
+  };
 
   return (
     <div className="flex flex-col h-full bg-white overflow-x-hidden mx-auto border-l">
-      <Link
-        to={`/${activeConversation?.ad_type}/id/${activeConversation?.ad_id}?phoneNumber=${loggedInUser_phone}`}
-      >
-        <h1 className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
+      {currentData ? (
+        <Link
+          to={`/${activeConversation?.ad_type}/id/${activeConversation?.ad_id}?phoneNumber=${loggedInUser_phone}`}
+        >
+          <h1 className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
+            <img
+              src={currentData.imageurl}
+              alt="Profile"
+              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full mr-2"
+            />
+            {currentData.name}
+          </h1>
+        </Link>
+      ) : (
+        <div className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
           <img
-            src={currentData?.imageurl || defaultImageUrl}
+            src={activeConversation?.profileImage}
             alt="Profile"
             className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full mr-2"
           />
-          {currentData?.name || "未知"}
-        </h1>
-      </Link>
+          {activeConversation?.name}
+        </div>
+      )}
 
       <div className="flex-grow overflow-y-auto  border-gray-300 p-2 sm:p-4">
         {loading ? (
