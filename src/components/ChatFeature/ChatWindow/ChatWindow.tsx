@@ -249,8 +249,8 @@ const ChatWindow: React.FC = () => {
           </div>
 
           {/* Text */}
-          <div className="flex-grow flex flex-col justify-between mx-auto md:p-5">
-            <div className="flex items-center">
+          <div className="flex-grow flex flex-col justify-between p-1 md:p-5">
+            <div className="flex items-center justify-center md:justify-start ">
               <h3 className="text-xl font-semibold text-blue-700 mr-3">
                 {individual?.name}
               </h3>
@@ -270,7 +270,7 @@ const ChatWindow: React.FC = () => {
             </div>
             <div className="text-gray-600 line-clamp mb-1">
               {associatedAds && (
-                <div>
+                <div className="mx-auto">
                   <p>{associatedAds.title}</p>
                   <p className="line-clamp-3">{associatedAds.description}</p>
                 </div>
@@ -281,48 +281,48 @@ const ChatWindow: React.FC = () => {
       </div>
 
       {/* Chat */}
-      <div className="flex-grow overflow-y-auto max-h-[calc(100vh-500px)]">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`${
-              message.sender_id === (phoneNumber_sender || "")
-                ? "text-right"
-                : "text-left"
-            } my-2 mx-4`}
-          >
+      <div className="flex flex-col h-screen">
+        <div className="flex-grow overflow-y-auto max-h-[calc(100vh-500px)] md:max-h-[calc(100vh-400px)]">
+          {messages.map((message, index) => (
             <div
-              className={`inline-block p-2 rounded ${
+              key={index}
+              className={`${
                 message.sender_id === (phoneNumber_sender || "")
-                  ? "bg-blue-400 text-white"
-                  : "bg-gray-300 text-black"
-              }`}
+                  ? "text-right"
+                  : "text-left"
+              } my-2 mx-4`}
             >
-              {message.content}
-              <div className="mt-1 text-xs">
-                {formatTimestamp(message.createtime || "")}
+              <div
+                className={`inline-block p-2 rounded ${
+                  message.sender_id === (phoneNumber_sender || "")
+                    ? "bg-blue-400 text-white"
+                    : "bg-gray-300 text-black"
+                }`}
+              >
+                {message.content}
+                <div className="mt-1 text-xs">
+                  {formatTimestamp(message.createtime || "")}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        <div id="endOfMessages" ref={endOfMessagesRef}></div>
-        {/* Moved inside scrollable div */}
-      </div>
+          ))}
+          <div id="endOfMessages" ref={endOfMessagesRef}></div>
+        </div>
 
-      {/* Input - Fixed at the bottom */}
-      <div className="flex items-center mt-2 sm:mt-4 border-t pt-2 sm:pt-4 w-full bottom-5">
-        <input
-          className="flex-grow rounded p-2 border border-gray-300 mr-2 ml-5 mb-2"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="请在这里输入..."
-        />
-        <button
-          className="p-2 sm:p-3 rounded bg-teal-400 text-white mr-4 mb-2"
-          onClick={sendMessage}
-        >
-          <BiSend size={16} className="sm:text-xl" />
-        </button>
+        <div className="flex items-center mt-2 sm:mt-4 border-t pt-2 sm:pt-4 w-full">
+          <input
+            className="flex-grow rounded p-2 border border-gray-300 mr-2 ml-5 mb-2"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="请在这里输入..."
+          />
+          <button
+            className="p-2 sm:p-3 rounded bg-teal-400 text-white mr-4 mb-2"
+            onClick={sendMessage}
+          >
+            <BiSend size={16} className="sm:text-xl" />
+          </button>
+        </div>
       </div>
     </div>
   );

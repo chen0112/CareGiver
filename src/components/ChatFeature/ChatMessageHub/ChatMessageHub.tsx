@@ -49,7 +49,7 @@ const ChatMessageHub: React.FC<ChatMessageHubProps> = ({
           关爱网
         </h1>
       </Link>
-      <div className="ml-2 sm:ml-4 md:ml-5 mr-2 sm:mr-4 md:mr-5">
+      <div className="ml-2 sm:ml-4 md:ml-5 mr-2 sm:mr-4 md:mr-5 overflow-y-auto max-h-[calc(100vh-100px)]">
         {/* Adjusted margins for mobile */}
         {conversations.map((conversation) => (
           <div

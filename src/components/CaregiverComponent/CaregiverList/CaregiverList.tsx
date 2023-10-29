@@ -239,6 +239,7 @@ const CaregiverList: React.FC = () => {
           )}
           <Link
             to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+            className="flex items-center justify-center"
           >
             <BiMessageDetail size={24} />
           </Link>

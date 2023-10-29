@@ -4,6 +4,7 @@ import Ably from "ably";
 import { BASE_URL } from "../../../types/Constant";
 import { BiSend } from "react-icons/bi";
 import { Caregiver, Careneeder } from "../../../types/Types";
+import {defaultImageUrl} from "../../../types/Constant";
 
 type Message = {
   id?: string; // Add this line
@@ -64,7 +65,10 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
   recipientId,
   conversations,
 }) => {
-  console.log("ChatConversation rerendered with activeConversationKey:", activeConversationKey);
+  console.log(
+    "ChatConversation rerendered with activeConversationKey:",
+    activeConversationKey
+  );
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
   const [loading, setLoading] = useState(false); // Added loading state
@@ -193,7 +197,6 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     console.log("useEffect activeConversationKey:", activeConversationKey);
 
     if (activeConversationKey) {
-      
       setLoading(true);
 
       fetchChatHistory()
@@ -229,7 +232,6 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
       };
     }
   }, [loggedInUser_phone, recipientId, activeConversationKey, ActiveAdId]);
-
 
   const activeConversation = conversations.find(
     //this ActiveConversationId will be the same
@@ -338,28 +340,29 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white overflow-x-hidden mx-auto border-l">
+    <div className="flex flex-col h-screen bg-white overflow-x-hidden mx-auto border-l min-height: 100vh">
       {currentData ? (
         <Link
           to={`/${activeConversation?.ad_type}/id/${activeConversation?.ad_id}?phoneNumber=${loggedInUser_phone}`}
+          className="no-underline"
         >
           <h1 className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
             <img
-              src={currentData.imageurl}
+              src={currentData.imageurl || defaultImageUrl}
               alt="Profile"
               className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full mr-2"
             />
-            {currentData.name}
+            {currentData.name || "未知"}
           </h1>
         </Link>
       ) : (
         <div className="text-lg font-bold mb-2 flex items-center bg-gray-100 p-4 border-b border-gray-300">
           <img
-            src={activeConversation?.profileImage}
+            src={activeConversation?.profileImage || defaultImageUrl}
             alt="Profile"
             className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 rounded-full mr-2"
           />
-          {activeConversation?.name}
+          {activeConversation?.name || "未知"}
         </div>
       )}
 
