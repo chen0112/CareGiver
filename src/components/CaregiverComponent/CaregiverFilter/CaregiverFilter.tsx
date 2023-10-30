@@ -23,11 +23,17 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
   onFilterChange,
   filterValues,
 }) => {
-  const [location, setLocation] = useState(filterValues.location);
-  const [age, setAge] = useState(filterValues.age);
-  const [gender, setGender] = useState(filterValues.gender);
-  const [experience, setExperience] = useState(filterValues.experience);
-  const [hourlycharge, setHourlyCharge] = useState(filterValues.hourlycharge);
+  const [location, setLocation] = useState<string | undefined>(
+    filterValues.location
+  );
+  const [age, setAge] = useState<string | undefined>(filterValues.age);
+  const [gender, setGender] = useState<string | undefined>(filterValues.gender);
+  const [experience, setExperience] = useState<string | undefined>(
+    filterValues.experience
+  );
+  const [hourlycharge, setHourlyCharge] = useState<string | undefined>(
+    filterValues.hourlycharge
+  );
 
   const handleImmediateFilterChange = (
     stateKey: string,
@@ -59,11 +65,31 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
     setAge(filterValues.age);
   }, [filterValues]);
 
+  const defaultFilter = {
+    location: undefined,
+    age: undefined,
+    gender: undefined,
+    experience: undefined,
+    hourlycharge: undefined,
+  };
+
+  const resetFilters = () => {
+    // Set all local filter states to undefined
+    setLocation(undefined);
+    setAge(undefined);
+    setGender(undefined);
+    setExperience(undefined);
+    setHourlyCharge(undefined);
+
+    // Notify the parent component that the filters have been reset to their defaults
+    onFilterChange(defaultFilter);
+  };
+
   return (
     <div>
       <div className="flex flex-col mb-2 md:mb-4">
         <select
-          value={location}
+          value={location || ""}
           onChange={(e) => {
             const value = e.target.value || undefined;
             handleImmediateFilterChange("location", setLocation, value);
@@ -80,7 +106,7 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
         <select
-          value={age}
+          value={age || ""}
           onChange={(e) => {
             const value = e.target.value || undefined;
             handleImmediateFilterChange("age", setAge, value);
@@ -97,7 +123,7 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
         <select
-          value={gender}
+          value={gender || ""}
           onChange={(e) => {
             const value = e.target.value || undefined;
             handleImmediateFilterChange("gender", setGender, value);
@@ -114,7 +140,7 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
         <select
-          value={experience}
+          value={experience || ""}
           onChange={(e) => {
             const value = e.target.value || undefined;
             handleImmediateFilterChange("experience", setExperience, value);
@@ -131,7 +157,7 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
         <select
-          value={hourlycharge}
+          value={hourlycharge || ""}
           onChange={(e) => {
             const value = e.target.value || undefined;
             handleImmediateFilterChange("hourlycharge", setHourlyCharge, value);
@@ -146,6 +172,12 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
           ))}
         </select>
       </div>
+      <button
+        onClick={resetFilters}
+        className="text-customFontSize md:text-base w-4/5 md:w-full mt-4 px-2 py-2 bg-gray-800 text-white rounded"
+      >
+        重置筛选
+      </button>
     </div>
   );
 };

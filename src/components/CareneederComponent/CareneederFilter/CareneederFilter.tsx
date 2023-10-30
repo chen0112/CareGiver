@@ -25,19 +25,33 @@ type FilterType = {
 
 const CareneederFilter: React.FC<CareneederFilterProps> = ({
   onFilterChange,
-  filterValues
+  filterValues,
 }) => {
-  const [location, setLocation] = useState(filterValues.location);
-  const [hourlycharge, setHourlyCharge] = useState(filterValues.hourlycharge);
+  const [location, setLocation] = useState<string | undefined>(
+    filterValues.location
+  );
+  const [hourlycharge, setHourlyCharge] = useState<string | undefined>(
+    filterValues.hourlycharge
+  );
 
   const [live_in_care, setLiveInCare] = useState(filterValues.live_in_care);
   const [live_out_care, setLiveOutCare] = useState(filterValues.live_out_care);
   const [domestic_work, setDomesticWork] = useState(filterValues.domestic_work);
-  const [meal_preparation, setMealPreparation] = useState(filterValues.meal_preparation);
-  const [companionship, setCompanionship] = useState(filterValues.companionship);
-  const [mobility_support, setMobilitySupport] = useState(filterValues.mobility_support);
-  const [transportation, setTransportation] = useState(filterValues.transportation);
-  const [errands_shopping, setErrandsShopping] = useState(filterValues.errands_shopping);
+  const [meal_preparation, setMealPreparation] = useState(
+    filterValues.meal_preparation
+  );
+  const [companionship, setCompanionship] = useState(
+    filterValues.companionship
+  );
+  const [mobility_support, setMobilitySupport] = useState(
+    filterValues.mobility_support
+  );
+  const [transportation, setTransportation] = useState(
+    filterValues.transportation
+  );
+  const [errands_shopping, setErrandsShopping] = useState(
+    filterValues.errands_shopping
+  );
 
   const handleImmediateFilterChange = (
     stateKey: string,
@@ -70,23 +84,56 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
   useEffect(() => {
     setLocation(filterValues.location);
     setHourlyCharge(filterValues.hourlycharge);
-    setLiveInCare(filterValues.live_in_care );
-    setLiveOutCare(filterValues.live_out_care );
-  setDomesticWork(filterValues.domestic_work );
-  setMealPreparation(filterValues.meal_preparation );
-  setCompanionship(filterValues.companionship );
-  setMobilitySupport(filterValues.mobility_support);
-  setTransportation(filterValues.transportation );
-  setErrandsShopping(filterValues.errands_shopping );
-}, [filterValues]);
+    setLiveInCare(filterValues.live_in_care);
+    setLiveOutCare(filterValues.live_out_care);
+    setDomesticWork(filterValues.domestic_work);
+    setMealPreparation(filterValues.meal_preparation);
+    setCompanionship(filterValues.companionship);
+    setMobilitySupport(filterValues.mobility_support);
+    setTransportation(filterValues.transportation);
+    setErrandsShopping(filterValues.errands_shopping);
+  }, [filterValues]);
+
+  const defaultFilter = {
+    location: undefined,
+    hourlycharge: undefined,
+    live_in_care: undefined,
+    live_out_care: undefined,
+    domestic_work: undefined,
+    meal_preparation: undefined,
+    companionship: undefined,
+    washing_dressing: undefined,
+    nursing_health_care: undefined,
+    mobility_support: undefined,
+    transportation: undefined,
+    errands_shopping: undefined,
+  };
+
+  const resetFilters = () => {
+    // Set all local filter states to undefined
+    setLocation(undefined);
+    setLiveInCare(undefined);
+    setLiveOutCare(undefined);
+    setDomesticWork(undefined);
+    setHourlyCharge(undefined);
+    setMealPreparation(undefined);
+    setCompanionship(undefined);
+    setMobilitySupport(undefined);
+    setTransportation(undefined);
+    setErrandsShopping(undefined);
+
+    // Notify the parent component that the filters have been reset to their defaults
+    onFilterChange(defaultFilter);
+  };
+
   return (
     <div>
       <div className="flex flex-col mb-2 md:mb-4">
         <select
           value={location}
-          onChange={(e) =>{
+          onChange={(e) => {
             const value = e.target.value || undefined;
-            handleImmediateFilterChange("location", setLocation, value)
+            handleImmediateFilterChange("location", setLocation, value);
           }}
           className="text-customFontSize md:text-base w-4/5 md:w-full"
         >
@@ -102,13 +149,9 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
       <div className="flex flex-col mb-2 md:mb-4">
         <select
           value={hourlycharge}
-          onChange={(e) =>{
+          onChange={(e) => {
             const value = e.target.value || undefined;
-            handleImmediateFilterChange(
-              "hourlycharge",
-              setHourlyCharge,
-              value
-            )
+            handleImmediateFilterChange("hourlycharge", setHourlyCharge, value);
           }}
           className="text-customFontSize md:text-base w-4/5 md:w-full"
         >
