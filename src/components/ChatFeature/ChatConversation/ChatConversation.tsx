@@ -4,7 +4,7 @@ import Ably from "ably";
 import { BASE_URL } from "../../../types/Constant";
 import { BiSend } from "react-icons/bi";
 import { Caregiver, Careneeder } from "../../../types/Types";
-import {defaultImageUrl} from "../../../types/Constant";
+import { defaultImageUrl } from "../../../types/Constant";
 
 type Message = {
   id?: string; // Add this line
@@ -196,7 +196,7 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     };
     console.log("useEffect activeConversationKey:", activeConversationKey);
 
-    if (activeConversationKey) {
+    if (activeConversationKey && ActiveAdId) {
       setLoading(true);
 
       fetchChatHistory()
@@ -267,23 +267,54 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
       });
   };
 
+  // 1. Create a flag to keep track of the current request
+  const activeRequest = useRef<number>(0);
+
+  useEffect(() => {
+    // Reset data when the activeConversationKey changes
+    setCaregiver(null);
+    setCareneeder(null);
+
+    console.log("Active Conversation key changed:", activeConversationKey);
+  }, [activeConversationKey]);
+
   useEffect(() => {
     console.log("Running useEffect for conversation_id:", ActiveConversationId);
     console.log("Active Conversation data:", activeConversation);
     console.log("Active Conversation ad_id:", activeConversation?.ad_id);
     console.log("Active Conversation ad_type:", activeConversation?.ad_type);
-    if (activeConversation?.ad_type === "careneeders") {
-      fetchData(
-        `${BASE_URL}/api/all_careneeders/${activeConversation.ad_id}`,
-        setCareneeder
-      );
-    } else if (activeConversation?.ad_type === "caregivers") {
-      fetchData(
-        `${BASE_URL}/api/all_caregivers/${activeConversation.ad_id}`,
-        setCaregiver
-      );
+
+    if (activeConversation) {
+      // Increment the request counter
+      activeRequest.current += 1;
+      const thisRequest = activeRequest.current;
+
+      const handleData = (data: any) => {
+        if (thisRequest === activeRequest.current) {
+          // Only update the state if this is the current active request
+          if (activeConversation.ad_type === "careneeders") {
+            setCareneeder(data);
+          } else if (activeConversation.ad_type === "caregivers") {
+            setCaregiver(data);
+          }
+        }
+      };
+
+      if (activeConversation.ad_type === "careneeders") {
+        fetchData(
+          `${BASE_URL}/api/all_careneeders/${activeConversation.ad_id}`,
+          handleData
+        );
+      } else if (activeConversation.ad_type === "caregivers") {
+        fetchData(
+          `${BASE_URL}/api/all_caregivers/${activeConversation.ad_id}`,
+          handleData
+        );
+      }
     }
-  }, [activeConversationKey]);
+  }, [activeConversation]);
+
+  console.log("Current caregiver:", caregiver);
 
   const currentData =
     activeConversation?.ad_type === "careneeders"
@@ -291,6 +322,8 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
       : activeConversation?.ad_type === "caregivers"
       ? caregiver
       : null;
+
+  console.log("activeConversation?.ad_type:", activeConversation?.ad_type);
 
   console.log("Current data:", currentData);
 
