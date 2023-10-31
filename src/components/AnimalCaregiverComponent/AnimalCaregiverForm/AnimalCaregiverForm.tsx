@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from "react";
 import { AnimalCaregiverForm } from "../../../types/Types";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import getCroppedImg from "../../CaregiverComponent/CaregiverForm/CropperImg";
 import Cropper from "react-easy-crop";
@@ -25,16 +25,6 @@ interface CropArea {
   height: number;
 }
 
-const initialFormData: Partial<AnimalCaregiverForm> = {
-  name: "",
-  phone: "",
-  location: [],
-  age: null,
-  education: "",
-  gender: "",
-  years_of_experience: null,
-};
-
 interface Option {
   label: string;
   value: string;
@@ -48,6 +38,16 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
   updateCaregivers,
   getCaregivers,
 }) => {
+  const { phone } = useParams<{ phone: string }>();
+  const initialFormData: Partial<AnimalCaregiverForm> = {
+    name: "",
+    phone: phone,
+    location: [],
+    age: null,
+    education: "",
+    gender: "",
+    years_of_experience: null,
+  };
   const [formData, setFormData] =
     useState<Partial<AnimalCaregiverForm>>(initialFormData);
 
@@ -263,11 +263,11 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
     const missingFields = [];
     if (!formData.name || formData.name.length === 0)
       missingFields.push("名字");
-    if (!formData.phone || formData.phone.length === 0)
-      missingFields.push("电话");
+    // if (!formData.phone || formData.phone.length === 0)
+    //   missingFields.push("电话");
     if (!imageurl) missingFields.push("照片");
     if (!formData.location || formData.location.length === 0)
-    missingFields.push("地址");
+      missingFields.push("地址");
 
     if (missingFields.length > 0) {
       setMissingFields(missingFields);
@@ -495,7 +495,7 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
+        {/* <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="phone">
             电话 (请与注册电话一致):
           </label>
@@ -510,7 +510,7 @@ const AnimalCaregiverWebForm: React.FC<AnimalCaregiverFormProps> = ({
             value={formData.phone}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
 
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="location">

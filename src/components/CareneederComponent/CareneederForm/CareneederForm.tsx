@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Careneeder } from "../../../types/Types";
 import { MultiSelect } from "react-multi-select-component";
 import "./CareneederForm.css";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import getCroppedImg from "./CropperImg";
 import Cropper from "react-easy-crop";
@@ -31,23 +31,6 @@ interface Option {
   value: string;
 }
 
-const initialFormData: Partial<Careneeder> = {
-  name: "",
-  phone: "",
-  hourlycharge: "",
-  location: [],
-  live_in_care: false,
-  live_out_care: false,
-  domestic_work: false,
-  meal_preparation: false,
-  companionship: false,
-  washing_dressing: false,
-  nursing_health_care: false,
-  mobility_support: false,
-  transportation: false,
-  errands_shopping: false,
-};
-
 const locationOptions = LOCATION_OPTIONS;
 
 const CareneederForm: React.FC<CareneederFormProps> = ({
@@ -56,6 +39,24 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
   updateCareneeder,
   getCareneeder,
 }) => {
+  const { phone } = useParams<{ phone: string }>();
+
+  const initialFormData: Partial<Careneeder> = {
+    name: "",
+    phone: phone,
+    hourlycharge: "",
+    location: [],
+    live_in_care: false,
+    live_out_care: false,
+    domestic_work: false,
+    meal_preparation: false,
+    companionship: false,
+    washing_dressing: false,
+    nursing_health_care: false,
+    mobility_support: false,
+    transportation: false,
+    errands_shopping: false,
+  };
   const [formData, setFormData] =
     useState<Partial<Careneeder>>(initialFormData);
 
@@ -255,8 +256,8 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
     // if (!imageurl) missingFields.push("照片");
     if (!formData.name || formData.name.length === 0)
       missingFields.push("名字");
-    if (!formData.phone || formData.phone.length === 0)
-      missingFields.push("电话");
+    // if (!formData.phone || formData.phone.length === 0)
+    //   missingFields.push("电话");
     if (!formData.location || formData.location.length === 0)
       missingFields.push("地址");
 
@@ -299,7 +300,9 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
 
         // Navigate to the schedule page with the careneeder's ID as a query parameter
         setTimeout(() => {
-          navigate(`/signup_careneeder/schedule?careneederId=${careneederId}&phone=${formData.phone}`);
+          navigate(
+            `/signup_careneeder/schedule?careneederId=${careneederId}&phone=${formData.phone}`
+          );
         }, 2000);
       })
       .catch((error) => console.error("Error adding careneeder:", error));
@@ -485,7 +488,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
+        {/* <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="phone">
             电话 (请与注册电话一致):
           </label>
@@ -500,7 +503,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
             value={formData.phone}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
 
         <div className="flex flex-col items-center justify-center bg-white shadow p-4 rounded-lg mb-4">
           <label className="mb-2 text-gray-700" htmlFor="hourlyCharge">

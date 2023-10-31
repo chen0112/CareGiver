@@ -247,7 +247,7 @@ const AnimalCareneederList: React.FC = () => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item href="/signup_animalcaregiver">
+                <Dropdown.Item href={`/signup_animalcaregiver/phone/${phone}`}>
                   发布新广告
                 </Dropdown.Item>
                 <Dropdown.Item href={`/myanimalcaregiverform/phone/${phone}`}>

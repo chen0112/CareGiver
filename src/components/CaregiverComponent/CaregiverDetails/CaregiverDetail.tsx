@@ -8,6 +8,7 @@ import { FaEnvelope } from "react-icons/fa";
 import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
 import "./CaregiverDetail.css";
 import { BASE_URL } from "../../../types/Constant";
+import {defaultImageUrl} from "../../../types/Constant"
 
 const CaregiverDetail: React.FC = () => {
   const { id } = useParams();

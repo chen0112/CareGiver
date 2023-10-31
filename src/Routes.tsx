@@ -107,7 +107,7 @@ const AppRoutes: React.FC = () => {
         />
         {/* Pass updateCaregivers and getCaregivers as props to the CaregiverForm component */}
         <Route
-          path="/signup_caregiver"
+          path="/signup_caregiver/phone/:phone"
           element={
             <CaregiverForm
               updateCaregivers={updateCaregivers}
@@ -132,7 +132,7 @@ const AppRoutes: React.FC = () => {
         {/* careneeder */}
 
         <Route
-          path="/signup_careneeder"
+          path="/signup_careneeder/phone/:phone"
           element={
             <CareneederForm
               updateCareneeder={updateCareneeders}
@@ -176,7 +176,7 @@ const AppRoutes: React.FC = () => {
           element={<Register userType="animalcaregiver" />}
         />
         <Route
-          path="/signup_animalcaregiver"
+          path="/signup_animalcaregiver/phone/:phone"
           element={
             <AnimalCaregiverWebForm
               updateCaregivers={updateAnimalCaregiverForm}
@@ -219,7 +219,7 @@ const AppRoutes: React.FC = () => {
           element={<Register userType="animalcareneeder" />}
         />
         <Route
-          path="/signup_animalcareneeder"
+          path="/signup_animalcareneeder/phone/:phone"
           element={
             <AnimalCareneederWebForm
               updateAnimalCareneeders={updateAnimalCaregiverForm}

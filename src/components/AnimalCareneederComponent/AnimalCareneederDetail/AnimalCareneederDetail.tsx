@@ -7,6 +7,7 @@ import { FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { useAnimalCareneederAdsContext } from "../../../context/AnimalCareneederAdsContext";
 import { useAnimalCareneederContext } from "../../../context/AnimalCareneederContext";
 import { BASE_URL } from "../../../types/Constant";
+import { defaultImageUrl } from "../../../types/Constant";
 
 const AnimalCareneederDetail: React.FC = () => {
   const { id } = useParams();
@@ -17,9 +18,6 @@ const AnimalCareneederDetail: React.FC = () => {
 
   const { animalcareneederAds } = useAnimalCareneederAdsContext();
   const { animalcareneeders } = useAnimalCareneederContext();
-
-  const defaultImageUrl =
-    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
 
   console.log("Context animalcareneederAds state:", animalcareneederAds);
 
@@ -78,16 +76,23 @@ const AnimalCareneederDetail: React.FC = () => {
               关爱网
             </h1>
           </Link>
-          <Link
-            to={`/animalcareneeders/message?id=${
-              AnimalCareneederForm?.id
-            }&phoneNumber_recipient=${
-              AnimalCareneederForm?.phone
-            }&phoneNumber_sender=${phoneNumber}&adType=${"animalcareneeders"}`}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center mr-4"
-          >
-            <FaEnvelope className="mr-2" /> 发送消息
-          </Link>
+          {!(
+            AnimalCareneederForm?.phone === phoneNumber ||
+            !AnimalCareneederForm?.phone ||
+            !phoneNumber ||
+            phoneNumber === "undefined"
+          ) && (
+            <Link
+              to={`/animalcareneeders/message?id=${
+                AnimalCareneederForm?.id
+              }&phoneNumber_recipient=${
+                AnimalCareneederForm?.phone
+              }&phoneNumber_sender=${phoneNumber}&adType=${"animalcareneeders"}`}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center mr-4"
+            >
+              <FaEnvelope className="mr-2" /> 发送消息
+            </Link>
+          )}
         </div>
 
         <hr className="border-t border-black-300 mx-1 my-2" />

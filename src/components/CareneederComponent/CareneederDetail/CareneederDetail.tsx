@@ -8,9 +8,7 @@ import dayjs from "dayjs";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
 import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
 import { BASE_URL } from "../../../types/Constant";
-
-const defaultImageUrl =
-  "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+import { defaultImageUrl } from "../../../types/Constant";
 
 const CareneederDetail: React.FC = () => {
   const { id } = useParams();

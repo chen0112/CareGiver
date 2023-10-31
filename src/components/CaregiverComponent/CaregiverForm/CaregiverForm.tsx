@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import { Caregiver } from "../../../types/Types";
 import "./CaregiverForm.css";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import getCroppedImg from "./CropperImg";
 import Cropper from "react-easy-crop";
@@ -26,17 +26,6 @@ interface CropArea {
   height: number;
 }
 
-const initialFormData: Partial<Caregiver> = {
-  name: "",
-  phone: "",
-  location: [],
-  age: null,
-  education: "",
-  gender: "",
-  years_of_experience: null,
-  hourlycharge: "",
-};
-
 interface Option {
   label: string;
   value: string;
@@ -50,6 +39,17 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
   updateCaregivers,
   getCaregivers,
 }) => {
+  const { phone } = useParams<{ phone: string }>();
+  const initialFormData: Partial<Caregiver> = {
+    name: "",
+    phone: phone,
+    location: [],
+    age: null,
+    education: "",
+    gender: "",
+    years_of_experience: null,
+    hourlycharge: "",
+  };
   const [formData, setFormData] = useState<Partial<Caregiver>>(initialFormData);
 
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
@@ -308,7 +308,9 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
 
         resetForm();
         setTimeout(() => {
-          navigate(`/signup_caregiver/ads?caregiverId=${caregiverId}&phone=${formData.phone }`);
+          navigate(
+            `/signup_caregiver/ads?caregiverId=${caregiverId}&phone=${formData.phone}`
+          );
         }, 2000);
       })
       .catch((error) => console.error("Error adding caregiver:", error));
