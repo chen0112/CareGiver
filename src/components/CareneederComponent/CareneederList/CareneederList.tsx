@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CareneederCard from "../CareneederCard/CareneederCard";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCareneederContext } from "../../../context/CareneederContext";
 import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
@@ -10,6 +10,8 @@ import { Accounts } from "../../../types/Types";
 import { BASE_URL } from "../../../types/Constant";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Dropdown from "react-bootstrap/Dropdown";
+import { defaultImageUrl } from "../../../types/Constant";
+import { useAuth } from "../../../context/AuthContext";
 
 const CareneederList: React.FC = () => {
   const { careneeders } = useCareneederContext();
@@ -20,11 +22,16 @@ const CareneederList: React.FC = () => {
   const { userType } = useParams<{ userType: string }>();
 
   const [accountData, setAccountData] = useState<Accounts | null>(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  const handleSignOut = async () => {
+    try {
+      await signOut(); // this might be asynchronous depending on your implementation
+      navigate("/"); // navigate to the homepage after sign out
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   type FilterType = {
@@ -220,8 +227,6 @@ const CareneederList: React.FC = () => {
   });
 
   console.log("Filtered careneeders:", filteredCareneeders);
-  const defaultImageUrl =
-    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png";
 
   return (
     <div className="relative">
@@ -260,6 +265,7 @@ const CareneederList: React.FC = () => {
                 <Dropdown.Item href={`/mycaregiver/phone/${phone}`}>
                   我的广告
                 </Dropdown.Item>
+                <Dropdown.Item onClick={handleSignOut}>退出登录</Dropdown.Item>
                 {/* ... Add other dropdown links similarly */}
               </Dropdown.Menu>
             </Dropdown>

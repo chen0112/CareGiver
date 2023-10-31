@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
 import { BASE_URL } from "../../../types/Constant";
+import ErrorComponent from "../../ErrorComponent/ErrorComponent";
 
 const MyAnimalCaregiver: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -22,10 +23,10 @@ const MyAnimalCaregiver: React.FC = () => {
   console.log("Context animalcaregiverAds state:", animalcaregiverAds);
 
   useEffect(() => {
-    fetch( `${BASE_URL}/api/myanimalcaregiverform/${phone}`) // Adjust the API endpoint
+    fetch(`${BASE_URL}/api/myanimalcaregiverform/${phone}`) // Adjust the API endpoint
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("请先发布您的广告！");
         }
         return response.json();
       })
@@ -56,9 +57,8 @@ const MyAnimalCaregiver: React.FC = () => {
   }
 
   if (error) {
-    return <p>错误: {error}</p>;
+    return <ErrorComponent message={`${error}`} userType={"animalcaregiver"} />;
   }
-
   return (
     <div>
       <div className="flex items-center mx-9 py-3">

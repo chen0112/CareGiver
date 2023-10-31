@@ -1,7 +1,7 @@
 // CaregiverList.tsx
 import React, { useEffect, useState } from "react";
 import AnimalCaregiverCard from "../AnimalCaregiverCard/AnimalCaregiverCard";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
 import { BiHeart, BiMessageDetail } from "react-icons/bi";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
@@ -12,6 +12,7 @@ import { BASE_URL } from "../../../types/Constant";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import { defaultImageUrl } from "../../../types/Constant";
+import { useAuth } from "../../../context/AuthContext";
 
 const AnimalCaregiverList: React.FC = () => {
   const { animalcaregivers } = useAnimalCaregiverContext();
@@ -22,11 +23,16 @@ const AnimalCaregiverList: React.FC = () => {
   const { userType } = useParams<{ userType: string }>();
 
   const [accountData, setAccountData] = useState<Accounts | null>(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  const handleSignOut = async () => {
+    try {
+      await signOut(); // this might be asynchronous depending on your implementation
+      navigate("/"); // navigate to the homepage after sign out
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   type FilterType = {
@@ -249,6 +255,7 @@ const AnimalCaregiverList: React.FC = () => {
                 <Dropdown.Item href={`/myanimalcareneederform/phone/${phone}`}>
                   我的广告
                 </Dropdown.Item>
+                <Dropdown.Item onClick={handleSignOut}>退出登录</Dropdown.Item>
                 {/* ... Add other dropdown links similarly */}
               </Dropdown.Menu>
             </Dropdown>

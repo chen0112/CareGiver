@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CaregiverCard from "../CaregiverCard/CaregiverCard";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useCaregiverContext } from "../../../context/CaregiverContext";
 import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
 import "./CaregiverList.css";
@@ -11,6 +11,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { Accounts } from "../../../types/Types";
 import { BASE_URL } from "../../../types/Constant";
 import { defaultImageUrl } from "../../../types/Constant";
+import { useAuth } from "../../../context/AuthContext";
 
 const CaregiverList: React.FC = () => {
   const { caregivers } = useCaregiverContext();
@@ -21,9 +22,16 @@ const CaregiverList: React.FC = () => {
 
   const [accountData, setAccountData] = useState<Accounts | null>(null);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(); // this might be asynchronous depending on your implementation
+      navigate("/"); // navigate to the homepage after sign out
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   type FilterType = {
@@ -231,6 +239,7 @@ const CaregiverList: React.FC = () => {
                 <Dropdown.Item href={`/mycareneeder/phone/${phone}`}>
                   我的广告
                 </Dropdown.Item>
+                <Dropdown.Item onClick={handleSignOut}>退出登录</Dropdown.Item>
                 {/* ... Add other dropdown links similarly */}
               </Dropdown.Menu>
             </Dropdown>

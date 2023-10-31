@@ -12,6 +12,7 @@ import AnimalCaregiverAdsProvider from "./context/AnimalCaregiverAdsContext";
 import AnimalCareneederProvider from "./context/AnimalCareneederContext";
 import AnimalCareneederFormProvider from "./context/AnimalCareneederFormContext";
 import AnimalCareneederAdsProvider from "./context/AnimalCareneederAdsContext";
+import AuthProvider from "./context/AuthContext";
 
 const App: React.FC = () => {
   return (
@@ -27,7 +28,9 @@ const App: React.FC = () => {
                       <AnimalCareneederAdsProvider>
                         <AnimalCareneederProvider>
                           <AnimalCareneederFormProvider>
-                            <Routes />
+                            <AuthProvider>
+                              <Routes />
+                            </AuthProvider>
                           </AnimalCareneederFormProvider>
                         </AnimalCareneederProvider>
                       </AnimalCareneederAdsProvider>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import { BASE_URL } from "../../types/Constant";
+import { useAuth } from "../../context/AuthContext";
 
 interface SignInProps {
   userType: "caregiver" | "careneeder" | "animalcaregiver" | "animalcareneeder"; // Define the valid user types here
@@ -16,6 +17,8 @@ const SignIn: React.FC<SignInProps> = ({ userType }) => {
 
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const { signIn, currentUser } = useAuth();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -40,6 +43,9 @@ const SignIn: React.FC<SignInProps> = ({ userType }) => {
       });
 
       const data = await response.json();
+      console.log("data from sign in:", data.user);
+
+      signIn(data.user, userType);
 
       if (response.ok && data.success) {
         // Use dynamic navigation paths based on userType

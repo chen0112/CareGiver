@@ -5,6 +5,7 @@ import { Caregiver } from "../../../types/Types";
 import { Link, useParams } from "react-router-dom";
 import { useCaregiverAdsContext } from "../../../context/CaregiverAdsContext";
 import { BASE_URL } from "../../../types/Constant";
+import ErrorComponent from "../../ErrorComponent/ErrorComponent";
 
 const MyCaregivers: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -19,7 +20,7 @@ const MyCaregivers: React.FC = () => {
     fetch(`${BASE_URL}/api/mycaregiver/${phone}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("请先发布您的广告！");
         }
         return response.json();
       })
@@ -46,7 +47,7 @@ const MyCaregivers: React.FC = () => {
   }
 
   if (error) {
-    return <p>错误: {error}</p>;
+    return <ErrorComponent message={`${error}`} userType={"caregiver"}/>;
   }
 
   return (

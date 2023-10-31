@@ -1,29 +1,50 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
-import { AiOutlineClose } from "react-icons/ai";
-import { HiOutlineMenuAlt4 } from "react-icons/hi";
-import AD1 from "./ad1.png";
-import AD2 from "./ad2.png";
 import AD3 from "./ad3.png";
 import AD4 from "./ad4.png";
 import AD5 from "./ad5.png";
-import AD6 from "./ad7.png";
 import AD8 from "./ad8.png";
 import User1 from "./user1.png";
 import User2 from "./user2.png";
 import User3 from "./user3.png";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
-  const [nav, setNav] = useState(false);
-  const [logo, setLogo] = useState(false);
-  const handleNav = () => {
-    setNav(!nav);
-    setLogo(!logo);
+  const navigate = useNavigate();
+
+  const { signIn, currentUser } = useAuth();
+  console.log("homepage currentuser:", currentUser?.phone)
+
+  const checkAuthenticationAndNavigate = (userType: string) => {
+    if (currentUser) {
+      // Assuming `currentUser` comes from `useAuth()`
+      // Navigate user to their dashboard or any other route you see fit
+      // Depending on the `userType` you might want to navigate to different dashboards
+      if (userType === "caregiver") {
+        navigate(
+          `/careneeders/phone/${currentUser.phone}/userType/${userType}`
+        );
+      } else if (userType === "careneeder") {
+        navigate(`/caregivers/phone/${currentUser.phone}/userType/${userType}`);
+      } else if (userType === "animalcaregiver") {
+        navigate(
+          `/animalcareneeders/phone/${currentUser.phone}/userType/${userType}`
+        );
+      } else if (userType === "animalcareneeder") {
+        navigate(
+          `/animalcaregivers/phone/${currentUser.phone}/userType/${userType}`
+        );
+      }
+    } else {
+      // If not logged in, navigate to the respective sign-in page
+      navigate(`/signin/${userType}`);
+    }
   };
 
   return (
-    <div className="container mx-auto px-6 py-2">
+    <div className="relative container mx-auto px-6 py-2">
       <header className="flex w-full justify-center items-center h-20 text-white relative px-2 md:px-1 mx-auto">
         {/* Logo */}
         <div className="absolute left-8 flex items-center">
@@ -31,105 +52,6 @@ const HomePage: React.FC = () => {
           <h1 className="font-bold text-red-500 text-3xl ml-2 my-auto">
             关爱网
           </h1>
-        </div>
-
-        {/* Links (Center-aligned) */}
-        <ul className="hidden md:flex justify-center space-x-8 items-center m-0 p-0">
-          <li>
-            <Link
-              to="/signin/caregiver"
-              className="no-underline text-black font-bold py-2 px-4 rounded"
-            >
-              护工登陆
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              to="/signin/careneeder"
-              className="no-underline text-black font-bold py-2 px-4 rounded"
-            >
-              雇主登陆
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/register/caregiver"
-              className="no-underline text-black font-bold py-2 px-4 rounded"
-            >
-              护工注册
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/register/careneeder"
-              className="no-underline text-black font-bold py-2 px-4 rounded"
-            >
-              雇主注册
-            </Link>
-          </li>
-        </ul>
-
-        {/* Mobile Menu Icon */}
-        <div
-          onClick={handleNav}
-          className="md:hidden z-10 absolute right-4 top-1/2 transform -translate-y-1/2"
-        >
-          {nav ? (
-            <AiOutlineClose className="text-gray-900" size={20} />
-          ) : (
-            <HiOutlineMenuAlt4 className="text-gray-900" size={20} />
-          )}
-        </div>
-
-        {/* Mobile menu dropdown */}
-        <div
-          onClick={handleNav}
-          className="md:hidden z-10 absolute right-4 top-1/2 transform -translate-y-1/2"
-        >
-          {nav ? (
-            <AiOutlineClose className="text-gray-900" size={20} />
-          ) : (
-            <HiOutlineMenuAlt4 className="text-gray-900" size={20} />
-          )}
-        </div>
-
-        {/* Mobile menu dropdown */}
-        <div
-          className={
-            nav
-              ? "absolute text-black left-0 top-0 w-full bg-gray-100 transition-all ease-in-out duration-500"
-              : "absolute left-0 top-0 w-full bg-gray-100 transition-all ease-in-out duration-500 h-0 overflow-hidden"
-          }
-        >
-          <ul className={nav ? "py-4 px-7" : "h-0 overflow-hidden"}>
-            <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-              关爱网
-            </h1>
-
-            <hr className="border-t border-black-300 mx-1 my-2" />
-
-            <li>
-              <Link to="/signin/caregiverr" className="text-black">
-                护工登陆
-              </Link>
-            </li>
-            <li>
-              <Link to="/signin/careneeder" className="text-black">
-                雇主登陆
-              </Link>
-            </li>
-            <li>
-              <Link to="/signin/caregiver" className="text-black">
-                护工注册
-              </Link>
-            </li>
-            <li>
-              <Link to="/register/careneeder" className="text-black">
-                雇主注册
-              </Link>
-            </li>
-          </ul>
         </div>
       </header>
 
@@ -153,38 +75,44 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between">
-        <Link
-          to="/signin/caregiver"
-          className="flex-none p-6 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md"
+      {/* Pinkish rounded rectangle */}
+      <div className="flex justify-center relative bg-cyan-200 rounded-lg my-4 p-4 h-[200px] z-0">
+        <h5>寻找你身边的帮工</h5>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2 -mt-12 hover:z-10 md:flex md:flex-row md:mt-0 justify-between">
+        {/* Make this button overlap with the pinkish section on mobile */}
+        <button 
+          onClick={() => checkAuthenticationAndNavigate("caregiver")}
+          className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
           <img src={AD3} alt="caregiver" className="w-20 h-16 mb-3" />
           <span className="text-black text-sm no-underline">成为护工</span>
-        </Link>
+        </button>
 
-        <Link
-          to="/signin/careneeder"
-          className="flex-none p-6 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md"
+        <button
+          onClick={() => checkAuthenticationAndNavigate("careneeder")}
+          className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
-          <img src={AD4} alt="careneeder post" className="w-20 h-16 mb-3" />
+          <img src={AD4} alt="careneeder" className="w-20 h-16 mb-3" />
           <span className="text-black text-sm no-underline">雇主发布</span>
-        </Link>
+        </button>
 
-        <Link
-          to="/signin/animalcaregiver"
-          className="flex-none p-6 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md"
+        <button
+          onClick={() => checkAuthenticationAndNavigate("animalcaregiver")}
+          className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
-          <img src={AD5} alt="Animal Care" className="w-20 h-16 mb-3" />
+          <img src={AD5} alt="animalcaregiver" className="w-20 h-16 mb-3" />
           <span className="text-black text-sm no-underline">成为宠托师</span>
-        </Link>
+        </button>
 
-        <Link
-          to="/signin/animalcareneeder"
-          className="flex-none p-6 rounded-lg bg-white-400 hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md"
+        <button
+          onClick={() => checkAuthenticationAndNavigate("animalcareneeder")}
+          className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
-          <img src={AD8} alt="Animal Careneeder" className="w-20 h-16 mb-3" />
+          <img src={AD8} alt="animalcareneeder" className="w-20 h-16 mb-3" />
           <span className="text-black text-sm no-underline">宠物托管</span>
-        </Link>
+        </button>
       </div>
 
       <div className="container mx-auto px-6 py-8">

@@ -34,6 +34,8 @@ import ChatWindow from "./components/ChatFeature/ChatWindow/ChatWindow";
 import ChatPage from "./components/ChatFeature/ChatPage/ChatPage";
 import ChatWindowAnimal from "./components/ChatFeature/ChatWindow/ChatWindowAnimal";
 import { BASE_URL } from "./types/Constant";
+import ErrorComponent from "./components/ErrorComponent/ErrorComponent";
+import ProtectedRoute from "./components/ProtectedRouteComponent/ProtectedRouteComponent";
 
 const API_URL = `${BASE_URL}/api/all_caregivers`;
 
@@ -119,7 +121,10 @@ const AppRoutes: React.FC = () => {
           path="/signin/caregiver"
           element={<SignIn userType="caregiver" />}
         />
-        <Route path="/caregivers/phone/:phone/userType/:userType" element={<CaregiverList />} />
+        <Route
+          path="/caregivers/phone/:phone/userType/:userType"
+          element={<ProtectedRoute element={<CaregiverList />} />}
+        />
         <Route path="/caregivers/id/:id" element={<CaregiverDetail />} />
         <Route path="/mycaregiver/phone/:phone" element={<MyCaregivers />} />
         <Route path="/signup_caregiver/ads" element={<CaregiverAds />} />
@@ -145,7 +150,11 @@ const AppRoutes: React.FC = () => {
           path="/register/careneeder"
           element={<Register userType="careneeder" />}
         />
-        <Route path="/careneeders/phone/:phone/userType/:userType" element={<CareneederList />} />
+
+        <Route
+          path="/careneeders/phone/:phone/userType/:userType"
+          element={<ProtectedRoute element={<CareneederList />} />}
+        />
         <Route path="/careneeders/id/:id" element={<CareneederDetail />} />
         <Route path="/mycareneeder/phone/:phone" element={<MyCareneeders />} />
         <Route
@@ -185,9 +194,10 @@ const AppRoutes: React.FC = () => {
           path="/signup_animalcaregiver/details/ads"
           element={<AnimalCaregiverAd />}
         />
+
         <Route
           path="/animalcaregivers/phone/:phone/userType/:userType"
-          element={<AnimalCaregiverList />}
+          element={<ProtectedRoute element={<AnimalCaregiverList />} />}
         />
         <Route
           path="/animalcaregivers/id/:id"
@@ -223,9 +233,10 @@ const AppRoutes: React.FC = () => {
           path="/signup_animalcareneeder/details"
           element={<AnimalCareneeder />}
         />
+
         <Route
           path="/animalcareneeders/phone/:phone/userType/:userType"
-          element={<AnimalCareneederList />}
+          element={<ProtectedRoute element={<AnimalCareneederList />} />}
         />
         <Route
           path="/signup_animalcareneeder/details/ads"
@@ -243,9 +254,18 @@ const AppRoutes: React.FC = () => {
         {/* chat window */}
         <Route path="/caregivers/message" element={<ChatWindow />} />
         <Route path="/careneeders/message" element={<ChatWindow />} />
-        <Route path="/animalcareneeders/message" element={<ChatWindowAnimal />} />
-        <Route path="/animalcaregivers/message" element={<ChatWindowAnimal />} />
+        <Route
+          path="/animalcareneeders/message"
+          element={<ChatWindowAnimal />}
+        />
+        <Route
+          path="/animalcaregivers/message"
+          element={<ChatWindowAnimal />}
+        />
         <Route path="/chatmessagehub" element={<ChatPage />} />
+
+        {/* error page */}
+        <Route path="/error_page" element={<ErrorComponent />} />
       </Routes>
     </BrowserRouter>
   );

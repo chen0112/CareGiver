@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
 import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
 import { BASE_URL } from "../../../types/Constant";
+import ErrorComponent from "../../ErrorComponent/ErrorComponent";
 
 const MyCareneeders: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -23,7 +24,7 @@ const MyCareneeders: React.FC = () => {
     fetch(`${BASE_URL}/api/mycareneeder/${phone}`) // Adjust the API endpoint
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("请先发布您的广告！");
         }
         return response.json();
       })
@@ -50,7 +51,7 @@ const MyCareneeders: React.FC = () => {
   }
 
   if (error) {
-    return <p>错误: {error}</p>;
+    return <ErrorComponent message={`${error}`} userType={"careneeder"}/>;
   }
 
   return (
