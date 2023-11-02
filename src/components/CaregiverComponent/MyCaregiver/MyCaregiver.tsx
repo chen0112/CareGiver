@@ -47,7 +47,7 @@ const MyCaregivers: React.FC = () => {
   }
 
   if (error) {
-    return <ErrorComponent message={`${error}`} userType={"caregiver"}/>;
+    return <ErrorComponent message={`${error}`} userType={"caregiver"} phone={phone}/>;
   }
 
   return (

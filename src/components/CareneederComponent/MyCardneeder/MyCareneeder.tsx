@@ -51,7 +51,7 @@ const MyCareneeders: React.FC = () => {
   }
 
   if (error) {
-    return <ErrorComponent message={`${error}`} userType={"careneeder"}/>;
+    return <ErrorComponent message={`${error}`} userType={"careneeder"} phone={phone}/>;
   }
 
   return (

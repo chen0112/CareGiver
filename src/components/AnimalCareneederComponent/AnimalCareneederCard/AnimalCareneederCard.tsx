@@ -7,9 +7,7 @@ import {
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { BASE_URL, LOCATION_OPTIONS } from "../../../types/Constant";
-
-const defaultImageUrl =
-  "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+import { defaultImageUrl } from "../../../types/Constant";
 
 interface AnimalcareneederCardProps {
   animalcareneeder: AnimalCareneeder | undefined;
@@ -18,8 +16,8 @@ interface AnimalcareneederCardProps {
   loggedInUserPhone?: string; // Add the logged-in user's phone number here
   onUpdateanimalcareneederForm?: (
     updatedanimalcareneederForm: AnimalCareneederForm
-  ) => void; 
-  className?: string; 
+  ) => void;
+  className?: string;
   phoneNumber?: string;
 }
 
@@ -35,8 +33,8 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
   animalcareneedersForm,
   animalcareneederAds,
   loggedInUserPhone,
-  onUpdateanimalcareneederForm, 
-  phoneNumber
+  onUpdateanimalcareneederForm,
+  phoneNumber,
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
@@ -175,11 +173,11 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
             {/* Text */}
             <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
-                <h3 className="text-xl font-semibold text-blue-700 mr-3">
+                <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-1 mt-1">
                   {animalcareneedersForm.name}
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />
-                <span className="text-gray-600 ml-2 mb-1">
+                <span className="text-gray-600 ml-1 mb-1 text-xs md:text-base">
                   {animalcareneedersForm.location &&
                   Array.isArray(animalcareneedersForm.location) &&
                   animalcareneedersForm.location.length > 0
@@ -188,13 +186,13 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
                         .join(", ")
                     : "无"}
                 </span>
-                <span className="mb-1 ml-3 text-black">
+                <span className="mb-1 ml-1 text-xs md:text-base text-black">
                   {animalcareneeder?.hourlycharge
                     ? `¥ ${animalcareneeder.hourlycharge}元/小时`
                     : "¥ 收费不详"}
                 </span>
               </div>
-              <div className="text-gray-600 mb-8 line-clamp">
+              <div className="text-gray-600 mb-3 line-clamp text-xs md:text-base">
                 {editedanimalcareneederAds && (
                   <div>
                     <p>{editedanimalcareneederAds.title}</p>

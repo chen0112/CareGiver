@@ -10,11 +10,13 @@ interface ErrorComponentProps {
     | "caregiver"
     | "animalcaregiver"
     | "animalcareneeder"; // Add your user types here, adjust as necessary
+  phone?: string; // Added phone prop
 }
 
 const ErrorComponent: React.FC<ErrorComponentProps> = ({
   message = "Oops! Something went wrong.",
   userType,
+  phone, 
 }) => {
   const navigate = useNavigate();
 
@@ -25,13 +27,13 @@ const ErrorComponent: React.FC<ErrorComponentProps> = ({
   const getLinkPath = (userType?: string) => {
     switch (userType) {
       case "careneeder":
-        return "/signup_careneeder";
+        return `/signup_careneeder/phone/${phone}` ;
       case "caregiver":
-        return "/signup_caregiver";
+        return `/signup_caregiver/phone/${phone}`;
       case "animalcaregiver":
-        return "/signup_animalcaregiver";
+        return `/signup_animalcaregiver/phone/${phone}`;
       case "animalcareneeder":
-        return "/signup_animalcareneeder";
+        return `/signup_animalcareneeder/phone/${phone}`;
       default:
         return "#"; // Fallback route if none of the types match
     }

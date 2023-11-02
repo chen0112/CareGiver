@@ -57,7 +57,7 @@ const MyAnimalCaregiver: React.FC = () => {
   }
 
   if (error) {
-    return <ErrorComponent message={`${error}`} userType={"animalcaregiver"} />;
+    return <ErrorComponent message={`${error}`} userType={"animalcaregiver"} phone={phone}/>;
   }
   return (
     <div>
