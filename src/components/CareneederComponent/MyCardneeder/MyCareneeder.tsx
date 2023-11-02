@@ -72,7 +72,7 @@ const MyCareneeders: React.FC = () => {
 
       <div className="text-center my-4">
         <Link
-          to="/signup_careneeder"
+          to={`/signup_careneeder/phone/${phone}`}
           className="no-underline py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
         >
           发布新广告

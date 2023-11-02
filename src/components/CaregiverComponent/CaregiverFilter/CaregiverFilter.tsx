@@ -104,6 +104,7 @@ const CaregiverFilter: React.FC<CaregiverFilterProps> = ({
           ))}
         </select>
       </div>
+      
       <div className="flex flex-col mb-2 md:mb-4">
         <select
           value={age || ""}

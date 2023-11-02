@@ -257,7 +257,7 @@ const CaregiverList: React.FC = () => {
 
       <div className="flex flex-row w-full">
         {/* Left sidebar for `CaregiverFilter` */}
-        <div className="w-1/4 p-2 md:p-4 border-r flex justify-center">
+        <div className="w-1/4 p-1 md:p-4 border-r flex justify-center">
           <CaregiverFilter
             onFilterChange={handleFilterChange}
             filterValues={filter}
