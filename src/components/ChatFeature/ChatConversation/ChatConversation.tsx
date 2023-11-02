@@ -5,6 +5,7 @@ import { BASE_URL } from "../../../types/Constant";
 import { BiSend } from "react-icons/bi";
 import { Caregiver, Careneeder } from "../../../types/Types";
 import { defaultImageUrl } from "../../../types/Constant";
+import { v4 as uuidv4 } from "uuid";
 
 type Message = {
   id?: string; // Add this line
@@ -21,6 +22,8 @@ type ChatConversationProps = {
   loggedInUser_phone: string | null;
   recipientId: string | null;
   conversations: Conversation[];
+  setIsUserOnline: (value: boolean) => void;
+  isUserOnline: boolean | false;
 };
 
 type ConversationId = number;
@@ -36,14 +39,6 @@ type Conversation = {
   ad_id: number;
   ad_type: string;
 };
-
-const realtime = new Ably.Realtime.Promise(
-  "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY"
-);
-
-realtime.connection.on("failed", (stateChange) => {
-  console.error("Ably realtime connection error:", stateChange.reason);
-});
 
 const formatTimestamp = (timestamp: string) => {
   if (!timestamp) return ""; // Return an empty string if no timestamp is provided
@@ -64,11 +59,10 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
   loggedInUser_phone,
   recipientId,
   conversations,
+  setIsUserOnline,
+  isUserOnline,
 }) => {
-  console.log(
-    "ChatConversation rerendered with activeConversationKey:",
-    activeConversationKey
-  );
+  console.log("ChatConversation rendered");
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
   const [loading, setLoading] = useState(false); // Added loading state
@@ -105,11 +99,152 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     Number(recipientId || 0),
   ].sort((a, b) => a - b);
 
+  const realtimeRef = useRef<InstanceType<typeof Ably.Realtime.Promise> | null>(
+    null
+  );
+  const channelRef = useRef<Ably.Types.RealtimeChannelPromise | null>(null);
+
   const channelName = `chat_${sortedIds[0]}_${sortedIds[1]}`;
 
-  const channel = realtime.channels.get(`[?rewind=10]${channelName}`);
+  useEffect(() => {
+    // Initialization of realtime
+    if (!realtimeRef.current) {
+      realtimeRef.current = new Ably.Realtime.Promise({
+        key: "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY",
+        clientId: loggedInUser_phone || uuidv4(),
+      });
 
-  console.log("this is channel:", channel);
+      realtimeRef.current.connection.on("failed", (stateChange) => {
+        console.error("Ably realtime connection error:", stateChange.reason);
+      });
+    }
+    // Initialization of the channel reference
+    if (realtimeRef.current) {
+      // If the channelRef already exists, detach from the channel
+      // to cleanup before re-initializing.
+      if (channelRef.current && channelRef.current.state === 'attached') {
+        channelRef.current.detach();
+      }
+
+      channelRef.current = realtimeRef.current.channels.get(
+        `[?rewind=10]${channelName}`
+      );
+    }
+    // Return cleanup function to detach from the channel when the component is unmounted
+    return () => {
+      if (channelRef.current && channelRef.current.state === 'attached') {
+        channelRef.current.detach();
+      }
+    };
+  }, [channelName]);
+
+  useEffect(() => {
+    if (!channelRef.current) return;
+
+    // Define the state change handler
+    const onStateChange = (stateChange: Ably.Types.ChannelStateChange) => {
+      if (stateChange.current === "attached") {
+        // Once the channel is attached, we can proceed with other operations
+
+        // Enter the chat
+        channelRef
+          .current!.presence.enter("User has entered the chat.")
+          .then(() => {
+            console.log("Successfully announced entry into the chat.");
+          })
+          .catch((err) => {
+            console.error("Error entering the chat:", err);
+          });
+
+        // Handle presence events
+        const handlePresence = (message: Ably.Types.PresenceMessage) => {
+          console.log(
+            "Presence event:",
+            message.action,
+            "for user",
+            message.clientId
+          );
+        };
+
+        channelRef.current!.presence.subscribe(handlePresence);
+
+        // Cleanup function to unsubscribe
+        return () => {
+          channelRef.current!.presence.unsubscribe(handlePresence);
+        };
+      }
+      // ... handle other states if needed
+    };
+
+    // Attach the state change handler
+    channelRef.current.on(onStateChange);
+
+    // Cleanup
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.off(onStateChange);
+        // If needed, you can add detach or other cleanup logic related to the channel
+      }
+    };
+  }, [channelRef.current]);
+
+  useEffect(() => {
+    if (!channelRef.current) return;
+
+    // Listener for users entering the channel
+    const handleEnter = (member: Ably.Types.PresenceMessage) => {
+      console.log("User entered:", member.clientId);
+      if (member.clientId === recipientId) {
+        setIsUserOnline(true);
+      }
+    };
+
+    // Listener for users leaving the channel
+    const handleLeave = (member: Ably.Types.PresenceMessage) => {
+      console.log("User left:", member.clientId);
+      if (member.clientId === recipientId) {
+        setIsUserOnline(false);
+      }
+    };
+
+    channelRef.current.presence.subscribe("enter", handleEnter);
+    channelRef.current.presence.subscribe("leave", handleLeave);
+
+    // Fetch the initial presence set when the component mounts
+    if (channelRef.current.state === "attached") {
+      channelRef.current.presence
+        .get()
+        .then((members) => {
+          console.log("Members in the channel:", members);
+          const isRecipientOnline = members.some(
+            (member) => member.clientId === recipientId
+          );
+          setIsUserOnline(isRecipientOnline);
+        })
+        .catch((err) => {
+          console.error("Error fetching presence data:", err);
+        });
+    }
+
+    // Cleanup function
+    return () => {
+      channelRef.current!.presence.unsubscribe("enter", handleEnter);
+      channelRef.current!.presence.unsubscribe("leave", handleLeave);
+      if (
+        channelRef.current!.state !== "detaching" &&
+        channelRef.current!.state !== "detached"
+      ) {
+        channelRef
+          .current!.presence.leave("User has left the chat.")
+          .catch((err) => {
+            console.error("Error leaving the chat:", err);
+          });
+      }
+    };
+  }, [channelRef.current, recipientId]);
+
+  console.log("this is channel:", channelRef.current);
+  console.log("this is recipientId:", recipientId);
 
   console.log(
     "this is activeconversationid and activeadId:",
@@ -216,12 +351,12 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
 
       // Unsubscribe from previous subscription if any
       if (currentSubscription) {
-        channel.unsubscribe();
+        channelRef.current!.unsubscribe();
         currentSubscription = null;
       }
 
       // Subscribe to new messages on the channel
-      channel.subscribe("send_message", handleNewMessage);
+      channelRef.current!.subscribe("send_message", handleNewMessage);
 
       return () => {
         if (currentSubscription) {
@@ -341,8 +476,8 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
       createtime: timestamp,
       id: uniqueMessageId,
     };
-    channel
-      .publish("send_message", payload)
+    channelRef
+      .current!.publish("send_message", payload)
       .then(() => {
         // Now send the message data to your backend
         fetch(`${BASE_URL}/api/handle_message`, {
@@ -398,7 +533,13 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
           {activeConversation?.name || "未知"}
         </div>
       )}
-
+      {/* <div
+        className={`mx-4 mt-2 text-center ${
+          isUserOnline ? "text-green-500" : "text-gray-500"
+        }`}
+      >
+        {isUserOnline ? "在线中" : "下线中，请留言"}
+      </div> */}
       <div className="flex-grow overflow-y-auto  border-gray-300 p-2 sm:p-4">
         {loading ? (
           <p className="text-sm sm:text-base">加载中...</p>

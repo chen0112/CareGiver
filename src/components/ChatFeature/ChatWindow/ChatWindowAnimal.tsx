@@ -18,6 +18,7 @@ import {
   AnimalCareneeder,
   AnimalCareneederAds,
 } from "../../../types/Types";
+import { defaultImageUrl } from "../../../types/Constant";
 
 type Message = {
   id?: string;
@@ -77,11 +78,12 @@ const ChatWindow: React.FC = () => {
   const adType = queryParams.get("adType");
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
-  const defaultImageUrl =
-    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
-
   let individual: AnimalCaregiverForm | AnimalCareneederForm | undefined;
-  let associatedAds: AnimalCaregiverAds | AnimalCareneederAds | null | undefined = undefined;
+  let associatedAds:
+    | AnimalCaregiverAds
+    | AnimalCareneederAds
+    | null
+    | undefined = undefined;
   let associatedAnimals: AnimalCaregiver | AnimalCareneeder | null | undefined;
 
   console.log("adType:", adType);
@@ -95,15 +97,19 @@ const ChatWindow: React.FC = () => {
     console.log("Fetched animalcaregivers individual:", individual);
 
     associatedAds = individual
-      ? animalcaregiverAds?.find((ad) => ad.animalcaregiverid === individual!.id)
+      ? animalcaregiverAds?.find(
+          (ad) => ad.animalcaregiverid === individual!.id
+        )
       : null;
     console.log("Fetched animalassociatedAds for caregivers:", associatedAds);
 
     associatedAnimals = individual
-    ? animalcaregivers?.find((ad) => ad.animalcaregiverid === individual!.id)
-    : null;
-  console.log("Fetched animal associatedAds for caregivers:", associatedAnimals);
-
+      ? animalcaregivers?.find((ad) => ad.animalcaregiverid === individual!.id)
+      : null;
+    console.log(
+      "Fetched animal associatedAds for caregivers:",
+      associatedAnimals
+    );
   } else if (adType === "animalcareneeders") {
     individual =
       id !== null && !isNaN(id)
@@ -112,14 +118,21 @@ const ChatWindow: React.FC = () => {
     console.log("Fetched animalcareneeders individual:", individual);
 
     associatedAds = individual
-      ? animalcareneederAds?.find((ad) => ad.animalcareneederid === individual!.id)
+      ? animalcareneederAds?.find(
+          (ad) => ad.animalcareneederid === individual!.id
+        )
       : null;
     console.log("Fetched associatedAds for animalcareneeders:", associatedAds);
 
     associatedAnimals = individual
-    ? animalcareneeders?.find((ad) => ad.animalcareneederid === individual!.id)
-    : null;
-    console.log("Fetched associatedAds for animalcareneeders:", associatedAnimals);
+      ? animalcareneeders?.find(
+          (ad) => ad.animalcareneederid === individual!.id
+        )
+      : null;
+    console.log(
+      "Fetched associatedAds for animalcareneeders:",
+      associatedAnimals
+    );
   }
 
   // Constructing the channel name
@@ -136,7 +149,7 @@ const ChatWindow: React.FC = () => {
 
   const fetchChatHistory = () => {
     fetch(
-      `${BASE_URL}/api/fetch_messages?sender_id=${phoneNumber_sender}&recipient_id=${phoneNumber_recipient}`
+      `${BASE_URL}/api/fetch_messages?sender_id=${phoneNumber_sender}&recipient_id=${phoneNumber_recipient}&ad_id=${id}&ad_type=${adType}`
     )
       .then((response) => response.json())
       .then((data: Message[]) => {

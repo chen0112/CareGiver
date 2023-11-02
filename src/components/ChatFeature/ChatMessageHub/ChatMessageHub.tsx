@@ -16,17 +16,22 @@ type Conversation = {
 
 type ConversationId = number;
 type AdId = number;
+type OnlineStatus = {
+  [phone: string]: boolean;
+};
 
 type ChatMessageHubProps = {
   conversations: Conversation[];
   setActiveConversationKey: React.Dispatch<React.SetStateAction<string | null>>;
   activeConversationKey: string | null;
+  isUserOnline: OnlineStatus | null;
 };
 
 const ChatMessageHub: React.FC<ChatMessageHubProps> = ({
   conversations,
   setActiveConversationKey,
   activeConversationKey,
+  isUserOnline,
 }) => {
   const createConversationKey = (
     conversation_id: ConversationId,
@@ -84,11 +89,19 @@ const ChatMessageHub: React.FC<ChatMessageHubProps> = ({
                   alt={conversation.name}
                 />
               </div>
-
               {/* Second section for name and timestamp */}
               <div className="flex-grow flex flex-col md:flex-row items-center justify-center md:justify-start">
-                <span className="font-medium text-base mb-2 md:mb-0 md:mr-3 sm:text-lg">
+                <span className="font-medium text-base mb-1 md:mb-0 md:mr-3 sm:text-lg">
                   {conversation.name}
+                </span>
+                <span
+                  className={`text-center text-customFontSize sm:text-sm sm:mb-1 ${
+                    isUserOnline && isUserOnline[conversation.other_user_phone] ? "text-green-500" : "text-gray-500"
+                  }`}
+                >
+                  {isUserOnline && isUserOnline[conversation.other_user_phone]
+                    ? "在线中"
+                    : "下线中，请留言"}
                 </span>
                 <span className="text-customFontSize text-gray-500 text-right flex-none md:ml-auto">
                   {conversation.timestamp}

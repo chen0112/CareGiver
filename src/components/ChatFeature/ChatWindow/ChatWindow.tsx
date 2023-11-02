@@ -9,6 +9,8 @@ import { BASE_URL } from "../../../types/Constant";
 import { useCareneederContext } from "../../../context/CareneederContext";
 import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
 import { Caregiver, Careneeder, CaregiverAds, Ads } from "../../../types/Types";
+import { defaultImageUrl } from "../../../types/Constant";
+import useUserOnlineStore from "../../StateOnlineStore/StateOnlineStore";
 
 type Message = {
   id?: string;
@@ -68,8 +70,7 @@ const ChatWindow: React.FC = () => {
   const adType = queryParams.get("adType");
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
-  const defaultImageUrl =
-    "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+  const { isUserOnline } = useUserOnlineStore();
 
   let individual: Caregiver | Careneeder | undefined;
   let associatedAds: CaregiverAds | Ads | null | undefined = undefined;
@@ -282,6 +283,14 @@ const ChatWindow: React.FC = () => {
 
       {/* Chat */}
       <div className="flex flex-col h-screen">
+        {/* Display online/offline status */}
+        <div
+          className={`mx-4 mt-2 text-center ${
+            isUserOnline ? "text-green-500" : "text-gray-500"
+          }`}
+        >
+          {isUserOnline ? "在线中" : "下线中，请留言"}
+        </div>
         <div className="flex-grow overflow-y-auto max-h-[calc(100vh-500px)] md:max-h-[calc(100vh-400px)]">
           {messages.map((message, index) => (
             <div

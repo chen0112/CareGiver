@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatMessageHub from "../ChatMessageHub/ChatMessageHub";
 import ChatConversation from "../ChatConversation/ChatConversation";
 import { useLocation } from "react-router-dom";
 import { BASE_URL } from "../../../types/Constant";
+import useUserOnlineStore from "../../StateOnlineStore/StateOnlineStore";
 
 type Conversation = {
   conversation_id: number;
@@ -46,10 +47,39 @@ const ChatPage: React.FC = () => {
       .then((data) => {
         console.log("Parsed Conversations Data: ", data);
         setConversations(data.conversations);
+
+        // Call the checkUserStatuses function right after setting conversations
+        checkUserStatuses(data.conversations);
       })
       .catch((error) => {
         console.error("There was an error fetching the conversations", error);
       });
+
+    const checkUserStatuses = (updatedConversations: Conversation[]) => {
+      const otherUsersData = {
+        phone_numbers: updatedConversations.map(
+          (conv) => conv.other_user_phone
+        ),
+      };
+
+      console.log("phone_numbers list:", otherUsersData);
+
+      fetch(`${BASE_URL}/api/usersstatus`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(otherUsersData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setIsUserOnline2(data);
+          console.log("user status data:", data);
+        })
+        .catch((error) => {
+          console.error("Error fetching user statuses", error);
+        });
+    };
   }, []);
 
   useEffect(() => {
@@ -68,6 +98,51 @@ const ChatPage: React.FC = () => {
     }
   }, [activeConversationKey, conversations]);
 
+  const startTime = useRef(Date.now());
+
+  useEffect(() => {
+    const checkUserStatusesInterval = () => {
+      const otherUsersData = {
+        phone_numbers: conversations.map((conv) => conv.other_user_phone),
+      };
+
+      console.log("phone_numbers list:", otherUsersData);
+
+      fetch(`${BASE_URL}/api/usersstatus`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(otherUsersData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setIsUserOnline2(data);
+          console.log("user status data:", data);
+        })
+        .catch((error) => {
+          console.error("Error fetching user statuses", error);
+        });
+    };
+
+    const intervalId = setInterval(() => {
+      if (Date.now() - startTime.current < 30 * 60 * 1000) {
+        // 30 minutes
+        checkUserStatusesInterval();
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 60000); // every 1 minute
+
+    return () => {
+      clearInterval(intervalId); // Clear the interval when the component is unmounted
+    };
+  }, [conversations]);
+
+  const { isUserOnline, setIsUserOnline } = useUserOnlineStore();
+
+  const [isUserOnline2, setIsUserOnline2] = useState({});
+
   return (
     <div className="flex h-screen">
       <div style={{ flex: 1 }}>
@@ -75,6 +150,7 @@ const ChatPage: React.FC = () => {
           conversations={conversations}
           setActiveConversationKey={setActiveConversationKey}
           activeConversationKey={activeConversationKey}
+          isUserOnline={isUserOnline2}
         />
       </div>
       <div style={{ flex: 2 }}>
@@ -83,6 +159,8 @@ const ChatPage: React.FC = () => {
           loggedInUser_phone={user_phone}
           recipientId={recipientId}
           conversations={conversations}
+          isUserOnline={isUserOnline}
+          setIsUserOnline={setIsUserOnline}
         />
       </div>
     </div>
