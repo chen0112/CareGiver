@@ -32,7 +32,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
   careneederAd,
   loggedInUserPhone,
   onUpdateCareneeder, // Receive the update function from the parent component
-  phoneNumber
+  phoneNumber,
 }) => {
   const imageStyle: React.CSSProperties = {
     objectFit: "cover",
@@ -163,18 +163,18 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
             {/* Text */}
             <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
-                <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-3 mt-1">
+                <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-1 mt-1">
                   {careneeder.name}
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />
-                <span className="text-gray-600 ml-2 mb-1 text-xs md:text-base">
+                <span className="text-gray-600 ml-1 mb-1 text-xs md:text-base">
                   {careneeder.location &&
                   Array.isArray(careneeder.location) &&
                   careneeder.location.length > 0
                     ? careneeder.location.map((loc) => loc.label).join(", ")
                     : "无"}
                 </span>
-                <span className="mb-1 ml-3 text-xs md:text-base text-black">
+                <span className="mb-1 ml-1 text-xs md:text-base text-black">
                   {careneeder?.hourlycharge
                     ? `¥ ${careneeder.hourlycharge}元/小时`
                     : "¥ 收费不详"}
@@ -194,8 +194,8 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
           {careneeder.phone === loggedInUserPhone && (
             <button
               onClick={handleEditClick}
-              className="bg-blue-600 hover:bg-blue-700 text-xs md:text-base text-white font-semibold py-2 px-4 rounded text-center" 
-              >
+              className="bg-blue-600 hover:bg-blue-700 text-xs md:text-base text-white font-semibold py-2 px-4 rounded text-center"
+            >
               编辑
             </button>
           )}

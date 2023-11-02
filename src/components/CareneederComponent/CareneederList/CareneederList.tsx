@@ -282,7 +282,7 @@ const CareneederList: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <div className="flex flex-row w-full">
-        <div className="w-1/4 p-2 md:p-4 border-r flex justify-center">
+        <div className="w-1/4 p-1 md:p-4 border-r flex justify-center">
           <CareneederFilter
             onFilterChange={handleFilterChange}
             filterValues={filter}

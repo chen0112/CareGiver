@@ -166,7 +166,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
 
       {/* Add checkboxes for boolean filters */}
       <div className="flex flex-col mb-2 md:mb-4">
-        <label className="text-customFontSize md:text-base w-4/5 md:w-full">
+        <label className="text-customFontSize md:text-base w-4/5 md:w-full flex items-center">
           <input
             type="checkbox"
             className="mr-1"
@@ -184,7 +184,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
       </div>
 
       <div className="flex flex-col mb-2 md:mb-4">
-        <label className="text-customFontSize md:text-base w-4/5 md:w-full">
+        <label className="text-customFontSize md:text-base w-4/5 md:w-full flex items-center">
           <input
             type="checkbox"
             className="mr-1"
@@ -219,7 +219,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         </label>
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
-        <label className="text-customFontSize md:text-base w-4/5 md:w-full">
+        <label className="text-customFontSize md:text-base w-4/5 md:w-full flex items-center">
           <input
             type="checkbox"
             className="mr-1"
@@ -236,7 +236,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         </label>
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
-        <label className="text-customFontSize md:text-base w-4/5 md:w-full">
+        <label className="text-customFontSize md:text-base w-4/5 md:w-full flex items-center">
           <input
             type="checkbox"
             className="mr-1"
@@ -253,7 +253,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         </label>
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
-        <label className="text-customFontSize md:text-base w-4/5 md:w-full">
+        <label className="text-customFontSize md:text-base w-4/5 md:w-full flex items-center">
           <input
             type="checkbox"
             className="mr-1"
@@ -270,7 +270,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         </label>
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
-        <label className="text-customFontSize md:text-base w-4/5 md:w-full">
+        <label className="text-customFontSize md:text-base w-4/5 md:w-full flex items-center">
           <input
             type="checkbox"
             className="mr-1"
@@ -287,7 +287,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
         </label>
       </div>
       <div className="flex flex-col mb-2 md:mb-4">
-        <label className="text-customFontSize md:text-base w-4/5 md:w-full">
+        <label className="text-customFontSize md:text-base w-4/5 md:w-full flex items-center">
           <input
             type="checkbox"
             className="mr-1"
