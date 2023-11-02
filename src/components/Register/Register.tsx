@@ -235,24 +235,8 @@ const Register: React.FC<RegisterProps> = ({ userType }) => {
         if (response.ok && data.success) {
           setSuccessMsg("创建账号成功!");
           resetForm();
-          // Navigate immediately without delay
-          if (userType === "caregiver") {
-            navigate(
-              `/careneeders/phone/${formData.phone}/userType/${userType}`
-            );
-          } else if (userType === "careneeder") {
-            navigate(
-              `/caregivers/phone/${formData.phone}/userType/${userType}`
-            );
-          } else if (userType === "animalcaregiver") {
-            navigate(
-              `/animalcareneeders/phone/${formData.phone}/userType/${userType}`
-            );
-          } else if (userType === "animalcareneeder") {
-            navigate(
-              `/animalcaregivers/phone/${formData.phone}/userType/${userType}`
-            );
-          }
+          // Navigate to /signin/{userType} regardless of the user type
+          navigate(`/signin/${userType}`);
         } else {
           setErrorMsg("注册失败: " + (data.error || "Unknown Error"));
         }
