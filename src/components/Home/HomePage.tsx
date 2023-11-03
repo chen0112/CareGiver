@@ -10,12 +10,16 @@ import User2 from "./user2.png";
 import User3 from "./user3.png";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { SearchOutlined } from "@ant-design/icons";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
   const { signIn, currentUser } = useAuth();
-  console.log("homepage currentuser:", currentUser?.phone)
+  console.log("homepage currentuser:", currentUser?.phone);
 
   const checkAuthenticationAndNavigate = (userType: string) => {
     if (currentUser) {
@@ -43,6 +47,28 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false, // to use default tailwind styles without arrows
+    className: "md:hidden", // only display on mobile
+  };
+
+  const [location, setLocation] = useState<string>("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocation(e.target.value);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && location.trim()) {
+      navigate("/signin/caregiver");
+    }
+  };
+
   return (
     <div className="relative container mx-auto px-6 py-2">
       <header className="flex w-full justify-center items-center h-20 text-white relative px-2 md:px-1 mx-auto">
@@ -56,7 +82,6 @@ const HomePage: React.FC = () => {
       </header>
 
       <hr className="border-t border-black-300 mx-1 my-1" />
-
       {/* New Image Container */}
       <div className="flex flex-wrap justify-between items-center my-0">
         <div className="w-full md:w-1/2 p-0 md:p-2">
@@ -76,13 +101,24 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Pinkish rounded rectangle */}
-      <div className="flex justify-center relative bg-cyan-200 rounded-lg my-4 p-4 h-[200px] z-0">
-        <h5>寻找你身边的帮工</h5>
+      <div className="flex flex-col items-center justify-center relative bg-cyan-200 rounded-lg my-4 p-4 h-[200px] z-0">
+        <h5 className="text-center mb-4">寻找你身边的帮工</h5>
+        <div className="relative w-3/4">
+          <input
+            type="text"
+            value={location}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+            placeholder="输入地点..."
+            className="ml-1 w-full px-10 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-300"
+          />
+          <SearchOutlined className="absolute text-gray-400 left-3 top-1/2 transform -translate-y-2/4 ml-1" />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 -mt-12 hover:z-10 md:flex md:flex-row md:mt-0 justify-between">
         {/* Make this button overlap with the pinkish section on mobile */}
-        <button 
+        <button
           onClick={() => checkAuthenticationAndNavigate("caregiver")}
           className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
@@ -115,7 +151,55 @@ const HomePage: React.FC = () => {
         </button>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-8 md:hidden">
+        <div className="reviews-carousel">
+          <Slider {...settings}>
+            {/* Repeat the following block for each review */}
+            <div className="flex flex-col m-2 shadow-md p-4 rounded-lg">
+              <div className="flex flex-row items-center mb-4">
+                <img
+                  src={User1}
+                  alt="User 1"
+                  className="w-16 h-16 rounded-full"
+                />
+                <span className="text-black font-bold ml-4">陈女士</span>
+              </div>
+              <p className="text-gray-700">
+                护工对我肠梗阻手术后的母亲提供了非常专业和细心的服务。他们不仅技术娴熟，还很有爱心和耐心。让我母亲在康复过程中感到非常安心和舒适。强烈推荐！
+              </p>
+            </div>
+            <div className="flex flex-col m-2 shadow-md p-4 rounded-lg">
+              <div className="flex flex-row items-center mb-4">
+                <img
+                  src={User2}
+                  alt="User 2"
+                  className="w-16 h-16 rounded-full"
+                />
+                <span className="text-black font-bold ml-4">张女士</span>
+              </div>
+              <p className="text-gray-700">
+                由于工作原因，我无法每时每刻照顾我有阿尔兹海默症的父亲，但是我有幸找到一位经验丰富的长期护工，这样我不在家的时候，也不会担心我父亲出现任何意外了。
+              </p>
+            </div>
+            <div className="flex flex-col m-2 shadow-md p-4 rounded-lg">
+              <div className="flex flex-row items-center mb-4">
+                <img
+                  src={User3}
+                  alt="User 3"
+                  className="w-16 h-16 rounded-full"
+                />
+                <span className="text-black font-bold ml-4">王先生</span>
+              </div>
+              <p className="text-gray-700">
+                强烈推荐小玲护工，她工作能力出色，高效又细致。具备很强的责任心和对细节的敏感度。如果你需要一个负责的人，她就是你的首选。非常诚实，让我随时都能信任她照看我的家。
+              </p>
+            </div>
+            {/* End of review block */}
+          </Slider>
+        </div>
+      </div>
+
+      <div className="hidden md:flex md:flex-row justify-between">
         <div className="flex flex-col md:flex-row justify-between">
           <div className="flex flex-col m-2 shadow-md p-4 rounded-lg">
             <div className="flex flex-row items-center mb-4">

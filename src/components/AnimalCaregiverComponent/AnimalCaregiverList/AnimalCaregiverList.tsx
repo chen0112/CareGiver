@@ -232,6 +232,12 @@ const AnimalCaregiverList: React.FC = () => {
         </Link>
 
         <div className="flex space-x-4 mr-8">
+          <Link
+            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+            className="flex items-center justify-center mt-0.5"
+          >
+            <BiMessageDetail size={24} />
+          </Link>
           {accountData && (
             <Dropdown>
               <Dropdown.Toggle
@@ -255,17 +261,26 @@ const AnimalCaregiverList: React.FC = () => {
                 <Dropdown.Item href={`/myanimalcareneederform/phone/${phone}`}>
                   我的广告
                 </Dropdown.Item>
+                <Dropdown.Item
+                  href={`/careneeders/phone/${phone}/userType/${userType}`}
+                >
+                  护工招聘
+                </Dropdown.Item>
+                <Dropdown.Item
+                  href={`/caregivers/phone/${phone}/userType/${userType}`}
+                >
+                  护工
+                </Dropdown.Item>
+                <Dropdown.Item
+                  href={`/animalcareneeders/phone/${phone}/userType/${userType}`}
+                >
+                  宠托师招聘
+                </Dropdown.Item>
                 <Dropdown.Item onClick={handleSignOut}>退出登录</Dropdown.Item>
                 {/* ... Add other dropdown links similarly */}
               </Dropdown.Menu>
             </Dropdown>
           )}
-          <Link
-            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
-            className="flex items-center justify-center"
-          >
-            <BiMessageDetail size={24} />
-          </Link>
         </div>
       </div>
 
@@ -283,7 +298,7 @@ const AnimalCaregiverList: React.FC = () => {
         {/* Right main content area */}
         <div className="flex flex-col items-center space-y-2 md:space-y-4 w-3/4 p-2 md:p-4">
           {/* Adjusted text sizes for main content */}
-          <div className="text-center w-full text-lg md:text-xl font-medium md:font-semibold mb-1 md:mb-3">
+          <div className="text-center w-full text-lg md:text-2xl font-medium md:font-semibold mb-1 md:mb-3">
             宠托师
           </div>
 

@@ -5,6 +5,7 @@ import { BiHeart } from "react-icons/bi";
 import { BASE_URL } from "../../types/Constant";
 import { useAuth } from "../../context/AuthContext";
 
+
 interface SignInProps {
   userType: "caregiver" | "careneeder" | "animalcaregiver" | "animalcareneeder"; // Define the valid user types here
 }

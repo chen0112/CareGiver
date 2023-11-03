@@ -242,6 +242,13 @@ const CareneederList: React.FC = () => {
         </Link>
 
         <div className="flex space-x-4 mr-8">
+          <Link
+            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
+            className="flex items-center justify-center mt-0.5"
+          >
+            <BiMessageDetail size={24} />
+          </Link>
+
           {accountData && (
             <Dropdown>
               <Dropdown.Toggle
@@ -265,17 +272,26 @@ const CareneederList: React.FC = () => {
                 <Dropdown.Item href={`/mycaregiver/phone/${phone}`}>
                   我的广告
                 </Dropdown.Item>
+                <Dropdown.Item
+                  href={`/caregivers/phone/${phone}/userType/${userType}`}
+                >
+                  护工板块
+                </Dropdown.Item>
+                <Dropdown.Item
+                  href={`/animalcareneeders/phone/${phone}/userType/${userType}`}
+                >
+                  宠托师招聘
+                </Dropdown.Item>
+                <Dropdown.Item
+                  href={`/animalcaregivers/phone/${phone}/userType/${userType}`}
+                >
+                  宠托师
+                </Dropdown.Item>
                 <Dropdown.Item onClick={handleSignOut}>退出登录</Dropdown.Item>
                 {/* ... Add other dropdown links similarly */}
               </Dropdown.Menu>
             </Dropdown>
           )}
-          <Link
-            to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}
-            className="flex items-center justify-center"
-          >
-            <BiMessageDetail size={24} />
-          </Link>
         </div>
       </div>
 
@@ -290,7 +306,7 @@ const CareneederList: React.FC = () => {
         </div>
 
         <div className="flex flex-col items-center space-y-2 md:space-y-4 w-3/4 p-2 md:p-4">
-          <div className="text-center w-full text-2xl font-semibold mb-3">
+          <div className="text-center w-full text-xl md:text-2xl font-semibold md:font-semibold mb-1 md:mb-3">
             雇主广告
           </div>
           <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
