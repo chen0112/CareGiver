@@ -153,30 +153,29 @@ const AnimalCaregiverCard: React.FC<AnimalcaregiverCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center mb-6 mx-2 md:mx-6">
+        <div className="flex flex-col items-center mb-6 mx-2 md:h-96">
           {/* Link to Animal Caregiver's Profile */}
           <Link
             to={`/animalcaregivers/id/${animalcaregiversForm.id}?phoneNumber=${phoneNumber}`}
-            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
+            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}
-            <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
+            <div className="flex justify-center items-center p-3 md:p-1">
               <img
                 src={animalcaregiversForm.imageurl || defaultImageUrl}
                 alt={animalcaregiversForm.name}
-                style={imageStyle}
                 className="rounded w-1/2 md:w-full"
               />
             </div>
 
             {/* Text */}
-            <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
+            <div className="flex-grow mx-2 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
                 <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-1 mt-1">
                   {animalcaregiversForm.name}
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />
-                <span className="text-gray-600 ml-1 mb-1 text-xs md:text-base">
+                <span className="text-gray-600 ml-1 mb-1 text-xs md:text-xs">
                   {animalcaregiversForm.location &&
                   Array.isArray(animalcaregiversForm.location) &&
                   animalcaregiversForm.location.length > 0
@@ -185,13 +184,13 @@ const AnimalCaregiverCard: React.FC<AnimalcaregiverCardProps> = ({
                         .join(", ")
                     : "无"}
                 </span>
-                <span className="mb-1 ml-1 text-xs md:text-base text-black">
+                <span className="mb-1 ml-1 text-xs md:text-xs text-black">
                   {animalcaregiver?.hourlycharge
                     ? `¥ ${animalcaregiver.hourlycharge}元/小时`
                     : "¥ 收费不详"}
                 </span>
               </div>
-              <div className="text-gray-600 mb-8 line-clamp text-xs md:text-base">
+              <div className="text-gray-600 mb-1 line-clamp text-xs md:text-sm">
                 {editedanimalcaregiverAds && (
                   <div>
                     <p>{editedanimalcaregiverAds.title}</p>

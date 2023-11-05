@@ -301,28 +301,30 @@ const AnimalCaregiverList: React.FC = () => {
           <div className="text-center w-full text-lg md:text-2xl font-medium md:font-semibold mb-1 md:mb-3">
             宠托师
           </div>
+          <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
+            {filteredanimalcaregiversForm.map((animalcaregiversForm) => {
+              // Find the associated careneederschedule for this careneeder
+              const associatedDetails = animalcaregivers.find(
+                (details) =>
+                  details.animalcaregiverid === animalcaregiversForm.id
+              );
+              // Find all the associated careneederAds for this careneeder
+              const associatedAds = animalcaregiverAds.find(
+                (ad) => ad.animalcaregiverid === animalcaregiversForm.id
+              );
 
-          {filteredanimalcaregiversForm.map((animalcaregiversForm) => {
-            // Find the associated careneederschedule for this careneeder
-            const associatedDetails = animalcaregivers.find(
-              (details) => details.animalcaregiverid === animalcaregiversForm.id
-            );
-            // Find all the associated careneederAds for this careneeder
-            const associatedAds = animalcaregiverAds.find(
-              (ad) => ad.animalcaregiverid === animalcaregiversForm.id
-            );
-
-            return (
-              <AnimalCaregiverCard
-                key={animalcaregiversForm.id}
-                animalcaregiversForm={animalcaregiversForm}
-                animalcaregiver={associatedDetails} // Pass the associated schedule as a prop
-                animalcaregiverAds={associatedAds}
-                className="w-full"
-                phoneNumber={phone}
-              />
-            );
-          })}
+              return (
+                <AnimalCaregiverCard
+                  key={animalcaregiversForm.id}
+                  animalcaregiversForm={animalcaregiversForm}
+                  animalcaregiver={associatedDetails} // Pass the associated schedule as a prop
+                  animalcaregiverAds={associatedAds}
+                  className="w-full"
+                  phoneNumber={phone}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

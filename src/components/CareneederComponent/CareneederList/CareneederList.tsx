@@ -309,7 +309,7 @@ const CareneederList: React.FC = () => {
           <div className="text-center w-full text-xl md:text-2xl font-semibold md:font-semibold mb-1 md:mb-3">
             雇主广告
           </div>
-          <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
+          <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
             {filteredCareneeders.map((careneeder) => {
               // Find the associated careneederschedule for this careneeder
               const associatedSchedule = careneedersSchedule.find(

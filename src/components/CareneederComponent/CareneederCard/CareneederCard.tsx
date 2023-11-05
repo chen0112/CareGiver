@@ -3,11 +3,8 @@ import { Careneeder, Schedule, Ads } from "../../../types/Types";
 import { Link } from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import dayjs from "dayjs";
 import { BASE_URL, LOCATION_OPTIONS } from "../../../types/Constant";
-
-const defaultImageUrl =
-  "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png"; // Replace with the actual URL
+import { defaultImageUrl } from "../../../types/Constant";
 
 interface CareneederCardProps {
   careneeder: Careneeder;
@@ -145,42 +142,41 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center mb-6 mx-2 md:mx-6">
+        <div className="flex flex-col items-center mb-6 mx-2 md:h-96">
           {/* Link to Careneeder's Profile */}
           <Link
             to={`/careneeders/id/${careneeder.id}?phoneNumber=${phoneNumber}`}
-            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:flex-row h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
+            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}
-            <div className="flex flex-row justify-center md:flex-shrink-0 items-center w-full md:w-1/3 p-2 md:p-1">
+            <div className="flex justify-center items-center p-3 md:p-1">
               <img
                 src={careneeder.imageurl || defaultImageUrl}
                 alt={careneeder.name}
-                style={imageStyle}
                 className="rounded w-1/2 md:w-full"
               />
             </div>
             {/* Text */}
-            <div className="flex-grow p-6 flex flex-col justify-between md:-ml-3">
+            <div className="flex-grow mx-2 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
                 <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-1 mt-1">
                   {careneeder.name}
                 </h3>
                 <FaMapMarkerAlt className="text-gray-600 mb-1" />
-                <span className="text-gray-600 ml-1 mb-1 text-xs md:text-base">
+                <span className="text-gray-600 ml-1 mb-1 text-xs md:text-xs">
                   {careneeder.location &&
                   Array.isArray(careneeder.location) &&
                   careneeder.location.length > 0
                     ? careneeder.location.map((loc) => loc.label).join(", ")
                     : "无"}
                 </span>
-                <span className="mb-1 ml-1 text-xs md:text-base text-black">
+                <span className="mb-1 ml-1 text-xs md:text-xs text-black">
                   {careneeder?.hourlycharge
                     ? `¥ ${careneeder.hourlycharge}元/小时`
                     : "¥ 收费不详"}
                 </span>
               </div>
-              <div className="text-gray-600 mb-3 line-clamp text-xs md:text-base">
+              <div className="text-gray-600 mb-1 line-clamp text-xs md:text-sm">
                 {careneederAd && (
                   <div>
                     <p>{careneederAd.title}</p>
@@ -190,6 +186,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
               </div>
             </div>
           </Link>
+
           {/* Edit Button */}
           {careneeder.phone === loggedInUserPhone && (
             <button

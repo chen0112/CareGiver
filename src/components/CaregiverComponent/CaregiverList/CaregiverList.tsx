@@ -285,7 +285,7 @@ const CaregiverList: React.FC = () => {
           <div className="text-center w-full text-xl md:text-2xl font-medium md:font-semibold mb-1 md:mb-3">
             护工广告
           </div>
-          <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
+          <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
             {filteredCaregivers.map((caregiver) => {
               const associatedAds = caregiverAds.find(
                 (ad) => ad.caregiver_id === caregiver.id

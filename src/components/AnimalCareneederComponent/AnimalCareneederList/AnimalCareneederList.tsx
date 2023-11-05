@@ -296,32 +296,33 @@ const AnimalCareneederList: React.FC = () => {
         {/* Right main content area */}
         <div className="flex flex-col items-center space-y-2 md:space-y-4 w-3/4 p-2 md:p-4">
           {/* Adjusted text sizes for main content */}
-          <div className="text-center w-full text-lg md:text-2xl font-medium md:font-semibold mb-1 md:mb-3">
+          <div className="text-center w-full text-xl md:text-2xl font-medium md:font-semibold mb-1 md:mb-3">
             招聘宠托师
           </div>
+          <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
+            {filteredanimalcareneedersForm.map((animalcareneedersForm) => {
+              // Find the associated careneederschedule for this careneeder
+              const associatedDetails = animalcareneeders.find(
+                (details) =>
+                  details.animalcareneederid === animalcareneedersForm.id
+              );
+              // Find all the associated careneederAds for this careneeder
+              const associatedAds = animalcareneederAds.find(
+                (ad) => ad.animalcareneederid === animalcareneedersForm.id
+              );
 
-          {filteredanimalcareneedersForm.map((animalcareneedersForm) => {
-            // Find the associated careneederschedule for this careneeder
-            const associatedDetails = animalcareneeders.find(
-              (details) =>
-                details.animalcareneederid === animalcareneedersForm.id
-            );
-            // Find all the associated careneederAds for this careneeder
-            const associatedAds = animalcareneederAds.find(
-              (ad) => ad.animalcareneederid === animalcareneedersForm.id
-            );
-
-            return (
-              <AnimalCareneederCard
-                key={animalcareneedersForm.id}
-                animalcareneedersForm={animalcareneedersForm}
-                animalcareneeder={associatedDetails} // Pass the associated schedule as a prop
-                animalcareneederAds={associatedAds}
-                className="w-full"
-                phoneNumber={phone}
-              />
-            );
-          })}
+              return (
+                <AnimalCareneederCard
+                  key={animalcareneedersForm.id}
+                  animalcareneedersForm={animalcareneedersForm}
+                  animalcareneeder={associatedDetails} // Pass the associated schedule as a prop
+                  animalcareneederAds={associatedAds}
+                  className="w-full"
+                  phoneNumber={phone}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
