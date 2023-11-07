@@ -276,22 +276,22 @@ const AnimalCareneederList: React.FC = () => {
             onFilterChange={handleFilterChange}
             filterValues={filter}
           />
-          <div className="flex flex-col space-y-3 w-4/5 md;w-full mt-4 px-4">
+           <div className="flex flex-col space-y-3 w-4/5 mt-3 mr-4 md:mr-0 md:px-4">
             <Link
               to={`/caregivers/phone/${phone}/userType/${userType}`}
-              className="no-underline  bg-regal-blue text-white text-xs text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
+              className="no-underline  bg-regal-blue text-white text-customFontSize text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
             >
               护工广告
             </Link>
             <Link
               to={`/careneeders/phone/${phone}/userType/${userType}`}
-              className="no-underline  bg-regal-blue text-white text-xs text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
+              className="no-underline  bg-regal-blue text-white text-customFontSize text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
             >
               雇主招聘
             </Link>
             <Link
               to={`/animalcaregivers/phone/${phone}/userType/${userType}`}
-              className="no-underline  bg-regal-blue text-white text-xs text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
+              className="no-underline  bg-regal-blue text-white text-customFontSize text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
             >
               宠托师广告
             </Link>

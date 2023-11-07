@@ -305,7 +305,7 @@ const CareneederFilter: React.FC<CareneederFilterProps> = ({
       </div>
       <button
         onClick={resetFilters}
-        className="text-customFontSize md:text-base w-4/5 md:w-full mt-4 px-2 py-2 bg-gray-800 text-white rounded"
+        className="text-customFontSize hover:bg-light-gray md:text-base w-4/5 md:w-full mt-4 px-2 py-2 bg-gray-800 text-white rounded"
       >
         重置筛选
       </button>
