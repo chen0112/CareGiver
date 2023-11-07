@@ -154,11 +154,11 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center mb-6 mx-2 md:h-96">
+        <div className="flex flex-row justify-center flex-wrap items-center mb-6 mx-2 md:h-auto">
           {/* Link to Animal Careneeder's Profile */}
           <Link
             to={`/animalcareneeders/id/${animalcareneedersForm.id}?phoneNumber=${phoneNumber}`}
-            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
+            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col h-96 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}
             <div className="flex justify-center items-center p-3 md:p-1">
@@ -195,7 +195,7 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
                 {editedanimalcareneederAds && (
                   <div>
                     <p>{editedanimalcareneederAds.title}</p>
-                    <p className="line-clamp-3">
+                    <p className="line-clamp-2">
                       {editedanimalcareneederAds.description}
                     </p>
                   </div>

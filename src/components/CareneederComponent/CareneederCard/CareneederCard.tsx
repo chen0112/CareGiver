@@ -142,11 +142,11 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center mb-6 mx-2 md:h-96">
+        <div className="flex flex-row justify-center flex-wrap items-center mb-6 mx-2 md:h-auto">
           {/* Link to Careneeder's Profile */}
           <Link
             to={`/careneeders/id/${careneeder.id}?phoneNumber=${phoneNumber}`}
-            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col h-62 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
+            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col h-96 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}
             <div className="flex justify-center items-center p-3 md:p-1">
@@ -180,7 +180,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
                 {careneederAd && (
                   <div>
                     <p>{careneederAd.title}</p>
-                    <p className="line-clamp-3">{careneederAd.description}</p>
+                    <p className="line-clamp-2">{careneederAd.description}</p>
                   </div>
                 )}
               </div>

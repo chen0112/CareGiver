@@ -8,6 +8,8 @@ import AD8 from "./ad8.png";
 import User1 from "./user1.png";
 import User2 from "./user2.png";
 import User3 from "./user3.png";
+import header1 from "./header1.png";
+import header2 from "./header2.png";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
@@ -70,10 +72,10 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="relative container mx-auto px-6 py-2">
+    <div className="relative container mx-auto py-1 bg-warm-beige">
       <header className="flex w-full justify-center items-center h-20 text-white relative px-2 md:px-1 mx-auto">
         {/* Logo */}
-        <div className="absolute left-8 flex items-center">
+        <div className="absolute left-5 flex items-center">
           <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
           <h1 className="font-bold text-red-500 text-3xl ml-2 my-auto">
             关爱网
@@ -84,25 +86,25 @@ const HomePage: React.FC = () => {
       <hr className="border-t border-black-300 mx-1 my-1" />
       {/* New Image Container */}
       <div className="flex flex-wrap justify-between items-center my-0">
-        <div className="w-full md:w-1/2 p-0 md:p-2">
+        <div className="w-full md:w-1/2 md:p-1">
           <img
-            src="https://cdn.animaapp.com/projects/64fb8a71af563afc18530806/releases/64fb8af17216e74c07a20a05/img/screenshot-2023-09-08-at-1-06-1.png"
+            src={header1}
             alt="Description of First Image"
-            className="w-full h-full object-cover rounded flex-grow"
+            className="w-full h-full object-cover rounded"
           />
         </div>
         <div className="hidden md:w-1/2 md:block p-2">
           <img
-            src="https://cdn.animaapp.com/projects/64fb8a71af563afc18530806/releases/64fb8af17216e74c07a20a05/img/screenshot-2023-09-08-at-1-01-1.png"
+            src={header2}
             alt="Description of Second Image"
-            className="w-full h-[300px] md:h-[400px] object-contain object-right-bottom rounded"
+            className="w-full h-full object-cover rounded "
           />
         </div>
       </div>
 
       {/* Pinkish rounded rectangle */}
-      <div className="flex flex-col items-center justify-center relative bg-cyan-200 rounded-lg my-4 p-4 h-[200px] z-0">
-        <h5 className="text-center mb-4">寻找你身边的帮工</h5>
+      <div className="flex flex-col items-center justify-center relative bg-soft-peach rounded-lg p-4 h-[200px] z-0">
+        <h5 className="text-center mb-4 text-dark-gray">寻找你身边的帮工</h5>
         <div className="relative w-3/4">
           <input
             type="text"
@@ -120,34 +122,34 @@ const HomePage: React.FC = () => {
         {/* Make this button overlap with the pinkish section on mobile */}
         <button
           onClick={() => checkAuthenticationAndNavigate("caregiver")}
-          className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
+          className="flex-none p-6 rounded-lg bg-light-gray hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
           <img src={AD3} alt="caregiver" className="w-20 h-16 mb-3" />
-          <span className="text-black text-sm no-underline">成为护工</span>
+          <span className="text-dark-gray font-bold text-sm no-underline">成为护工</span>
         </button>
 
         <button
           onClick={() => checkAuthenticationAndNavigate("careneeder")}
-          className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
+          className="flex-none p-6 rounded-lg bg-light-gray hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
           <img src={AD4} alt="careneeder" className="w-20 h-16 mb-3" />
-          <span className="text-black text-sm no-underline">雇主发布</span>
+          <span className="text-dark-gray font-bold text-sm no-underline">雇主发布</span>
         </button>
 
         <button
           onClick={() => checkAuthenticationAndNavigate("animalcaregiver")}
-          className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
+          className="flex-none p-6 rounded-lg bg-light-gray hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
           <img src={AD5} alt="animalcaregiver" className="w-20 h-16 mb-3" />
-          <span className="text-black text-sm no-underline">成为宠托师</span>
+          <span className="text-dark-gray font-bold text-sm no-underline">成为宠托师</span>
         </button>
 
         <button
           onClick={() => checkAuthenticationAndNavigate("animalcareneeder")}
-          className="flex-none p-6 rounded-lg bg-white hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
+          className="flex-none p-6 rounded-lg bg-light-gray hover:bg-gray-600 transition duration-300 flex flex-col items-center justify-center m-1 shadow-md -mt-8 md:mt-0 z-10"
         >
           <img src={AD8} alt="animalcareneeder" className="w-20 h-16 mb-3" />
-          <span className="text-black text-sm no-underline">宠物托管</span>
+          <span className="text-dark-gray font-bold text-sm no-underline">宠物托管</span>
         </button>
       </div>
 
@@ -162,9 +164,9 @@ const HomePage: React.FC = () => {
                   alt="User 1"
                   className="w-16 h-16 rounded-full"
                 />
-                <span className="text-black font-bold ml-4">陈女士</span>
+                <span className="text-dark-gray font-bold ml-4">陈女士</span>
               </div>
-              <p className="text-gray-700">
+              <p className="text-dark-gray">
                 护工对我肠梗阻手术后的母亲提供了非常专业和细心的服务。他们不仅技术娴熟，还很有爱心和耐心。让我母亲在康复过程中感到非常安心和舒适。强烈推荐！
               </p>
             </div>
@@ -175,9 +177,9 @@ const HomePage: React.FC = () => {
                   alt="User 2"
                   className="w-16 h-16 rounded-full"
                 />
-                <span className="text-black font-bold ml-4">张女士</span>
+                <span className="text-dark-gray font-bold ml-4">张女士</span>
               </div>
-              <p className="text-gray-700">
+              <p className="text-dark-gray">
                 由于工作原因，我无法每时每刻照顾我有阿尔兹海默症的父亲，但是我有幸找到一位经验丰富的长期护工，这样我不在家的时候，也不会担心我父亲出现任何意外了。
               </p>
             </div>
@@ -188,9 +190,9 @@ const HomePage: React.FC = () => {
                   alt="User 3"
                   className="w-16 h-16 rounded-full"
                 />
-                <span className="text-black font-bold ml-4">王先生</span>
+                <span className="text-dark-gray font-bold ml-4">王先生</span>
               </div>
-              <p className="text-gray-700">
+              <p className="text-dark-gray">
                 强烈推荐小玲护工，她工作能力出色，高效又细致。具备很强的责任心和对细节的敏感度。如果你需要一个负责的人，她就是你的首选。非常诚实，让我随时都能信任她照看我的家。
               </p>
             </div>
@@ -208,7 +210,7 @@ const HomePage: React.FC = () => {
                 alt="User 1"
                 className="w-16 h-16 rounded-full"
               />
-              <span className="text-black font-bold ml-4">陈女士</span>
+              <span className="text-dark-gray font-bold ml-4">陈女士</span>
             </div>
             <p className="text-gray-700">
               护工对我肠梗阻手术后的母亲提供了非常专业和细心的服务。他们不仅技术娴熟，还很有爱心和耐心。让我母亲在康复过程中感到非常安心和舒适。强烈推荐！
@@ -222,7 +224,7 @@ const HomePage: React.FC = () => {
                 alt="User 2"
                 className="w-16 h-16 rounded-full"
               />
-              <span className="text-black font-bold ml-4">张女士</span>
+              <span className="text-dark-gray font-bold ml-4">张女士</span>
             </div>
             <p className="text-gray-700">
               由于工作原因，我无法每时每刻照顾我有阿尔兹海默症的父亲，但是我有幸找到一位经验丰富的长期护工，这样我不在家的时候，也不会担心我父亲出现任何意外了。
@@ -236,7 +238,7 @@ const HomePage: React.FC = () => {
                 alt="User 3"
                 className="w-16 h-16 rounded-full"
               />
-              <span className="text-black font-bold ml-4">王先生</span>
+              <span className="text-dark-gray font-bold ml-4">王先生</span>
             </div>
             <p className="text-gray-700">
               强烈推荐小玲护工，她工作能力出色，高效又细致。具备很强的责任心和对细节的敏感度。如果你需要一个负责的人，她就是你的首选。非常诚实，让我随时都能信任她照看我的家。
@@ -245,7 +247,7 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      <footer className="bg-gray-200 text-black py-4 mt-8">
+      <footer className="bg-light-gray text-black py-4 mt-8">
         <div className="container mx-auto flex flex-wrap">
           {/* About Section */}
           <div className="w-full md:w-1/4 text-center md:text-left ">

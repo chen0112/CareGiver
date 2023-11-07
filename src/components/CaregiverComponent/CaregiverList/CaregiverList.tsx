@@ -245,21 +245,6 @@ const CaregiverList: React.FC = () => {
                 <Dropdown.Item href={`/mycareneeder/phone/${phone}`}>
                   我的广告
                 </Dropdown.Item>
-                <Dropdown.Item
-                  href={`/careneeders/phone/${phone}/userType/${userType}`}
-                >
-                  护工招聘
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href={`/animalcareneeders/phone/${phone}/userType/${userType}`}
-                >
-                  宠托师招聘
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href={`/animalcaregivers/phone/${phone}/userType/${userType}`}
-                >
-                  宠托师
-                </Dropdown.Item>
                 <Dropdown.Item onClick={handleSignOut}>退出登录</Dropdown.Item>
                 {/* ... Add other dropdown links similarly */}
               </Dropdown.Menu>
@@ -272,11 +257,31 @@ const CaregiverList: React.FC = () => {
 
       <div className="flex flex-row w-full">
         {/* Left sidebar for `CaregiverFilter` */}
-        <div className="w-1/4 p-1 md:p-4 border-r flex justify-center">
+        <div className="w-1/4 p-1 md:p-4 border-r flex flex-col items-center">
           <CaregiverFilter
             onFilterChange={handleFilterChange}
             filterValues={filter}
           />
+          <div className="flex flex-col space-y-3 w-4/5 md;w-full mt-4 px-4">
+            <Link
+              to={`/careneeders/phone/${phone}/userType/${userType}`}
+              className="no-underline  bg-regal-blue text-white text-xs text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
+            >
+              雇主招聘
+            </Link>
+            <Link
+              to={`/animalcareneeders/phone/${phone}/userType/${userType}`}
+              className="no-underline  bg-regal-blue text-white text-xs text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
+            >
+              宠托师招聘
+            </Link>
+            <Link
+              to={`/animalcaregivers/phone/${phone}/userType/${userType}`}
+              className="no-underline  bg-regal-blue text-white text-xs text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
+            >
+              宠托师广告
+            </Link>
+          </div>
         </div>
 
         {/* Right main content area */}
