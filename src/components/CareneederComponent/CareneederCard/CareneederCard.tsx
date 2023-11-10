@@ -142,7 +142,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-row justify-center flex-wrap items-center mb-3 mx-2 md:h-auto">
+        <div className="flex flex-col justify-center flex-wrap items-center mb-3 mx-2 md:h-auto">
           {/* Link to Careneeder's Profile */}
           <Link
             to={`/careneeders/id/${careneeder.id}?phoneNumber=${phoneNumber}`}
@@ -191,7 +191,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
           {careneeder.phone === loggedInUserPhone && (
             <button
               onClick={handleEditClick}
-              className="bg-blue-600 hover:bg-blue-700 text-xs md:text-base text-white font-semibold py-2 px-4 rounded text-center"
+              className="bg-blue-600 mt-2 hover:bg-blue-700 text-xs md:text-base text-white font-semibold py-2 px-4 rounded text-center"
             >
               编辑
             </button>

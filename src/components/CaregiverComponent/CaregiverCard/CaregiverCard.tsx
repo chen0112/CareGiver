@@ -149,12 +149,12 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-row justify-center flex-wrap items-center mb-6 mx-2 md:h-auto">
-          {/* Link to Careneeder's Profile */}
-          <Link
+        <div className="flex flex-col justify-center flex-wrap items-center mb-3 mx-2 md:h-auto">
+        {/* Link to Careneeder's Profile */}
+        <Link
             to={`/caregivers/id/${caregiver.id}?phoneNumber=${phoneNumber}`}
             className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:h-72 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
-          >
+            >
             {/* Image */}
             <div className="flex justify-center items-center p-3 md:p-1">
               <img
@@ -199,7 +199,7 @@ const CaregiverCard: React.FC<CaregiverCardProps> = ({
           {caregiver.phone === loggedInUserPhone && (
             <button
               onClick={handleEditClick}
-              className="bg-blue-600 hover:bg-blue-700 text-xs md:text-base text-white font-semibold py-2 px-4 rounded text-center"
+              className="bg-blue-600 mt-2 hover:bg-blue-700 text-xs md:text-base text-white font-semibold py-2 px-4 rounded text-center"
             >
               编辑
             </button>

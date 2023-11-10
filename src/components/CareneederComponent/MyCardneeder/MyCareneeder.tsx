@@ -51,7 +51,13 @@ const MyCareneeders: React.FC = () => {
   }
 
   if (error) {
-    return <ErrorComponent message={`${error}`} userType={"careneeder"} phone={phone}/>;
+    return (
+      <ErrorComponent
+        message={`${error}`}
+        userType={"careneeder"}
+        phone={phone}
+      />
+    );
   }
 
   return (
@@ -79,8 +85,8 @@ const MyCareneeders: React.FC = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col items-center space-y-8">
-        <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
+      <div className="flex flex-col items-center space-y-2 md:space-y-4 w-full p-2 md:p-4">
+        <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
           {myCareneeders.map((careneeder) => {
             // Find the associated careneederschedule for this careneeder
             const associatedSchedule = careneedersSchedule.find(

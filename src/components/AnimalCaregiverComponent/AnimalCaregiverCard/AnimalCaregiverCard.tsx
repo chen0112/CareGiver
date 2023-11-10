@@ -153,23 +153,23 @@ const AnimalCaregiverCard: React.FC<AnimalcaregiverCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-row justify-center flex-wrap items-center mb-6 mx-2 md:h-auto">
+        <div className="flex flex-col justify-center flex-wrap items-center mb-3 mx-2 md:h-auto">
           {/* Link to Animal Caregiver's Profile */}
           <Link
             to={`/animalcaregivers/id/${animalcaregiversForm.id}?phoneNumber=${phoneNumber}`}
-            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:h-96 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
+            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:h-72 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}
             <div className="flex justify-center items-center p-3 md:p-1">
               <img
                 src={animalcaregiversForm.imageurl || defaultImageUrl}
                 alt={animalcaregiversForm.name}
-                className="rounded w-1/2 md:w-full"
+                className="rounded w-1/2"
               />
             </div>
 
             {/* Text */}
-            <div className="flex-grow mx-2 flex flex-col justify-between md:-ml-3">
+            <div className="mx-2 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
                 <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-1 mt-1">
                   {animalcaregiversForm.name}
@@ -194,7 +194,7 @@ const AnimalCaregiverCard: React.FC<AnimalcaregiverCardProps> = ({
                 {editedanimalcaregiverAds && (
                   <div>
                     <p>{editedanimalcaregiverAds.title}</p>
-                    <p className="line-clamp-2">
+                    <p className="line-clamp-3">
                       {editedanimalcaregiverAds.description}
                     </p>
                   </div>
@@ -206,7 +206,7 @@ const AnimalCaregiverCard: React.FC<AnimalcaregiverCardProps> = ({
           {animalcaregiversForm.phone === loggedInUserPhone && (
             <button
               onClick={handleEditClick}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
+              className="bg-blue-600 mt-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
             >
               编辑
             </button>

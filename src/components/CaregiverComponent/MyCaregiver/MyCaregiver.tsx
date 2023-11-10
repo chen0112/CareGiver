@@ -47,7 +47,13 @@ const MyCaregivers: React.FC = () => {
   }
 
   if (error) {
-    return <ErrorComponent message={`${error}`} userType={"caregiver"} phone={phone}/>;
+    return (
+      <ErrorComponent
+        message={`${error}`}
+        userType={"caregiver"}
+        phone={phone}
+      />
+    );
   }
 
   return (
@@ -75,8 +81,8 @@ const MyCaregivers: React.FC = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col items-center space-y-8">
-        <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
+      <div className="flex flex-col items-center space-y-2 md:space-y-4 w-full p-2 md:p-4">
+        <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
           {myCaregivers.map((caregiver) => {
             // Find all the associated careneederAds for this careneeder
             const associatedAds = caregiverAds.find(

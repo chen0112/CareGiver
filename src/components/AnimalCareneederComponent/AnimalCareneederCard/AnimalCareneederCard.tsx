@@ -154,7 +154,7 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-row justify-center flex-wrap items-center mb-6 mx-2 md:h-auto">
+        <div className="flex flex-col justify-center flex-wrap items-center mb-3 mx-2 md:h-auto">
           {/* Link to Animal Careneeder's Profile */}
           <Link
             to={`/animalcareneeders/id/${animalcareneedersForm.id}?phoneNumber=${phoneNumber}`}
@@ -207,7 +207,7 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
           {animalcareneedersForm.phone === loggedInUserPhone && (
             <button
               onClick={handleEditClick}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
+              className="bg-blue-600 mt-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center"
             >
               编辑
             </button>

@@ -23,7 +23,7 @@ const MyAnimalCareneeder: React.FC = () => {
   console.log("Context animalcareneederAds state:", animalcareneederAds);
 
   useEffect(() => {
-    fetch( `${BASE_URL}/api/myanimalcareneederform/${phone}`) // Adjust the API endpoint
+    fetch(`${BASE_URL}/api/myanimalcareneederform/${phone}`) // Adjust the API endpoint
       .then((response) => {
         if (!response.ok) {
           throw new Error("请先发布您的广告！");
@@ -57,9 +57,14 @@ const MyAnimalCareneeder: React.FC = () => {
   }
 
   if (error) {
-    return <ErrorComponent message={`${error}`} userType={"animalcareneeder"} phone={phone}/>;
+    return (
+      <ErrorComponent
+        message={`${error}`}
+        userType={"animalcareneeder"}
+        phone={phone}
+      />
+    );
   }
-
 
   return (
     <div>
@@ -86,12 +91,13 @@ const MyAnimalCareneeder: React.FC = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col items-center space-y-8">
-        <div className="flex flex-col items-center w-full md:w-4/5 lg:w-3/5">
+      <div className="flex flex-col items-center space-y-2 md:space-y-4 w-full p-2 md:p-4">
+        <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
           {myAnimalCareneederForms.map((myAnimalCareneederForm) => {
             // Find the associated myAnimalCareneederdetail for this AnimalCareneederForm
             const associatedanimalcareneedersDetail = animalcareneeders.find(
-              (detail) => detail.animalcareneederid === myAnimalCareneederForm.id
+              (detail) =>
+                detail.animalcareneederid === myAnimalCareneederForm.id
             );
 
             // Find all the associated AnimalCareneederAds for this AnimalCareneederForm
