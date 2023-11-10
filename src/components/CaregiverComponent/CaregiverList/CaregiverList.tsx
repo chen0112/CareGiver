@@ -14,7 +14,7 @@ import { defaultImageUrl } from "../../../types/Constant";
 import { useAuth } from "../../../context/AuthContext";
 
 const CaregiverList: React.FC = () => {
-  const { caregivers } = useCaregiverContext();
+  const { caregivers = [] } = useCaregiverContext();
   const { caregiverAds } = useCaregiverAdsContext();
 
   const { phone } = useParams<{ phone: string }>();
@@ -96,109 +96,114 @@ const CaregiverList: React.FC = () => {
   }, [phone]);
 
   // Your filtered caregivers
-  const filteredCaregivers = caregivers.filter((caregiver) => {
-    // 1. Check location
-    if (
-      filter.location &&
-      !caregiver.location?.some((option) => option.value === filter.location)
-    ) {
-      return false;
-    }
+  const filteredCaregivers =
+    caregivers && caregivers.length > 0
+      ? caregivers.filter((caregiver) => {
+          // 1. Check location
+          if (
+            filter.location &&
+            !caregiver.location?.some(
+              (option) => option.value === filter.location
+            )
+          ) {
+            return false;
+          }
 
-    // 2. Check age
-    if (filter.age) {
-      if (caregiver.age == null) {
-        // Check if age is null
-        return false;
-      }
+          // 2. Check age
+          if (filter.age) {
+            if (caregiver.age == null) {
+              // Check if age is null
+              return false;
+            }
 
-      const [minAge, maxAge] = filter.age.split("-").map(Number);
+            const [minAge, maxAge] = filter.age.split("-").map(Number);
 
-      if (isNaN(maxAge)) {
-        // If maxAge is 'NaN', then the age range is something like "56+"
-        if (caregiver.age < minAge) {
-          return false;
-        }
-      } else {
-        if (caregiver.age < minAge || caregiver.age > maxAge) {
-          return false;
-        }
-      }
-    }
+            if (isNaN(maxAge)) {
+              // If maxAge is 'NaN', then the age range is something like "56+"
+              if (caregiver.age < minAge) {
+                return false;
+              }
+            } else {
+              if (caregiver.age < minAge || caregiver.age > maxAge) {
+                return false;
+              }
+            }
+          }
 
-    // 3. Check gender
-    if (filter.gender && caregiver.gender !== filter.gender) {
-      return false;
-    }
+          // 3. Check gender
+          if (filter.gender && caregiver.gender !== filter.gender) {
+            return false;
+          }
 
-    // 4. Check experience
-    if (filter.experience) {
-      if (caregiver.years_of_experience == null) {
-        // Check if years_of_experience is null
-        return false;
-      }
+          // 4. Check experience
+          if (filter.experience) {
+            if (caregiver.years_of_experience == null) {
+              // Check if years_of_experience is null
+              return false;
+            }
 
-      const [minExp, maxExp] = filter.experience.split("-").map(Number);
+            const [minExp, maxExp] = filter.experience.split("-").map(Number);
 
-      if (isNaN(maxExp)) {
-        // If maxExp is 'NaN', then the experience range is something like ">10"
-        if (caregiver.years_of_experience < minExp) {
-          return false;
-        }
-      } else {
-        if (
-          caregiver.years_of_experience < minExp ||
-          caregiver.years_of_experience > maxExp
-        ) {
-          return false;
-        }
-      }
-    }
+            if (isNaN(maxExp)) {
+              // If maxExp is 'NaN', then the experience range is something like ">10"
+              if (caregiver.years_of_experience < minExp) {
+                return false;
+              }
+            } else {
+              if (
+                caregiver.years_of_experience < minExp ||
+                caregiver.years_of_experience > maxExp
+              ) {
+                return false;
+              }
+            }
+          }
 
-    // 5. Check hourly charge
-    if (filter.hourlycharge) {
-      console.log("Checking hourlycharge filter");
+          // 5. Check hourly charge
+          if (filter.hourlycharge) {
+            console.log("Checking hourlycharge filter");
 
-      if (caregiver.hourlycharge == null) {
-        console.log("Hourly charge is null for caregiver:", caregiver);
-        return false;
-      }
+            if (caregiver.hourlycharge == null) {
+              console.log("Hourly charge is null for caregiver:", caregiver);
+              return false;
+            }
 
-      const charge = Number(caregiver.hourlycharge);
+            const charge = Number(caregiver.hourlycharge);
 
-      if (filter.hourlycharge === "<10" && charge >= 10) {
-        console.log(
-          "Filtering out caregiver with hourly charge:",
-          caregiver.hourlycharge
-        );
-        return false;
-      }
+            if (filter.hourlycharge === "<10" && charge >= 10) {
+              console.log(
+                "Filtering out caregiver with hourly charge:",
+                caregiver.hourlycharge
+              );
+              return false;
+            }
 
-      if (filter.hourlycharge === "40+" && charge < 40) {
-        console.log(
-          "Filtering out caregiver with hourly charge:",
-          caregiver.hourlycharge
-        );
-        return false;
-      }
+            if (filter.hourlycharge === "40+" && charge < 40) {
+              console.log(
+                "Filtering out caregiver with hourly charge:",
+                caregiver.hourlycharge
+              );
+              return false;
+            }
 
-      if (filter.hourlycharge.includes("-")) {
-        const [minCharge, maxCharge] = filter.hourlycharge
-          .split("-")
-          .map(Number);
+            if (filter.hourlycharge.includes("-")) {
+              const [minCharge, maxCharge] = filter.hourlycharge
+                .split("-")
+                .map(Number);
 
-        if (charge < minCharge || charge > maxCharge) {
-          console.log(
-            "Filtering out caregiver with hourly charge:",
-            caregiver.hourlycharge
-          );
-          return false;
-        }
-      }
-    }
+              if (charge < minCharge || charge > maxCharge) {
+                console.log(
+                  "Filtering out caregiver with hourly charge:",
+                  caregiver.hourlycharge
+                );
+                return false;
+              }
+            }
+          }
 
-    return true;
-  });
+          return true;
+        })
+      : [];
 
   console.log("Filtered caregivers:", filteredCaregivers);
 
@@ -292,9 +297,9 @@ const CaregiverList: React.FC = () => {
           </div>
           <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
             {filteredCaregivers.map((caregiver) => {
-              const associatedAds = caregiverAds.find(
-                (ad) => ad.caregiver_id === caregiver.id
-              );
+              const associatedAds = Array.isArray(caregiverAds)
+                ? caregiverAds.find((ad) => ad.caregiver_id === caregiver.id)
+                : undefined;
 
               return (
                 <CaregiverCard

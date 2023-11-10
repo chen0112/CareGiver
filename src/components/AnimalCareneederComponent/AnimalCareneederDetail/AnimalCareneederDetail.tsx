@@ -88,7 +88,7 @@ const AnimalCareneederDetail: React.FC = () => {
               }&phoneNumber_recipient=${
                 AnimalCareneederForm?.phone
               }&phoneNumber_sender=${phoneNumber}&adType=${"animalcareneeders"}`}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full inline-flex items-center mr-4"
+              className="bg-blue-500 hover:bg-blue-700 no-underline text-white font-bold py-2 px-4 rounded-full inline-flex items-center mr-4"
             >
               <FaEnvelope className="mr-2" /> 发送消息
             </Link>

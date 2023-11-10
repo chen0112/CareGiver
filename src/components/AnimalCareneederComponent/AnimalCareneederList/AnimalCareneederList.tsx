@@ -14,8 +14,8 @@ import { defaultImageUrl } from "../../../types/Constant";
 import { useAuth } from "../../../context/AuthContext";
 
 const AnimalCareneederList: React.FC = () => {
-  const { animalcareneeders } = useAnimalCareneederContext();
-  const { animalcareneedersForm } = useAnimalCareneederFormContext();
+  const { animalcareneeders = [] } = useAnimalCareneederContext();
+  const { animalcareneedersForm = [] } = useAnimalCareneederFormContext();
   const { animalcareneederAds } = useAnimalCareneederAdsContext();
 
   const { phone } = useParams<{ phone: string }>();
@@ -92,127 +92,128 @@ const AnimalCareneederList: React.FC = () => {
   }, [phone]);
 
   // Your filtered animalcaregiversForm
-  const filteredanimalcareneedersForm = animalcareneedersForm.filter(
-    (animalcareneederform) => {
-      const correspondingCareneeder = animalcareneeders.find(
-        (cg) => cg.animalcareneederid === animalcareneederform.id
-      );
+  const filteredanimalcareneedersForm =
+    animalcareneedersForm && animalcareneedersForm.length > 0
+      ? animalcareneedersForm.filter((animalcareneederform) => {
+          const correspondingCareneeder = animalcareneeders.find(
+            (cg) => cg.animalcareneederid === animalcareneederform.id
+          );
 
-      if (!correspondingCareneeder) {
-        // If you can't find a corresponding careneeder, decide if you want to filter out or keep this entry
-        return false;
-      }
-
-      // 1. Check location
-      if (
-        filter.location &&
-        !animalcareneederform.location?.some(
-          (option) => option.value === filter.location
-        )
-      ) {
-        return false;
-      }
-
-      // 2. Check age
-      if (filter.age) {
-        if (animalcareneederform.age == null) {
-          // Check if age is null
-          return false;
-        }
-
-        const [minAge, maxAge] = filter.age.split("-").map(Number);
-
-        if (isNaN(maxAge)) {
-          // If maxAge is 'NaN', then the age range is something like "56+"
-          if (animalcareneederform.age < minAge) {
+          if (!correspondingCareneeder) {
+            // If you can't find a corresponding careneeder, decide if you want to filter out or keep this entry
             return false;
           }
-        } else {
+
+          // 1. Check location
           if (
-            animalcareneederform.age < minAge ||
-            animalcareneederform.age > maxAge
+            filter.location &&
+            !animalcareneederform.location?.some(
+              (option) => option.value === filter.location
+            )
           ) {
             return false;
           }
-        }
-      }
 
-      // 3. Check gender
-      if (filter.gender && animalcareneederform.gender !== filter.gender) {
-        return false;
-      }
+          // 2. Check age
+          if (filter.age) {
+            if (animalcareneederform.age == null) {
+              // Check if age is null
+              return false;
+            }
 
-      // 4. Check experience
-      if (filter.experience) {
-        if (animalcareneederform.years_of_experience == null) {
-          // Check if years_of_experience is null
-          return false;
-        }
+            const [minAge, maxAge] = filter.age.split("-").map(Number);
 
-        const [minExp, maxExp] = filter.experience.split("-").map(Number);
+            if (isNaN(maxAge)) {
+              // If maxAge is 'NaN', then the age range is something like "56+"
+              if (animalcareneederform.age < minAge) {
+                return false;
+              }
+            } else {
+              if (
+                animalcareneederform.age < minAge ||
+                animalcareneederform.age > maxAge
+              ) {
+                return false;
+              }
+            }
+          }
 
-        if (isNaN(maxExp)) {
-          // If maxExp is 'NaN', then the experience range is something like ">10"
-          if (animalcareneederform.years_of_experience < minExp) {
+          // 3. Check gender
+          if (filter.gender && animalcareneederform.gender !== filter.gender) {
             return false;
           }
-        } else {
-          if (
-            animalcareneederform.years_of_experience < minExp ||
-            animalcareneederform.years_of_experience > maxExp
-          ) {
-            return false;
+
+          // 4. Check experience
+          if (filter.experience) {
+            if (animalcareneederform.years_of_experience == null) {
+              // Check if years_of_experience is null
+              return false;
+            }
+
+            const [minExp, maxExp] = filter.experience.split("-").map(Number);
+
+            if (isNaN(maxExp)) {
+              // If maxExp is 'NaN', then the experience range is something like ">10"
+              if (animalcareneederform.years_of_experience < minExp) {
+                return false;
+              }
+            } else {
+              if (
+                animalcareneederform.years_of_experience < minExp ||
+                animalcareneederform.years_of_experience > maxExp
+              ) {
+                return false;
+              }
+            }
           }
-        }
-      }
 
-      // 5. Check hourly charge
-      if (filter.hourlycharge) {
-        console.log("Checking hourlycharge filter");
+          // 5. Check hourly charge
+          if (filter.hourlycharge) {
+            console.log("Checking hourlycharge filter");
 
-        if (correspondingCareneeder.hourlycharge == null) {
-          console.log(
-            "Hourly charge is null for caregiver:",
-            correspondingCareneeder
-          );
-          return false;
-        }
+            if (correspondingCareneeder.hourlycharge == null) {
+              console.log(
+                "Hourly charge is null for caregiver:",
+                correspondingCareneeder
+              );
+              return false;
+            }
 
-        const charge = Number(correspondingCareneeder.hourlycharge);
+            const charge = Number(correspondingCareneeder.hourlycharge);
 
-        if (filter.hourlycharge === "<10" && charge >= 10) {
-          console.log(
-            "Filtering out correspondingCareneeder with hourly charge:",
-            correspondingCareneeder.hourlycharge
-          );
-          return false;
-        }
+            if (filter.hourlycharge === "<10" && charge >= 10) {
+              console.log(
+                "Filtering out correspondingCareneeder with hourly charge:",
+                correspondingCareneeder.hourlycharge
+              );
+              return false;
+            }
 
-        if (filter.hourlycharge === "40+" && charge < 40) {
-          console.log(
-            "Filtering out correspondingCareneeder with hourly charge:",
-            correspondingCareneeder.hourlycharge
-          );
-          return false;
-        }
+            if (filter.hourlycharge === "40+" && charge < 40) {
+              console.log(
+                "Filtering out correspondingCareneeder with hourly charge:",
+                correspondingCareneeder.hourlycharge
+              );
+              return false;
+            }
 
-        if (filter.hourlycharge.includes("-")) {
-          const [minCharge, maxCharge] = filter.hourlycharge
-            .split("-")
-            .map(Number);
+            if (filter.hourlycharge.includes("-")) {
+              const [minCharge, maxCharge] = filter.hourlycharge
+                .split("-")
+                .map(Number);
 
-          if (charge < minCharge || charge > maxCharge) {
-            console.log(
-              "Filtering out caregiver with hourly charge:",
-              correspondingCareneeder.hourlycharge
-            );
-            return false;
+              if (charge < minCharge || charge > maxCharge) {
+                console.log(
+                  "Filtering out caregiver with hourly charge:",
+                  correspondingCareneeder.hourlycharge
+                );
+                return false;
+              }
+            }
           }
-        }
-      }
-      return true;
-    }
-  );
+          return true;
+        })
+      : [];
 
   console.log("Filtered careneeders:", filteredanimalcareneedersForm);
 
@@ -276,7 +277,7 @@ const AnimalCareneederList: React.FC = () => {
             onFilterChange={handleFilterChange}
             filterValues={filter}
           />
-           <div className="flex flex-col space-y-3 w-4/5 mt-3 mr-4 md:mr-0 md:px-4">
+          <div className="flex flex-col space-y-3 w-4/5 mt-3 mr-4 md:mr-0 md:px-4">
             <Link
               to={`/caregivers/phone/${phone}/userType/${userType}`}
               className="no-underline  bg-regal-blue text-white text-customFontSize text-center md:text-base w-full py-2 rounded-md hover:bg-light-gray transition duration-300"
@@ -307,14 +308,18 @@ const AnimalCareneederList: React.FC = () => {
           <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
             {filteredanimalcareneedersForm.map((animalcareneedersForm) => {
               // Find the associated careneederschedule for this careneeder
-              const associatedDetails = animalcareneeders.find(
-                (details) =>
-                  details.animalcareneederid === animalcareneedersForm.id
-              );
+              const associatedDetails = Array.isArray(animalcareneeders)
+                ? animalcareneeders.find(
+                    (details) =>
+                      details.animalcareneederid === animalcareneedersForm.id
+                  )
+                : undefined;
               // Find all the associated careneederAds for this careneeder
-              const associatedAds = animalcareneederAds.find(
-                (ad) => ad.animalcareneederid === animalcareneedersForm.id
-              );
+              const associatedAds = Array.isArray(animalcareneederAds)
+                ? animalcareneederAds.find(
+                    (ad) => ad.animalcareneederid === animalcareneedersForm.id
+                  )
+                : undefined;
 
               return (
                 <AnimalCareneederCard

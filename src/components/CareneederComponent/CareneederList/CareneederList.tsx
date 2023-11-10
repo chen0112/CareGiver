@@ -14,7 +14,7 @@ import { defaultImageUrl } from "../../../types/Constant";
 import { useAuth } from "../../../context/AuthContext";
 
 const CareneederList: React.FC = () => {
-  const { careneeders } = useCareneederContext();
+  const { careneeders = [] } = useCareneederContext();
   const { careneedersSchedule } = useCareneederScheduleContext();
   const { careneederAds } = useCareneederAdsContext();
 
@@ -108,123 +108,128 @@ const CareneederList: React.FC = () => {
       });
   }, [phone]);
 
-  const filteredCareneeders = careneeders.filter((careneeder) => {
-    // 1. Check location
-    if (
-      filter.location &&
-      !careneeder.location?.some((option) => option.value === filter.location)
-    ) {
-      return false;
-    }
+  const filteredCareneeders =
+    careneeders && careneeders.length > 0
+      ? careneeders.filter((careneeder) => {
+          // 1. Check location
+          if (
+            filter.location &&
+            !careneeder.location?.some(
+              (option) => option.value === filter.location
+            )
+          ) {
+            return false;
+          }
 
-    // 2. Check hourly charge
-    if (filter.hourlycharge) {
-      console.log("Checking hourlycharge filter");
+          // 2. Check hourly charge
+          if (filter.hourlycharge) {
+            console.log("Checking hourlycharge filter");
 
-      if (careneeder.hourlycharge == null) {
-        console.log("Hourly charge is null for caregiver:", careneeder);
-        return false;
-      }
+            if (careneeder.hourlycharge == null) {
+              console.log("Hourly charge is null for caregiver:", careneeder);
+              return false;
+            }
 
-      const charge = Number(careneeder.hourlycharge);
+            const charge = Number(careneeder.hourlycharge);
 
-      if (filter.hourlycharge === "<10" && charge >= 10) {
-        console.log(
-          "Filtering out careneeder with hourly charge:",
-          careneeder.hourlycharge
-        );
-        return false;
-      }
+            if (filter.hourlycharge === "<10" && charge >= 10) {
+              console.log(
+                "Filtering out careneeder with hourly charge:",
+                careneeder.hourlycharge
+              );
+              return false;
+            }
 
-      if (filter.hourlycharge === "40+" && charge < 40) {
-        console.log(
-          "Filtering out careneeder with hourly charge:",
-          careneeder.hourlycharge
-        );
-        return false;
-      }
+            if (filter.hourlycharge === "40+" && charge < 40) {
+              console.log(
+                "Filtering out careneeder with hourly charge:",
+                careneeder.hourlycharge
+              );
+              return false;
+            }
 
-      if (filter.hourlycharge.includes("-")) {
-        const [minCharge, maxCharge] = filter.hourlycharge
-          .split("-")
-          .map(Number);
+            if (filter.hourlycharge.includes("-")) {
+              const [minCharge, maxCharge] = filter.hourlycharge
+                .split("-")
+                .map(Number);
 
-        if (charge < minCharge || charge > maxCharge) {
-          console.log(
-            "Filtering out caregiver with hourly charge:",
-            careneeder.hourlycharge
-          );
-          return false;
-        }
-      }
-    }
+              if (charge < minCharge || charge > maxCharge) {
+                console.log(
+                  "Filtering out caregiver with hourly charge:",
+                  careneeder.hourlycharge
+                );
+                return false;
+              }
+            }
+          }
 
-    // Check live_in_care
-    if (
-      filter.live_in_care !== undefined &&
-      careneeder.live_in_care !== filter.live_in_care
-    ) {
-      return false;
-    }
+          // Check live_in_care
+          if (
+            filter.live_in_care !== undefined &&
+            careneeder.live_in_care !== filter.live_in_care
+          ) {
+            return false;
+          }
 
-    // Check live_out_care
-    if (
-      filter.live_out_care !== undefined &&
-      careneeder.live_out_care !== filter.live_out_care
-    ) {
-      return false;
-    }
+          // Check live_out_care
+          if (
+            filter.live_out_care !== undefined &&
+            careneeder.live_out_care !== filter.live_out_care
+          ) {
+            return false;
+          }
 
-    // Check domestic_work
-    if (
-      filter.domestic_work !== undefined &&
-      careneeder.domestic_work !== filter.domestic_work
-    ) {
-      return false;
-    }
+          // Check domestic_work
+          if (
+            filter.domestic_work !== undefined &&
+            careneeder.domestic_work !== filter.domestic_work
+          ) {
+            return false;
+          }
 
-    // Check meal_preparation
-    if (
-      filter.meal_preparation !== undefined &&
-      careneeder.meal_preparation !== filter.meal_preparation
-    ) {
-      return false;
-    }
+          // Check meal_preparation
+          if (
+            filter.meal_preparation !== undefined &&
+            careneeder.meal_preparation !== filter.meal_preparation
+          ) {
+            return false;
+          }
 
-    // Check companionship
-    if (
-      filter.companionship !== undefined &&
-      careneeder.companionship !== filter.companionship
-    ) {
-      return false;
-    }
+          // Check companionship
+          if (
+            filter.companionship !== undefined &&
+            careneeder.companionship !== filter.companionship
+          ) {
+            return false;
+          }
 
-    // Check mobility_support
-    if (
-      filter.mobility_support !== undefined &&
-      careneeder.mobility_support !== filter.mobility_support
-    ) {
-      return false;
-    }
+          // Check mobility_support
+          if (
+            filter.mobility_support !== undefined &&
+            careneeder.mobility_support !== filter.mobility_support
+          ) {
+            return false;
+          }
 
-    // Check transportation
-    if (
-      filter.transportation !== undefined &&
-      careneeder.transportation !== filter.transportation
-    ) {
-      return false;
-    }
+          // Check transportation
+          if (
+            filter.transportation !== undefined &&
+            careneeder.transportation !== filter.transportation
+          ) {
+            return false;
+          }
 
-    // Check errands_shopping
-    if (
-      filter.errands_shopping !== undefined &&
-      careneeder.errands_shopping !== filter.errands_shopping
-    ) {
-      return false;
-    }
+          // Check errands_shopping
+          if (
+            filter.errands_shopping !== undefined &&
+            careneeder.errands_shopping !== filter.errands_shopping
+          ) {
+            return false;
+          }
 
-    return true; // If all checks pass, return true
-  });
+          return true; // If all checks pass, return true
+        })
+      : [];
 
   console.log("Filtered careneeders:", filteredCareneeders);
 
@@ -317,13 +322,13 @@ const CareneederList: React.FC = () => {
           <div className="flex flex-col items-center w-full lg:grid lg:grid-cols-3">
             {filteredCareneeders.map((careneeder) => {
               // Find the associated careneederschedule for this careneeder
-              const associatedSchedule = careneedersSchedule.find(
+              const associatedSchedule = Array.isArray(careneedersSchedule)?careneedersSchedule.find(
                 (schedule) => schedule.careneeder_id === careneeder.id
-              );
+              ):undefined;
               // Find all the associated careneederAds for this careneeder
-              const associatedAds = careneederAds.find(
+              const associatedAds = Array.isArray(careneederAds)?careneederAds.find(
                 (ad) => ad.careneeder_id === careneeder.id
-              );
+              ):undefined;
 
               return (
                 <CareneederCard

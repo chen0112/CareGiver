@@ -158,19 +158,19 @@ const AnimalCareneederCard: React.FC<AnimalcareneederCardProps> = ({
           {/* Link to Animal Careneeder's Profile */}
           <Link
             to={`/animalcareneeders/id/${animalcareneedersForm.id}?phoneNumber=${phoneNumber}`}
-            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col h-96 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
+            className="no-underline w-full md:w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden mb-1 flex flex-col md:h-72 transition-transform transform duration-200 ease-in-out hover:-translate-y-1 hover:shadow-2xl cursor-pointer hover:bg-gray-100 p-1"
           >
             {/* Image */}
             <div className="flex justify-center items-center p-3 md:p-1">
               <img
                 src={animalcareneedersForm.imageurl || defaultImageUrl}
                 alt={animalcareneedersForm.name}
-                className="rounded w-1/2 md:w-full"
+                className="rounded w-1/2"
               />
             </div>
 
             {/* Text */}
-            <div className="flex-grow mx-2 flex flex-col justify-between md:-ml-3">
+            <div className="mx-2 flex flex-col justify-between md:-ml-3">
               <div className="flex items-center">
                 <h3 className="text-base md:text-lg font-semibold text-blue-700 mr-1 mt-1">
                   {animalcareneedersForm.name}

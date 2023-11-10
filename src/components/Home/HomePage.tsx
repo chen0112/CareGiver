@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="relative container mx-auto py-1 bg-warm-beige">
+    <div className="relative container py-1 bg-warm-beige">
       <header className="flex w-full justify-center items-center h-20 text-white relative px-2 md:px-1 mx-auto">
         {/* Logo */}
         <div className="absolute left-5 flex items-center">
@@ -247,19 +247,19 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      <footer className="bg-light-gray text-black py-4 mt-8">
+      <footer className="text-black py-4 mt-8">
         <div className="container mx-auto flex flex-wrap">
           {/* About Section */}
           <div className="w-full md:w-1/4 text-center md:text-left ">
-            <h5 className="uppercase mb-6 font-bold">关于关爱网</h5>
-            <ul className="mb-4">
+            <h5 className="uppercase mb-6 text-gray-700 font-bold">关于关爱网</h5>
+            <ul className="mr-8 mb-4">
               <li className="mt-2">
-                <Link to="/" className="hover:underline">
+                <Link to="/" className=" no-underline hover:underline text-gray-700">
                   关于我们
                 </Link>
               </li>
               <li className="mt-2">
-                <Link to="/" className="hover:underline">
+                <Link to="/" className="no-underline hover:underline text-gray-700">
                   联系我们
                 </Link>
               </li>
@@ -268,25 +268,25 @@ const HomePage: React.FC = () => {
 
           {/* Quick Links */}
           <div className="w-full md:w-1/4 text-center md:text-left">
-            <h5 className="uppercase mb-6 font-bold">快速链接</h5>
-            <ul className="mb-4">
+            <h5 className="uppercase mb-6 font-bold text-gray-700">快速链接</h5>
+            <ul className="mr-8 mb-4">
               <li className="mt-2">
-                <Link to="/signin/caregiver" className="hover:underline">
+                <Link to="/signin/caregiver" className="no-underline hover:underline text-gray-700">
                   护工登陆
                 </Link>
               </li>
               <li className="mt-2">
-                <Link to="/signin/careneeder" className="hover:underline">
+                <Link to="/signin/careneeder" className="no-underline hover:underline text-gray-700">
                   雇主登陆
                 </Link>
               </li>
               <li className="mt-2">
-                <Link to="/register/caregiver" className="hover:underline">
+                <Link to="/register/caregiver" className="no-underline hover:underline text-gray-700">
                   护工注册
                 </Link>
               </li>
               <li className="mt-2">
-                <Link to="/register/careneeder" className="hover:underline">
+                <Link to="/register/careneeder" className="no-underline hover:underline text-gray-700">
                   雇主注册
                 </Link>
               </li>
@@ -295,15 +295,15 @@ const HomePage: React.FC = () => {
 
           {/* Social Media */}
           <div className="w-full md:w-1/4 text-center md:text-left">
-            <h5 className="uppercase mb-6 font-bold">社交媒体</h5>
-            <ul className="mb-4">
+            <h5 className="uppercase no-underline mb-6 font-bold">社交媒体</h5>
+            <ul className="mr-8 mb-4">
               <li className="mt-2">
-                <a href="#" className="hover:underline">
+                <a href="#" className="no-underline hover:underline">
                   Facebook
                 </a>
               </li>
               <li className="mt-2">
-                <a href="#" className="hover:underline">
+                <a href="#" className="no-underline hover:underline">
                   Twitter
                 </a>
               </li>

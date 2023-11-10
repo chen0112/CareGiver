@@ -45,4 +45,4 @@ export const LOCATION_OPTIONS = [
   export const BASE_URL = "https://nginx.yongxinguanai.com";
 
   export const defaultImageUrl =
-  "https://alex-chen.s3.us-west-1.amazonaws.com/blank_image.png";
+  "https://alex-chen-images.s3.ap-east-1.amazonaws.com/blank_image.png";
