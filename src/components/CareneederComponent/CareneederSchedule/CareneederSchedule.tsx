@@ -11,6 +11,7 @@ import { Schedule } from "../../../types/Types";
 import DatePicker, { registerLocale } from "react-datepicker";
 import { zhCN } from "date-fns/locale";
 import { BASE_URL } from "../../../types/Constant";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 registerLocale("zh-cn", zhCN);
 
@@ -121,14 +122,7 @@ const CareneederSchedule: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="flex items-center mx-9 py-3">
-        <Link to="/" className="flex items-center text-black no-underline ml-0">
-          <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
-      </div>
+  < HeaderLogo/>
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <h1 className="text-center">排班列表</h1>

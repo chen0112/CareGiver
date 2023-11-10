@@ -19,6 +19,7 @@ import {
   AnimalCareneederAds,
 } from "../../../types/Types";
 import { defaultImageUrl } from "../../../types/Constant";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 type Message = {
   id?: string;
@@ -260,14 +261,7 @@ const ChatWindow: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex items-center mx-9 py-3">
-        <Link to="/" className="flex items-center text-black no-underline ml-0">
-          <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
-      </div>
+      <HeaderLogo />
 
       <hr className="border-t border-black-300 mx-1 my-2" />
       {/* Caregiver Info */}

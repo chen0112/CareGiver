@@ -8,6 +8,7 @@ import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAd
 import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
 import { BASE_URL } from "../../../types/Constant";
 import { defaultImageUrl } from "../../../types/Constant";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 const AnimalCaregiverDetail: React.FC = () => {
   const { id } = useParams();
@@ -66,16 +67,8 @@ const AnimalCaregiverDetail: React.FC = () => {
   return (
     <div className="relative">
       <div>
-        <div className="flex items-center justify-between py-3 ml-3 w-full">
-          <Link
-            to="/"
-            className="flex items-center text-black no-underline ml-0" // Remove 'mx-8 py-3' and add 'ml-0' to push it to the far left
-          >
-            <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-            <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-              关爱网
-            </h1>
-          </Link>
+        <div className="flex items-center justify-between py-1 ml-1 w-full">
+          <HeaderLogo />
 
           {!(
             AnimalCaregiverForm?.phone === phoneNumber ||

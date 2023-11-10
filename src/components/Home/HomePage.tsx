@@ -16,6 +16,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { SearchOutlined } from "@ant-design/icons";
+import HeaderLogo from "../HeaderLogoComponent/HeaderLogo";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -73,14 +74,9 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="relative container py-1 bg-warm-beige">
-      <header className="flex w-full justify-center items-center h-20 text-white relative px-2 md:px-1 mx-auto">
+      <header className="flex w-full justify-left items-center text-white relative px-2 md:px-1 mx-auto">
         {/* Logo */}
-        <div className="absolute left-5 flex items-center">
-          <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-red-500 text-3xl ml-2 my-auto">
-            关爱网
-          </h1>
-        </div>
+        < HeaderLogo/>
       </header>
 
       <hr className="border-t border-black-300 mx-1 my-1" />

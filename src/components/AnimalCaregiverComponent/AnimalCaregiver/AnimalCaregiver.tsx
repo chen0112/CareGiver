@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "antd";
 import { BASE_URL } from "../../../types/Constant";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 const services = [
   "遛宠物/刷街",
@@ -109,16 +110,13 @@ const AnimalCaregiver: React.FC = () => {
     }
 
     // Send a POST request to the Flask backend
-    const response = await fetch(
-      `${BASE_URL}/api/animalcaregiver_details`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      }
-    );
+    const response = await fetch(`${BASE_URL}/api/animalcaregiver_details`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
     if (response.ok) {
       // Handle success
@@ -138,17 +136,7 @@ const AnimalCaregiver: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center mx-9 py-3">
-        <Link
-          to="/"
-          className="flex items-center text-black no-underline ml-0" // Remove 'mx-8 py-3' and add 'ml-0' to push it to the far left
-        >
-          <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
-      </div>
+      <HeaderLogo />
 
       <hr className="border-t border-black-300 mx-1 my-2" />
 

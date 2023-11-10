@@ -11,6 +11,7 @@ import { Point, Area } from "react-easy-crop/types";
 import Modal from "react-bootstrap/Modal";
 import { v4 as uuidv4 } from "uuid";
 import { LOCATION_OPTIONS } from "../../../types/Constant";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 interface CareneederFormProps {
   API_URL: string;
@@ -310,18 +311,7 @@ const CareneederForm: React.FC<CareneederFormProps> = ({
 
   return (
     <div>
-      <div className="flex items-center mx-9 py-3">
-        <Link
-          to="/"
-          className="flex items-center text-black no-underline ml-0" // Remove 'mx-8 py-3' and add 'ml-0' to push it to the far left
-        >
-          <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
-      </div>
-
+      <HeaderLogo />
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <header className="flex items-center justify-center text-2xl font-bold text-gray-700 mb-4">

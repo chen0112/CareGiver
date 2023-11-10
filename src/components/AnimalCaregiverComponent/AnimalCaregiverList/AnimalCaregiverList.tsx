@@ -13,6 +13,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import { defaultImageUrl } from "../../../types/Constant";
 import { useAuth } from "../../../context/AuthContext";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 const AnimalCaregiverList: React.FC = () => {
   const { animalcaregivers } = useAnimalCaregiverContext();
@@ -221,17 +222,8 @@ const AnimalCaregiverList: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="flex items-center justify-between py-3 ml-3 w-full">
-        <Link to="/" className="flex items-center text-black no-underline">
-          <BiHeart
-            size={30}
-            className="text-red-500 heart-icon my-auto ml-4 hidden md:block"
-          />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
-
+      <div className="flex items-center justify-between py-1 ml-1 w-full">
+        <HeaderLogo />
         <div className="flex space-x-4 mr-8">
           <Link
             to={`/chatmessagehub?loggedInUser=${phone}&userType=${userType}`}

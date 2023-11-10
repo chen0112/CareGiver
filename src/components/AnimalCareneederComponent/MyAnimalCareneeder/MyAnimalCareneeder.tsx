@@ -7,6 +7,7 @@ import { useAnimalCareneederContext } from "../../../context/AnimalCareneederCon
 import { useAnimalCareneederAdsContext } from "../../../context/AnimalCareneederAdsContext";
 import { BASE_URL } from "../../../types/Constant";
 import ErrorComponent from "../../ErrorComponent/ErrorComponent";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 const MyAnimalCareneeder: React.FC = () => {
   const { phone } = useParams<{ phone: string }>();
@@ -68,17 +69,7 @@ const MyAnimalCareneeder: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center mx-9 py-3">
-        <Link
-          to="/"
-          className="flex items-center text-black no-underline ml-0" // Remove 'mx-8 py-3' and add 'ml-0' to push it to the far left
-        >
-          <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
-      </div>
+      <HeaderLogo />
 
       <hr className="border-t border-black-300 mx-1 my-2" />
 

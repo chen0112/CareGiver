@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal"; // Import the Modal component
 import Button from "react-bootstrap/Button"; // Import the Button component
 import { BASE_URL } from "../../../types/Constant";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 const CaregiverAds: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -20,7 +21,7 @@ const CaregiverAds: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const caregiverId = queryParams.get("caregiverId");
   const phoneNumber = queryParams.get("phone");
-  const userType = "caregiver"
+  const userType = "caregiver";
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const titleText = e.target.value;
@@ -119,14 +120,7 @@ const CaregiverAds: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="flex items-center mx-9 py-3">
-        <Link to="/" className="flex items-center text-black no-underline">
-          <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
-      </div>
+      <HeaderLogo />
       <hr className="border-t border-black-300 mx-1 my-2" />
 
       <h2 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4">

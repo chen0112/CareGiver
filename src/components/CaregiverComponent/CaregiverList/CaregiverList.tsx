@@ -12,6 +12,7 @@ import { Accounts } from "../../../types/Types";
 import { BASE_URL } from "../../../types/Constant";
 import { defaultImageUrl } from "../../../types/Constant";
 import { useAuth } from "../../../context/AuthContext";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 
 const CaregiverList: React.FC = () => {
   const { caregivers = [] } = useCaregiverContext();
@@ -209,16 +210,8 @@ const CaregiverList: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="flex items-center justify-between py-3 w-full">
-        <Link to="/" className="flex items-center text-black no-underline">
-          <BiHeart
-            size={30}
-            className="text-red-500 heart-icon my-auto ml-4 hidden md:block" // Added ml-4 for more margin to the left
-          />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
+      <div className="flex items-center justify-between py-1 w-full">
+        <HeaderLogo />
 
         <div className="flex space-x-4 mr-8">
           <Link
