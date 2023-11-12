@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { BiHeart } from "react-icons/bi";
 import AD3 from "./ad3.png";
 import AD4 from "./ad4.png";
 import AD5 from "./ad5.png";
@@ -73,7 +72,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="relative container py-1 bg-warm-beige">
+    <div className="relative py-1 bg-warm-beige">
       <header className="flex w-full justify-left items-center text-white relative px-2 md:px-1 mx-auto">
         {/* Logo */}
         < HeaderLogo/>
@@ -81,7 +80,7 @@ const HomePage: React.FC = () => {
 
       <hr className="border-t border-black-300 mx-1 my-1" />
       {/* New Image Container */}
-      <div className="flex flex-wrap justify-between items-center my-0">
+      <div className="flex flex-wrap mx-6 justify-between items-center my-0">
         <div className="w-full md:w-1/2 md:p-1">
           <img
             src={header1}
@@ -99,7 +98,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Pinkish rounded rectangle */}
-      <div className="flex flex-col items-center justify-center relative bg-soft-peach rounded-lg p-4 h-[200px] z-0">
+      <div className="flex flex-col mx-6 items-center justify-center relative bg-soft-peach rounded-lg p-4 h-[200px] z-0">
         <h5 className="text-center mb-4 text-dark-gray">寻找你身边的帮工</h5>
         <div className="relative w-3/4">
           <input
@@ -114,7 +113,7 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 -mt-12 hover:z-10 md:flex md:flex-row md:mt-0 justify-between">
+      <div className="grid grid-cols-2 gap-6 -mt-10 hover:z-10 mx-8 md:flex md:flex-row md:mt-0 justify-between">
         {/* Make this button overlap with the pinkish section on mobile */}
         <button
           onClick={() => checkAuthenticationAndNavigate("caregiver")}

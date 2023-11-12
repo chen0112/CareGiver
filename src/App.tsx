@@ -16,7 +16,7 @@ import AuthProvider from "./context/AuthContext";
 
 const App: React.FC = () => {
   return (
-    <div className="">
+    <div >
       <CaregiverProvider>
         <CareneederProvider>
           <CareneederScheduleProvider>
