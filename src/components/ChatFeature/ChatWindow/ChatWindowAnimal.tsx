@@ -29,14 +29,6 @@ type Message = {
   createtime?: string | null;
 };
 
-const realtime = new Ably.Realtime.Promise(
-  "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY"
-);
-
-realtime.connection.on("failed", (stateChange) => {
-  console.error("Ably realtime connection error:", stateChange.reason);
-});
-
 const imageStyle: React.CSSProperties = {
   objectFit: "cover",
   height: "80%",
@@ -142,6 +134,14 @@ const ChatWindow: React.FC = () => {
     Number(phoneNumber_recipient || 0),
   ].sort((a, b) => a - b);
 
+  const realtime = new Ably.Realtime.Promise(
+    "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY"
+  );
+  
+  realtime.connection.on("failed", (stateChange) => {
+    console.error("Ably realtime connection error:", stateChange.reason);
+  });
+  
   const channelName = `chat_${sortedIds[0]}_${sortedIds[1]}`;
 
   const channel = realtime.channels.get(`[?rewind=10]${channelName}`);

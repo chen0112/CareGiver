@@ -22,14 +22,6 @@ type Message = {
   ad_type?: string;
 };
 
-const realtime = new Ably.Realtime.Promise(
-  "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY"
-);
-
-realtime.connection.on("failed", (stateChange) => {
-  console.error("Ably realtime connection error:", stateChange.reason);
-});
-
 const imageStyle: React.CSSProperties = {
   objectFit: "cover",
   height: "80%",
@@ -107,6 +99,14 @@ const ChatWindow: React.FC = () => {
     Number(phoneNumber_recipient || 0),
   ].sort((a, b) => a - b);
 
+  const realtime = new Ably.Realtime.Promise(
+    "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY"
+  );
+  
+  realtime.connection.on("failed", (stateChange) => {
+    console.error("Ably realtime connection error:", stateChange.reason);
+  });
+
   const channelName = `chat_${sortedIds[0]}_${sortedIds[1]}`;
 
   const channel = realtime.channels.get(`[?rewind=10]${channelName}`);
@@ -137,7 +137,7 @@ const ChatWindow: React.FC = () => {
   };
 
   const sendMessage = () => {
-    const timestamp = new Date().toISOString();
+    if (channel) {const timestamp = new Date().toISOString();
 
     const uniqueMessageId = `${new Date().getTime()}-${Math.random()
       .toString(36)
@@ -182,7 +182,11 @@ const ChatWindow: React.FC = () => {
       });
 
     setInput("");
-  };
+    } else {
+    console.error("Ably channel not initialized. Message not sent.");
+    // Handle the case where the Ably channel is not initialized
+  }
+};
 
   // This effect will run every time `messages` changes, to auto-scroll to the end
   useEffect(() => {
