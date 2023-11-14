@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Careneeder, Schedule } from "../../../types/Types";
 import { Link } from "react-router-dom";
-import { BiHeart } from "react-icons/bi";
 import { FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useCareneederScheduleContext } from "../../../context/CareneederScheduleContext";
@@ -14,14 +13,12 @@ import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
 const CareneederDetail: React.FC = () => {
   const { id } = useParams();
   const [careneeder, setCareneeder] = useState<Careneeder | null>(null);
-  const [careneederSchedule, setCareneederSchedule] = useState<Schedule | null>(
-    null
-  );
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const { careneedersSchedule } = useCareneederScheduleContext();
-  console.log("Context careneederSchedule state:", careneedersSchedule);
+  console.log("Context careneedersSchedule state:", careneedersSchedule);
 
   const { careneederAds } = useCareneederAdsContext();
   console.log("Context careneederAds state:", careneederAds);
@@ -57,7 +54,7 @@ const CareneederDetail: React.FC = () => {
     return <p>Error: {error}</p>;
   }
 
-  console.log("careneederSchedule:", careneederSchedule);
+  console.log("careneedersSchedule:", careneedersSchedule);
   console.log("careneederAds:", careneederAds);
 
   // Check if careneeder is not null before attempting to find the schedule

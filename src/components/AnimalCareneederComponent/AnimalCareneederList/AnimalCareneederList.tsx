@@ -248,7 +248,7 @@ const AnimalCareneederList: React.FC = () => {
 
               <Dropdown.Menu>
                 <Dropdown.Item href={`/signup_animalcaregiver/phone/${phone}`}>
-                  发布新广告
+                  发布宠托师广告
                 </Dropdown.Item>
                 <Dropdown.Item href={`/myanimalcaregiverform/phone/${phone}`}>
                   我的广告

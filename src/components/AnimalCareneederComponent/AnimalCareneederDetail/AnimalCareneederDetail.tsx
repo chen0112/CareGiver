@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { AnimalCareneederForm } from "../../../types/Types";
 import { Link } from "react-router-dom";
-import { BiHeart } from "react-icons/bi";
 import { FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { useAnimalCareneederAdsContext } from "../../../context/AnimalCareneederAdsContext";
 import { useAnimalCareneederContext } from "../../../context/AnimalCareneederContext";

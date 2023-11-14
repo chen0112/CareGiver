@@ -265,7 +265,7 @@ const CareneederList: React.FC = () => {
 
               <Dropdown.Menu>
                 <Dropdown.Item href={`/signup_caregiver/phone/${phone}`}>
-                  发布新广告
+                  发布护工新广告
                 </Dropdown.Item>
                 <Dropdown.Item href={`/mycaregiver/phone/${phone}`}>
                   我的广告
