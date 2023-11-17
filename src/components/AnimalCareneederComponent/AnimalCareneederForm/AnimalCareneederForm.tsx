@@ -292,12 +292,12 @@ const AnimalCareneederWebForm: React.FC<AnimalCareneederFormProps> = ({
 
         // After successfully creating the careneeder, navigate to the schedule page
         // by extracting the careneeder's ID from the response and including it in the URL
-        const animalcareneederId = newCaregiver.id;
+        const animalcareneederformId = newCaregiver.id;
 
         resetForm();
         setTimeout(() => {
           navigate(
-            `/signup_animalcareneeder/details?animalcareneederId=${animalcareneederId}&phone=${formData.phone}`
+            `/signup_animalcareneeder/details?animalcareneederformId=${animalcareneederformId}&phone=${formData.phone}`
           );
         }, 2000);
       })

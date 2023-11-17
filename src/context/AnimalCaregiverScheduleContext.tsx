@@ -20,7 +20,7 @@ export const AnimalcaregiverScheduleContext = createContext<{
   getCaregiversSchedule: () => {},
 });
 
-const AnimalcaregiverScheduleProvider: React.FC<AnimalcaregiverScheduleProviderProps> = ({
+const AnimalCaregiverScheduleProvider: React.FC<AnimalcaregiverScheduleProviderProps> = ({
   children,
 }) => {
   const [animalcaregiversSchedule, setCaregiversSchedule] = useState<AnimalcaregiversSchedule[]>(
@@ -80,4 +80,4 @@ export const useAnimalCaregiverScheduleContext = () => {
   return context;
 };
 
-export default AnimalcaregiverScheduleProvider;
+export default AnimalCaregiverScheduleProvider;

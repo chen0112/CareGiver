@@ -19,7 +19,7 @@ const AnimalCareneederAds: React.FC = () => {
 
   // Extract the caregiverId from the query parameters
   const queryParams = new URLSearchParams(location.search);
-  const animalcareneederid = queryParams.get("animalcareneederId");
+  const animalcareneederid = queryParams.get("animalcareneederformId");
   const phoneNumber = queryParams.get("phone");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

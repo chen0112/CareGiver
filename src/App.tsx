@@ -13,7 +13,8 @@ import AnimalCaregiverAdsProvider from "./context/AnimalCaregiverAdsContext";
 import AnimalCareneederProvider from "./context/AnimalCareneederContext";
 import AnimalCareneederFormProvider from "./context/AnimalCareneederFormContext";
 import AnimalCareneederAdsProvider from "./context/AnimalCareneederAdsContext";
-import AnimalcaregiverScheduleProvider from "./context/AnimalCaregiverScheduleContext";
+import AnimalCaregiverScheduleProvider from "./context/AnimalCaregiverScheduleContext";
+import AnimalCareneederScheduleProvider from "./context/AnimalCareneederScheduleContext";
 import AuthProvider from "./context/AuthContext";
 
 const App: React.FC = () => {
@@ -27,19 +28,21 @@ const App: React.FC = () => {
                 <CaregiverAdsProvider>
                   <AnimalCaregiverFormProvider>
                     <AnimalCaregiverProvider>
-                      <AnimalcaregiverScheduleProvider>
+                      <AnimalCaregiverScheduleProvider>
                         <AnimalCaregiverAdsProvider>
                           <AnimalCareneederAdsProvider>
                             <AnimalCareneederProvider>
                               <AnimalCareneederFormProvider>
-                                <AuthProvider>
-                                  <Routes />
-                                </AuthProvider>
+                                <AnimalCareneederScheduleProvider>
+                                  <AuthProvider>
+                                    <Routes />
+                                  </AuthProvider>
+                                </AnimalCareneederScheduleProvider>
                               </AnimalCareneederFormProvider>
                             </AnimalCareneederProvider>
                           </AnimalCareneederAdsProvider>
                         </AnimalCaregiverAdsProvider>
-                      </AnimalcaregiverScheduleProvider>
+                      </AnimalCaregiverScheduleProvider>
                     </AnimalCaregiverProvider>
                   </AnimalCaregiverFormProvider>
                 </CaregiverAdsProvider>

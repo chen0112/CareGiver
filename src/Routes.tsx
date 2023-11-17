@@ -38,6 +38,7 @@ import ErrorComponent from "./components/ErrorComponent/ErrorComponent";
 import ProtectedRoute from "./components/ProtectedRouteComponent/ProtectedRouteComponent";
 import CaregiverSchedule from "./components/CaregiverComponent/CaregiverSchedule/CaregiverSchedule";
 import AnimalcaregiverSchedule from "./components/AnimalCaregiverComponent/AnimalCaregiverSchedule/AnimalCaregiverSchedule";
+import AnimalcareneederSchedule from "./components/AnimalCareneederComponent/AnimalCareneederSchedule/AnimalCareneederSchedule";
 
 const API_URL = `${BASE_URL}/api/all_caregivers`;
 
@@ -249,8 +250,12 @@ const AppRoutes: React.FC = () => {
           element={<ProtectedRoute element={<AnimalCareneederList />} />}
         />
         <Route
-          path="/signup_animalcareneeder/details/ads"
+          path="/signup_animalcareneeder/details/schedules/ads"
           element={<AnimalCareneederAds />}
+        />
+         <Route
+          path="/signup_animalcareneeder/details/schedules"
+          element={<AnimalcareneederSchedule />}
         />
         <Route
           path="/animalcareneeders/id/:id"

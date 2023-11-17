@@ -37,7 +37,7 @@ const AnimalCareneeder: React.FC = () => {
 
   // Extract the animalcaregiverId from the query parameters
   const queryParams = new URLSearchParams(location.search);
-  const animalcareneederId = queryParams.get("animalcareneederId");
+  const animalcareneederId = queryParams.get("animalcareneederformId");
   const phoneNumber = queryParams.get("phone");
 
   const toggleService = (service: string) => {
@@ -128,7 +128,7 @@ const AnimalCareneeder: React.FC = () => {
       const animalcareneederid = data.animalcareneederid;
 
       navigate(
-        `/signup_animalcareneeder/details/ads?animalcareneederId=${animalcareneederid}&phone=${phoneNumber}`
+        `/signup_animalcareneeder/details/schedules?animalcareneederformId=${animalcareneederid}&phone=${phoneNumber}`
       );
     } else {
       // Handle error
