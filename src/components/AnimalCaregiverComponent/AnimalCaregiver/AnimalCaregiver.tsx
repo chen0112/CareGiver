@@ -38,7 +38,7 @@ const AnimalCaregiver: React.FC = () => {
 
   // Extract the animalcaregiverId from the query parameters
   const queryParams = new URLSearchParams(location.search);
-  const animalcaregiverId = queryParams.get("animalcaregiverId");
+  const animalcaregiverformId = queryParams.get("animalcaregiverformId");
   const phoneNumber = queryParams.get("phone");
 
   const toggleService = (service: string) => {
@@ -98,18 +98,18 @@ const AnimalCaregiver: React.FC = () => {
 
     // Data to send to the server
     const payload = {
-      animalcaregiverid: animalcaregiverId,
+      // it should be animalcaregiverformId, but lazy to change it
+      animalcaregiverid: animalcaregiverformId,
       selectedservices: selectedServices,
       selectedanimals: selectedAnimals,
       hourlycharge: hourlyCharge,
     };
 
-    if (!animalcaregiverId) {
+    if (!animalcaregiverformId) {
       console.error("Missing animalcaregiverId");
       return;
     }
 
-    // Send a POST request to the Flask backend
     const response = await fetch(`${BASE_URL}/api/animalcaregiver_details`, {
       method: "POST",
       headers: {
@@ -126,7 +126,7 @@ const AnimalCaregiver: React.FC = () => {
       const animalcaregiverid = data.animalcaregiverid;
 
       navigate(
-        `/signup_animalcaregiver/details/ads?animalcaregiverId=${animalcaregiverid}&phone=${phoneNumber}`
+        `/signup_animalcaregiver/details/schedules?animalcaregiverformId=${animalcaregiverid}&phone=${phoneNumber}`
       );
     } else {
       // Handle error

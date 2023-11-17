@@ -61,6 +61,14 @@ export interface Schedule {
   careneeder_id: number;
 }
 
+// CaregiverSchedule
+export type CaregiverSchedule = Omit<Schedule, 'careneeder_id'> & { caregiver_id: number };
+// AnimalcaregiverSchedule
+export type AnimalcaregiversSchedule = Omit<Schedule, 'careneeder_id'> & { animalcaregiverform_id: number };
+// AnimalcareneederSchedule
+export type AnimalcareneedersSchedule = Omit<Schedule, 'careneeder_id'> & { animalcareneederform_id: number };
+
+
 ///carenederAds
 export interface Ads {
   id: number;

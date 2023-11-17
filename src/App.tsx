@@ -5,6 +5,7 @@ import CareneederProvider from "./context/CareneederContext"; // Import Careneed
 import CareneederScheduleProvider from "./context/CareneederScheduleContext"; // Import CareneederScheduleProvider
 import CareneederAdsProvider from "./context/CareneederAdsContext";
 import CaregiverAdsProvider from "./context/CaregiverAdsContext";
+import CaregiverScheduleProvider from "./context/CaregiverScheduleContext";
 import "./index.css";
 import AnimalCaregiverFormProvider from "./context/AnimalCaregiverFormContext";
 import AnimalCaregiverProvider from "./context/AnimalCaregiverContext";
@@ -12,35 +13,40 @@ import AnimalCaregiverAdsProvider from "./context/AnimalCaregiverAdsContext";
 import AnimalCareneederProvider from "./context/AnimalCareneederContext";
 import AnimalCareneederFormProvider from "./context/AnimalCareneederFormContext";
 import AnimalCareneederAdsProvider from "./context/AnimalCareneederAdsContext";
+import AnimalcaregiverScheduleProvider from "./context/AnimalCaregiverScheduleContext";
 import AuthProvider from "./context/AuthContext";
 
 const App: React.FC = () => {
   return (
-    <div >
+    <div>
       <CaregiverProvider>
-        <CareneederProvider>
-          <CareneederScheduleProvider>
-            <CareneederAdsProvider>
-              <CaregiverAdsProvider>
-                <AnimalCaregiverFormProvider>
-                  <AnimalCaregiverProvider>
-                    <AnimalCaregiverAdsProvider>
-                      <AnimalCareneederAdsProvider>
-                        <AnimalCareneederProvider>
-                          <AnimalCareneederFormProvider>
-                            <AuthProvider>
-                              <Routes />
-                            </AuthProvider>
-                          </AnimalCareneederFormProvider>
-                        </AnimalCareneederProvider>
-                      </AnimalCareneederAdsProvider>
-                    </AnimalCaregiverAdsProvider>
-                  </AnimalCaregiverProvider>
-                </AnimalCaregiverFormProvider>
-              </CaregiverAdsProvider>
-            </CareneederAdsProvider>
-          </CareneederScheduleProvider>
-        </CareneederProvider>
+        <CaregiverScheduleProvider>
+          <CareneederProvider>
+            <CareneederScheduleProvider>
+              <CareneederAdsProvider>
+                <CaregiverAdsProvider>
+                  <AnimalCaregiverFormProvider>
+                    <AnimalCaregiverProvider>
+                      <AnimalcaregiverScheduleProvider>
+                        <AnimalCaregiverAdsProvider>
+                          <AnimalCareneederAdsProvider>
+                            <AnimalCareneederProvider>
+                              <AnimalCareneederFormProvider>
+                                <AuthProvider>
+                                  <Routes />
+                                </AuthProvider>
+                              </AnimalCareneederFormProvider>
+                            </AnimalCareneederProvider>
+                          </AnimalCareneederAdsProvider>
+                        </AnimalCaregiverAdsProvider>
+                      </AnimalcaregiverScheduleProvider>
+                    </AnimalCaregiverProvider>
+                  </AnimalCaregiverFormProvider>
+                </CaregiverAdsProvider>
+              </CareneederAdsProvider>
+            </CareneederScheduleProvider>
+          </CareneederProvider>
+        </CaregiverScheduleProvider>
       </CaregiverProvider>
     </div>
   );

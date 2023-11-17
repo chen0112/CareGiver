@@ -36,6 +36,8 @@ import ChatWindowAnimal from "./components/ChatFeature/ChatWindow/ChatWindowAnim
 import { BASE_URL } from "./types/Constant";
 import ErrorComponent from "./components/ErrorComponent/ErrorComponent";
 import ProtectedRoute from "./components/ProtectedRouteComponent/ProtectedRouteComponent";
+import CaregiverSchedule from "./components/CaregiverComponent/CaregiverSchedule/CaregiverSchedule";
+import AnimalcaregiverSchedule from "./components/AnimalCaregiverComponent/AnimalCaregiverSchedule/AnimalCaregiverSchedule";
 
 const API_URL = `${BASE_URL}/api/all_caregivers`;
 
@@ -127,7 +129,11 @@ const AppRoutes: React.FC = () => {
         />
         <Route path="/caregivers/id/:id" element={<CaregiverDetail />} />
         <Route path="/mycaregiver/phone/:phone" element={<MyCaregivers />} />
-        <Route path="/signup_caregiver/ads" element={<CaregiverAds />} />
+        <Route
+          path="/signup_caregiver/schedule"
+          element={<CaregiverSchedule />}
+        />
+        <Route path="/signup_caregiver/schedule/ads" element={<CaregiverAds />} />
 
         {/* careneeder */}
 
@@ -190,8 +196,12 @@ const AppRoutes: React.FC = () => {
           path="/signup_animalcaregiver/details"
           element={<AnimalCaregiver />}
         />
+          <Route
+          path="/signup_animalcaregiver/details/schedules"
+          element={< AnimalcaregiverSchedule />}
+        />
         <Route
-          path="/signup_animalcaregiver/details/ads"
+          path="/signup_animalcaregiver/details/schedule/ads"
           element={<AnimalCaregiverAd />}
         />
 

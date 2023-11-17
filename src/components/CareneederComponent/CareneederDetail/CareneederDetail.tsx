@@ -107,12 +107,12 @@ const CareneederDetail: React.FC = () => {
 
             {/* Details section */}
             <div className="flex flex-col space-y-2">
-              <h2 className="text-xl md:text-2xl font-semibold text-blue-600">
+              <h2 className="text-xl text-center md:text-2xl font-semibold text-blue-600">
                 {careneeder?.name}
               </h2>
               <div className="flex items-center space-x-2">
-                <FaMapMarkerAlt className="text-blue-600 mb-2" />
-                <p className="text-black font-semibold mb-2">
+                <p className="flex flex-row text-black font-semibold mb-2">
+                <FaMapMarkerAlt className="text-blue-600 mt-1 mr-1" />
                   {careneeder?.location &&
                   Array.isArray(careneeder.location) &&
                   careneeder.location.length > 0
@@ -120,6 +120,7 @@ const CareneederDetail: React.FC = () => {
                     : "无"}
                 </p>
               </div>
+              
               <p className="text-black font-semibold">
                 电话: {careneeder?.phone}
               </p>
@@ -131,6 +132,7 @@ const CareneederDetail: React.FC = () => {
               </p>
             </div>
           </div>
+
           {/* Schedule Information */}
           {selectedSchedule && (
             <div className="max-w-4xl w-full p-4 bg-blue-100 shadow-lg rounded-lg">

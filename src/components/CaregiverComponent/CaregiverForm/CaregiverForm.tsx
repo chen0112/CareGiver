@@ -2,7 +2,6 @@ import React, { useState, useCallback, useRef } from "react";
 import { Caregiver } from "../../../types/Types";
 import "./CaregiverForm.css";
 import { useNavigate, Link, useParams } from "react-router-dom";
-import { BiHeart } from "react-icons/bi";
 import getCroppedImg from "./CropperImg";
 import Cropper from "react-easy-crop";
 import { Slider, Button, Typography } from "antd";
@@ -310,7 +309,7 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({
         resetForm();
         setTimeout(() => {
           navigate(
-            `/signup_caregiver/ads?caregiverId=${caregiverId}&phone=${formData.phone}`
+            `/signup_caregiver/schedule?caregiverId=${caregiverId}&phone=${formData.phone}`
           );
         }, 2000);
       })
