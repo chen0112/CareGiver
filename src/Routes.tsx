@@ -40,15 +40,15 @@ import CaregiverSchedule from "./components/CaregiverComponent/CaregiverSchedule
 import AnimalcaregiverSchedule from "./components/AnimalCaregiverComponent/AnimalCaregiverSchedule/AnimalCaregiverSchedule";
 import AnimalcareneederSchedule from "./components/AnimalCareneederComponent/AnimalCareneederSchedule/AnimalCareneederSchedule";
 
-const API_URL = `${BASE_URL}/api/all_caregivers`;
+const API_URL = `${BASE_URL}/api/caregiver/all_caregivers`;
 
 const API_URL_UPLOAD = `${BASE_URL}/api/upload`;
 
-const API_URL_careneeders = `${BASE_URL}/api/all_careneeders`;
+const API_URL_careneeders = `${BASE_URL}/api/careneeder/all_careneeders`;
 
-const API_URL_animalcaregivers = `${BASE_URL}/api/all_animalcaregivers`;
+const API_URL_animalcaregivers = `${BASE_URL}/api/animalcaregiver/all_animalcaregivers`;
 
-const API_URL_animalcareneeders = `${BASE_URL}/api/all_animalcareneeders`;
+const API_URL_animalcareneeders = `${BASE_URL}/api/animalcareneeder/all_animalcareneeders`;
 
 const AppRoutes: React.FC = () => {
   const { caregivers, setCaregivers } = useCaregiverContext();

@@ -22,7 +22,7 @@ const MyCareneeders: React.FC = () => {
   console.log("Context careneederAds state:", careneederAds);
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/mycareneeder/${phone}`) // Adjust the API endpoint
+    fetch(`${BASE_URL}/api/careneeder/mycareneeder/${phone}`) // Adjust the API endpoint
       .then((response) => {
         if (!response.ok) {
           throw new Error("请先发布您的广告！");

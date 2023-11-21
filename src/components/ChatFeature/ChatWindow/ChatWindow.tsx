@@ -11,6 +11,8 @@ import { useCareneederAdsContext } from "../../../context/CareneederAdsContext";
 import { Caregiver, Careneeder, CaregiverAds, Ads } from "../../../types/Types";
 import { defaultImageUrl } from "../../../types/Constant";
 import useUserOnlineStore from "../../StateOnlineStore/StateOnlineStore";
+import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
+import { useAbly } from "../../../context/AblyContext";
 
 type Message = {
   id?: string;
@@ -77,6 +79,7 @@ const ChatWindow: React.FC = () => {
         : undefined;
 
     console.log("Fetched caregivers individual:", individual);
+
     associatedAds = individual
       ? caregiverAds?.find((ad) => ad.caregiver_id === individual!.id)
       : null;
@@ -99,19 +102,9 @@ const ChatWindow: React.FC = () => {
     Number(phoneNumber_recipient || 0),
   ].sort((a, b) => a - b);
 
-  const realtime = new Ably.Realtime.Promise(
-    "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY"
-  );
-  
-  realtime.connection.on("failed", (stateChange) => {
-    console.error("Ably realtime connection error:", stateChange.reason);
-  });
+  const ably = useAbly();
 
   const channelName = `chat_${sortedIds[0]}_${sortedIds[1]}`;
-
-  const channel = realtime.channels.get(`[?rewind=10]${channelName}`);
-
-  console.log("this is channel:", channel);
 
   const fetchChatHistory = () => {
     fetch(
@@ -137,7 +130,15 @@ const ChatWindow: React.FC = () => {
   };
 
   const sendMessage = () => {
-    if (channel) {const timestamp = new Date().toISOString();
+    const trimmedInput = input.trim();
+
+    // Check if the input is empty after trimming
+    if (!trimmedInput) {
+      console.log("Cannot send an empty message");
+      return; // Exit the function to prevent sending an empty message
+    }
+
+    const timestamp = new Date().toISOString();
 
     const uniqueMessageId = `${new Date().getTime()}-${Math.random()
       .toString(36)
@@ -152,9 +153,14 @@ const ChatWindow: React.FC = () => {
 
     console.log("Sending ad_id:", id);
 
-    channel
-      .publish("send_message", messageData)
-      .then(() => {
+    if (ably) {
+      const channel = ably.channels.get(`[?rewind=10]${channelName}`);
+      channel.publish("send_message", messageData, (err) => {
+        if (err) {
+          console.error("Error sending message:", err);
+          return;
+        }
+
         // Now send the message data to your backend
         fetch(`${BASE_URL}/api/handle_message`, {
           method: "POST",
@@ -167,26 +173,21 @@ const ChatWindow: React.FC = () => {
             content: input,
             ad_id: id,
             ad_type: adType,
+            ably_message_id: uniqueMessageId,
           }),
         })
-          .then((response) => response.json()) // Assuming server responds with json
+          .then((response) => response.json())
           .then((data) => {
             console.log("Message stored in backend:", data);
           })
           .catch((error) => {
             console.error("Error storing message in backend:", error);
           });
-      })
-      .catch((err) => {
-        console.error("Error sending message:", err);
       });
+    }
 
     setInput("");
-    } else {
-    console.error("Ably channel not initialized. Message not sent.");
-    // Handle the case where the Ably channel is not initialized
-  }
-};
+  };
 
   // This effect will run every time `messages` changes, to auto-scroll to the end
   useEffect(() => {
@@ -196,48 +197,45 @@ const ChatWindow: React.FC = () => {
   }, [messages]); // Dependency on messages array
 
   useEffect(() => {
-    fetchChatHistory();
-    channel.subscribe("send_message", (message) => {
-      const data = message.data;
-      setMessages((prevMessages) => {
-        // Combine previous messages with the new message
-        const updatedMessages = [
-          ...prevMessages,
-          {
-            id: data.id,
-            sender_id: data.sender_id,
-            content: data.content,
-            recipient_id: data.recipient_id,
-            createtime: data.createtime,
-          },
-        ];
+    if (ably) {
+      const channel = ably.channels.get(`[?rewind=10]${channelName}`);
+      channel.subscribe("send_message", (message) => {
+        const data = message.data;
+        setMessages((prevMessages) => {
+          // Combine previous messages with the new message
+          const updatedMessages = [
+            ...prevMessages,
+            {
+              id: data.id,
+              sender_id: data.sender_id,
+              content: data.content,
+              recipient_id: data.recipient_id,
+              createtime: data.createtime,
+            },
+          ];
 
-        // Sort messages by their `createtime`
-        updatedMessages.sort((a, b) => {
-          const dateA = new Date(a.createtime).getTime();
-          const dateB = new Date(b.createtime).getTime();
-          return dateA - dateB; // sort in ascending order
+          // Sort messages by their `createtime`
+          updatedMessages.sort((a, b) => {
+            const dateA = new Date(a.createtime).getTime();
+            const dateB = new Date(b.createtime).getTime();
+            return dateA - dateB; // sort in ascending order
+          });
+
+          return updatedMessages;
         });
-
-        return updatedMessages;
       });
-    });
 
-    return () => {
-      channel.unsubscribe("send_message");
-    };
-  }, [phoneNumber_sender, phoneNumber_recipient]);
+      fetchChatHistory();
 
+      return () => {
+        channel.unsubscribe("send_message");
+      };
+    }
+  }, [ably, phoneNumber_sender, phoneNumber_recipient, channelName]);
+  
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex items-center mx-9 py-3">
-        <Link to="/" className="flex items-center text-black no-underline ml-0">
-          <BiHeart size={30} className="text-red-500 heart-icon my-auto" />
-          <h1 className="font-bold text-3xl ml-2 my-auto align-middle text-red-500">
-            关爱网
-          </h1>
-        </Link>
-      </div>
+      <HeaderLogo />
 
       <hr className="border-t border-black-300 mx-1 my-2" />
       {/* Caregiver Info */}
@@ -287,14 +285,6 @@ const ChatWindow: React.FC = () => {
 
       {/* Chat */}
       <div className="flex flex-col h-screen">
-        {/* Display online/offline status */}
-        <div
-          className={`mx-4 mt-2 text-center ${
-            isUserOnline ? "text-green-500" : "text-gray-500"
-          }`}
-        >
-          {isUserOnline ? "在线中" : "下线中，请留言"}
-        </div>
         <div className="flex-grow overflow-y-auto max-h-[calc(100vh-500px)] md:max-h-[calc(100vh-400px)]">
           {messages.map((message, index) => (
             <div

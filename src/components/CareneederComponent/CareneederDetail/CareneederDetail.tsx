@@ -29,7 +29,7 @@ const CareneederDetail: React.FC = () => {
 
   useEffect(() => {
     // Fetch careneeder data
-    fetch(`${BASE_URL}/api/all_careneeders/${id}`)
+    fetch(`${BASE_URL}/api/careneeder/all_careneeders/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

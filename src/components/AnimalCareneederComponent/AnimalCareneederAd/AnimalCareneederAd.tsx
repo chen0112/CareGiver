@@ -71,7 +71,7 @@ const AnimalCareneederAds: React.FC = () => {
     };
 
     // Replace with your actual API URL
-    const API_URL = `${BASE_URL}/api/animalcareneeder_ads`;
+    const API_URL = `${BASE_URL}/api/animalcareneeder/animalcareneeder_ads`;
 
     if (!animalcareneederid) {
       console.error("Missing animalcareneederid");

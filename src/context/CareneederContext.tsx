@@ -24,7 +24,7 @@ const CareneederProvider: React.FC<CareneederProviderProps> = ({
   const [careneeders, setCareneeders] = useState<Careneeder[]>([]);
 
   const getCareneeders = () => {
-    fetch(`${BASE_URL}/api/all_careneeders`) // Adjust URL
+    fetch(`${BASE_URL}/api/careneeder/all_careneeders`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setCareneeders(data))
       .catch((error) => console.error("Error fetching care needers:", error));

@@ -28,7 +28,7 @@ const AnimalCaregiverScheduleProvider: React.FC<AnimalcaregiverScheduleProviderP
   );
 
   const getCaregiversSchedule = () => {
-    fetch(`${BASE_URL}/api/all_animalcaregiverschedule`) // Adjust URL
+    fetch(`${BASE_URL}/api/animalcaregiver/all_animalcaregiverschedule`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setCaregiversSchedule(data))
       .catch((error) =>

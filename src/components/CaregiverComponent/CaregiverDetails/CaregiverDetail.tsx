@@ -28,7 +28,7 @@ const CaregiverDetail: React.FC = () => {
   const phoneNumber = queryParams.get("phoneNumber");
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/all_caregivers/${id}`)
+    fetch(`${BASE_URL}/api/caregiver/all_caregivers/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

@@ -81,7 +81,7 @@ const AnimalCaregiverCard: React.FC<AnimalcaregiverCardProps> = ({
 
   const handleSave = () => {
     fetch(
-      `${BASE_URL}/api/myanimalcaregiver/${editedanimalcaregiverForm.id}/ad`,
+      `${BASE_URL}/api/animalcaregiver/myanimalcaregiver/${editedanimalcaregiverForm.id}/ad`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

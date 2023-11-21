@@ -28,7 +28,7 @@ const CaregiverScheduleProvider: React.FC<CaregiverScheduleProviderProps> = ({
   );
 
   const getCaregiversSchedule = () => {
-    fetch(`${BASE_URL}/api/all_caregiverschedule`) // Adjust URL
+    fetch(`${BASE_URL}/api/caregiver/all_caregiverschedule`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setCaregiversSchedule(data))
       .catch((error) =>

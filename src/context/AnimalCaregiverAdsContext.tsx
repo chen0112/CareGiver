@@ -28,7 +28,7 @@ const AnimalCaregiverAdsProvider: React.FC<AnimalCaregiverAdsProviderProps> = ({
   >([]);
 
   const getanimalcaregiverAds = () => {
-    fetch(`${BASE_URL}/api/all_animal_caregiver_ads`) // Adjust URL
+    fetch(`${BASE_URL}/api/animalcaregiver/all_animal_caregiver_ads`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setanimalcaregiverAds(data))
       .catch((error) =>

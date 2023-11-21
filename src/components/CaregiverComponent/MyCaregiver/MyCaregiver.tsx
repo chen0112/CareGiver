@@ -18,7 +18,7 @@ const MyCaregivers: React.FC = () => {
   console.log("Context careneederAds state:", caregiverAds);
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/mycaregiver/${phone}`)
+    fetch(`${BASE_URL}/api/caregiver/mycaregiver/${phone}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("请先发布您的广告！");

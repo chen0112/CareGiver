@@ -76,7 +76,7 @@ const CaregiverAds: React.FC = () => {
       description: description,
     };
 
-    const API_URL = `${BASE_URL}/api/caregiver_ads`;
+    const API_URL = `${BASE_URL}/api/caregiver/caregiver_ads`;
 
     if (!caregiverId) {
       console.error("Missing caregiverId");

@@ -80,7 +80,7 @@ const CareneederSchedule: React.FC = () => {
     }
 
     // Step 2: Create an API request
-    const API_URL = `${BASE_URL}/api/careneeder_schedule`; // Replace with your actual API endpoint
+    const API_URL = `${BASE_URL}/api/careneeder/careneeder_schedule`; // Replace with your actual API endpoint
 
     const requestData = {
       careneeder_id: careneederId,

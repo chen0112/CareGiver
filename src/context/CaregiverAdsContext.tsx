@@ -24,7 +24,7 @@ const CaregiverAdsProvider: React.FC<CaregiverAdsProviderProps> = ({
   const [caregiverAds, setCaregiverAds] = useState<CaregiverAds[]>([]);
 
   const getCaregiverAds = () => {
-    fetch(`${BASE_URL}/api/all_caregiverads`) // Temporary URL
+    fetch(`${BASE_URL}/api/caregiver/all_caregiverads`) // Temporary URL
       .then((response) => response.json())
       .then((data) => setCaregiverAds(data))
       .catch((error) => console.error("Error fetching caregiver ads:", error));

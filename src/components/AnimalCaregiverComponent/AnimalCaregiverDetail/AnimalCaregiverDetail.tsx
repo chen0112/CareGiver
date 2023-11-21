@@ -29,7 +29,7 @@ const AnimalCaregiverDetail: React.FC = () => {
   console.log("Context animalcaregiverAds state:", animalcaregiverAds);
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/all_animalcaregiverform/${id}`)
+    fetch(`${BASE_URL}/api/animalcaregiver/all_animalcaregiverform/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

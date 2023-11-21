@@ -24,7 +24,7 @@ const CareneederAdsProvider: React.FC<CareneederAdsProviderProps> = ({
   const [careneederAds, setCareneederAds] = useState<Ads[]>([]);
 
   const getCareneederAds = () => {
-    fetch(`${BASE_URL}/api/all_careneederads`) // Adjust URL
+    fetch(`${BASE_URL}/api/careneeder/all_careneederads`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setCareneederAds(data))
       .catch((error) => console.error("Error fetching careneeder ads:", error));

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AnimalCareneederCard from "../AnimalCareneederCard/AnimalCareneederCard";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { BiHeart, BiMessageDetail } from "react-icons/bi";
+import { BiMessageDetail } from "react-icons/bi";
 import { useAnimalCareneederFormContext } from "../../../context/AnimalCareneederFormContext";
 import { useAnimalCareneederAdsContext } from "../../../context/AnimalCareneederAdsContext";
 import { useAnimalCareneederContext } from "../../../context/AnimalCareneederContext";

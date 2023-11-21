@@ -24,7 +24,7 @@ const MyAnimalCaregiver: React.FC = () => {
   console.log("Context animalcaregiverAds state:", animalcaregiverAds);
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/myanimalcaregiverform/${phone}`) // Adjust the API endpoint
+    fetch(`${BASE_URL}/api/animalcaregiver/myanimalcaregiverform/${phone}`) // Adjust the API endpoint
       .then((response) => {
         if (!response.ok) {
           throw new Error("请先发布您的广告！");

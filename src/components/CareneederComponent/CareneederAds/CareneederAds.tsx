@@ -71,7 +71,7 @@ const CareneederAds: React.FC = () => {
     };
 
     // Replace with your actual API URL
-    const API_URL = `${BASE_URL}/api/careneeder_ads`;
+    const API_URL = `${BASE_URL}/api/careneeder/careneeder_ads`;
 
     if (!careneederId) {
       console.error("Missing careneederId");

@@ -4,8 +4,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { useAnimalCaregiverContext } from "../../../context/AnimalCaregiverContext";
 import { useAnimalCaregiverAdsContext } from "../../../context/AnimalCaregiverAdsContext";
 import { useAnimalCaregiverFormContext } from "../../../context/AnimalCaregiverFormContext";
-import { Link, useLocation } from "react-router-dom";
-import { BiHeart, BiSend } from "react-icons/bi";
+import { useLocation } from "react-router-dom";
+import { BiSend } from "react-icons/bi";
 import { BASE_URL } from "../../../types/Constant";
 import { useAnimalCareneederContext } from "../../../context/AnimalCareneederContext";
 import { useAnimalCareneederAdsContext } from "../../../context/AnimalCareneederAdsContext";
@@ -20,6 +20,7 @@ import {
 } from "../../../types/Types";
 import { defaultImageUrl } from "../../../types/Constant";
 import HeaderLogo from "../../HeaderLogoComponent/HeaderLogo";
+import { useAbly } from "../../../context/AblyContext";
 
 type Message = {
   id?: string;
@@ -27,6 +28,8 @@ type Message = {
   content: string;
   recipient_id: string | null;
   createtime?: string | null;
+  ad_id?: number;
+  ad_type?: string;
 };
 
 const imageStyle: React.CSSProperties = {
@@ -87,6 +90,7 @@ const ChatWindow: React.FC = () => {
       id !== null && !isNaN(id)
         ? animalcaregiversForm.find((c) => c.id === id)
         : undefined;
+
     console.log("Fetched animalcaregivers individual:", individual);
 
     associatedAds = individual
@@ -134,19 +138,9 @@ const ChatWindow: React.FC = () => {
     Number(phoneNumber_recipient || 0),
   ].sort((a, b) => a - b);
 
-  const realtime = new Ably.Realtime.Promise(
-    "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY"
-  );
-  
-  realtime.connection.on("failed", (stateChange) => {
-    console.error("Ably realtime connection error:", stateChange.reason);
-  });
-  
+  const ably = useAbly();
+
   const channelName = `chat_${sortedIds[0]}_${sortedIds[1]}`;
-
-  const channel = realtime.channels.get(`[?rewind=10]${channelName}`);
-
-  console.log("this is channel:", channel);
 
   const fetchChatHistory = () => {
     fetch(
@@ -172,24 +166,36 @@ const ChatWindow: React.FC = () => {
   };
 
   const sendMessage = () => {
-    const timestamp = new Date().toISOString();
+    const trimmedInput = input.trim();
 
+    // Check if the input is empty after trimming
+    if (!trimmedInput) {
+      console.log("Cannot send an empty message");
+      return; // Exit the function to prevent sending an empty message
+    }
+
+    const timestamp = new Date().toISOString();
     const uniqueMessageId = `${new Date().getTime()}-${Math.random()
       .toString(36)
       .substr(2, 9)}`;
     const messageData = {
       sender_id: phoneNumber_sender || "unknown",
       recipient_id: phoneNumber_recipient,
-      content: input,
+      content: trimmedInput,
       createtime: timestamp,
       id: uniqueMessageId,
     };
 
     console.log("Sending ad_id:", id);
 
-    channel
-      .publish("send_message", messageData)
-      .then(() => {
+    if (ably) {
+      const channel = ably.channels.get(`[?rewind=10]${channelName}`);
+      channel.publish("send_message", messageData, (err) => {
+        if (err) {
+          console.error("Error sending message:", err);
+          return;
+        }
+
         // Now send the message data to your backend
         fetch(`${BASE_URL}/api/handle_message`, {
           method: "POST",
@@ -199,22 +205,21 @@ const ChatWindow: React.FC = () => {
           body: JSON.stringify({
             sender_id: phoneNumber_sender || "unknown",
             recipient_id: phoneNumber_recipient,
-            content: input,
+            content: trimmedInput,
             ad_id: id,
             ad_type: adType,
+            ably_message_id: uniqueMessageId,
           }),
         })
-          .then((response) => response.json()) // Assuming server responds with json
+          .then((response) => response.json())
           .then((data) => {
             console.log("Message stored in backend:", data);
           })
           .catch((error) => {
             console.error("Error storing message in backend:", error);
           });
-      })
-      .catch((err) => {
-        console.error("Error sending message:", err);
       });
+    }
 
     setInput("");
   };
@@ -227,37 +232,37 @@ const ChatWindow: React.FC = () => {
   }, [messages]); // Dependency on messages array
 
   useEffect(() => {
-    fetchChatHistory();
-    channel.subscribe("send_message", (message) => {
-      const data = message.data;
-      setMessages((prevMessages) => {
-        // Combine previous messages with the new message
-        const updatedMessages = [
-          ...prevMessages,
-          {
-            id: data.id,
-            sender_id: data.sender_id,
-            content: data.content,
-            recipient_id: data.recipient_id,
-            createtime: data.createtime,
-          },
-        ];
-
-        // Sort messages by their `createtime`
-        updatedMessages.sort((a, b) => {
-          const dateA = new Date(a.createtime).getTime();
-          const dateB = new Date(b.createtime).getTime();
-          return dateA - dateB; // sort in ascending order
+    if (ably) {
+      const channel = ably.channels.get(`[?rewind=10]${channelName}`);
+      channel.subscribe("send_message", (message) => {
+        const data = message.data;
+        setMessages((prevMessages) => {
+          const updatedMessages = [
+            ...prevMessages,
+            {
+              id: data.id,
+              sender_id: data.sender_id,
+              content: data.content,
+              recipient_id: data.recipient_id,
+              createtime: data.createtime,
+            },
+          ];
+          updatedMessages.sort(
+            (a, b) =>
+              new Date(a.createtime).getTime() -
+              new Date(b.createtime).getTime()
+          );
+          return updatedMessages;
         });
-
-        return updatedMessages;
       });
-    });
 
-    return () => {
-      channel.unsubscribe("send_message");
-    };
-  }, [phoneNumber_sender, phoneNumber_recipient]);
+      fetchChatHistory();
+
+      return () => {
+        channel.unsubscribe("send_message");
+      };
+    }
+  }, [ably, phoneNumber_sender, phoneNumber_recipient, channelName]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -310,48 +315,50 @@ const ChatWindow: React.FC = () => {
       </div>
 
       {/* Chat */}
-      <div className="flex-grow overflow-y-auto max-h-[calc(100vh-500px)]">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`${
-              message.sender_id === (phoneNumber_sender || "")
-                ? "text-right"
-                : "text-left"
-            } my-2 mx-4`}
-          >
+      <div className="flex flex-col h-screen">
+        <div className="flex-grow overflow-y-auto max-h-[calc(100vh-500px)] md:max-h-[calc(100vh-400px)]">
+          {messages.map((message, index) => (
             <div
-              className={`inline-block p-2 rounded ${
+              key={index}
+              className={`${
                 message.sender_id === (phoneNumber_sender || "")
-                  ? "bg-blue-400 text-white"
-                  : "bg-gray-300 text-black"
-              }`}
+                  ? "text-right"
+                  : "text-left"
+              } my-2 mx-4`}
             >
-              {message.content}
-              <div className="mt-1 text-xs">
-                {formatTimestamp(message.createtime || "")}
+              <div
+                className={`inline-block p-2 rounded ${
+                  message.sender_id === (phoneNumber_sender || "")
+                    ? "bg-blue-400 text-white"
+                    : "bg-gray-300 text-black"
+                }`}
+              >
+                {message.content}
+                <div className="mt-1 text-xs">
+                  {formatTimestamp(message.createtime || "")}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        <div id="endOfMessages" ref={endOfMessagesRef}></div>
-        {/* Moved inside scrollable div */}
-      </div>
+          ))}
+          <div id="endOfMessages" ref={endOfMessagesRef}></div>
+          {/* Moved inside scrollable div */}
+        </div>
 
-      {/* Input - Fixed at the bottom */}
-      <div className="flex items-center mt-2 sm:mt-4 border-t pt-2 sm:pt-4 w-full bottom-5">
-        <input
-          className="flex-grow rounded p-2 border border-gray-300 mr-2 ml-5 mb-2"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="请在这里输入..."
-        />
-        <button
-          className="p-2 sm:p-3 rounded bg-teal-400 text-white mr-4 mb-2"
-          onClick={sendMessage}
-        >
-          <BiSend size={16} className="sm:text-xl" />
-        </button>
+        {/* Input - Fixed at the bottom */}
+        <div className="flex items-center mt-2 sm:mt-4 border-t pt-2 sm:pt-4 w-full bottom-5">
+          <input
+            className="flex-grow rounded p-2 border border-gray-300 mr-2 ml-5 mb-2"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="请在这里输入..."
+          />
+          <button
+            className="p-2 sm:p-3 rounded bg-teal-400 text-white mr-4 mb-2"
+            onClick={sendMessage}
+          >
+            <BiSend size={16} className="sm:text-xl" />
+          </button>
+        </div>
       </div>
     </div>
   );

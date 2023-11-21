@@ -28,7 +28,7 @@ const AnimalCareneederScheduleProvider: React.FC<AnimalcareneederScheduleProvide
   );
 
   const getCareneedersSchedule = () => {
-    fetch(`${BASE_URL}/api/all_animalcareneederschedule`) // Adjust URL
+    fetch(`${BASE_URL}/api/animalcareneeder/all_animalcareneederschedule`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setCareneedersSchedule(data))
       .catch((error) =>

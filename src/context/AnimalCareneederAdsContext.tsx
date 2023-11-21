@@ -28,7 +28,7 @@ const AnimalCareneederAdsProvider: React.FC<
   >([]);
 
   const getanimalcareneederAds = () => {
-    fetch(`${BASE_URL}/api/all_animal_careneeder_ads`) // Adjust URL
+    fetch(`${BASE_URL}/api/animalcareneeder/all_animal_careneeder_ads`) // Adjust URL
       .then((response) => response.json())
       .then((data) => setanimalcareneederAds(data))
       .catch((error) =>

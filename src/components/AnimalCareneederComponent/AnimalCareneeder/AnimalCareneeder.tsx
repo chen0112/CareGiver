@@ -110,7 +110,7 @@ const AnimalCareneeder: React.FC = () => {
 
     // Send a POST request to the Flask backend
     const response = await fetch(
-      `${BASE_URL}/api/animalcareneeder_details`,
+      `${BASE_URL}/api/animalcareneeder/animalcareneeder_details`,
       {
         method: "POST",
         headers: {

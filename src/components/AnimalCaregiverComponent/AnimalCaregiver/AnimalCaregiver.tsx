@@ -110,7 +110,7 @@ const AnimalCaregiver: React.FC = () => {
       return;
     }
 
-    const response = await fetch(`${BASE_URL}/api/animalcaregiver_details`, {
+    const response = await fetch(`${BASE_URL}/api/animalcaregiver/animalcaregiver_details`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

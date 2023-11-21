@@ -28,7 +28,7 @@ const AnimalCaregiverFormProvider: React.FC<CaregiverProviderProps> = ({
   >([]);
 
   const getanimalcaregivers = () => {
-    fetch(`${BASE_URL}/api/all_animalcaregivers`)
+    fetch(`${BASE_URL}/api/animalcaregiver/all_animalcaregivers`)
       .then((response) => response.json())
       .then((data) => setanimalcaregiversForm(data))
       .catch((error) =>

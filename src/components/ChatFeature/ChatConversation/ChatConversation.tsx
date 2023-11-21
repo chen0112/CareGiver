@@ -1,20 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, useLocation, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Ably from "ably";
 import { BASE_URL } from "../../../types/Constant";
 import { BiSend } from "react-icons/bi";
-import { Caregiver, Careneeder } from "../../../types/Types";
+import {
+  Caregiver,
+  Careneeder,
+  AnimalCaregiverForm,
+  AnimalCareneederForm,
+} from "../../../types/Types";
 import { defaultImageUrl } from "../../../types/Constant";
 import { v4 as uuidv4 } from "uuid";
+import { useAbly } from "../../../context/AblyContext";
 
 type Message = {
-  id?: string; // Add this line
+  id?: string;
   sender_id: string;
   content: string;
   recipient_id: string | null;
   createtime?: string | null;
   ad_id?: number;
   ad_type?: string;
+  ably_message_id?: string;
 };
 
 type ChatConversationProps = {
@@ -70,11 +77,17 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
 
   const [caregiver, setCaregiver] = useState<Caregiver | null>(null);
   const [careneeder, setCareneeder] = useState<Careneeder | null>(null);
+  const [animalcaregiver, setAnimalCaregiver] =
+    useState<AnimalCaregiverForm | null>(null);
+  const [animalcareneeder, setAnimalCareneeder] =
+    useState<AnimalCareneederForm | null>(null);
 
   const [ActiveConversationId, setActiveConversationId] = useState<
     number | null
   >(null);
   const [ActiveAdId, setActiveAdId] = useState<number | null>(null);
+
+  const [receivedMessageIds, setReceivedMessageIds] = useState(new Set());
 
   const splitConversationKey = (key: string): [ConversationId, AdId] => {
     const parts = key.split("-");
@@ -99,151 +112,10 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     Number(recipientId || 0),
   ].sort((a, b) => a - b);
 
-  const realtimeRef = useRef<InstanceType<typeof Ably.Realtime.Promise> | null>(
-    null
-  );
-  const channelRef = useRef<Ably.Types.RealtimeChannelPromise | null>(null);
+  const ably = useAbly();
 
   const channelName = `chat_${sortedIds[0]}_${sortedIds[1]}`;
 
-  useEffect(() => {
-    // Initialization of realtime
-    if (!realtimeRef.current) {
-      realtimeRef.current = new Ably.Realtime.Promise({
-        key: "iP9ymA.8JTs-Q:XJkf6tU_20Q-62UkTi1gbXXD21SHtpygPTPnA7GX0aY",
-        clientId: loggedInUser_phone || uuidv4(),
-      });
-
-      realtimeRef.current.connection.on("failed", (stateChange) => {
-        console.error("Ably realtime connection error:", stateChange.reason);
-      });
-    }
-    // Initialization of the channel reference
-    if (realtimeRef.current) {
-      // If the channelRef already exists, detach from the channel
-      // to cleanup before re-initializing.
-      if (channelRef.current && channelRef.current.state === 'attached') {
-        channelRef.current.detach();
-      }
-
-      channelRef.current = realtimeRef.current.channels.get(
-        `[?rewind=10]${channelName}`
-      );
-    }
-    // Return cleanup function to detach from the channel when the component is unmounted
-    return () => {
-      if (channelRef.current && channelRef.current.state === 'attached') {
-        channelRef.current.detach();
-      }
-    };
-  }, [channelName]);
-
-  useEffect(() => {
-    if (!channelRef.current) return;
-
-    // Define the state change handler
-    const onStateChange = (stateChange: Ably.Types.ChannelStateChange) => {
-      if (stateChange.current === "attached") {
-        // Once the channel is attached, we can proceed with other operations
-
-        // Enter the chat
-        channelRef
-          .current!.presence.enter("User has entered the chat.")
-          .then(() => {
-            console.log("Successfully announced entry into the chat.");
-          })
-          .catch((err) => {
-            console.error("Error entering the chat:", err);
-          });
-
-        // Handle presence events
-        const handlePresence = (message: Ably.Types.PresenceMessage) => {
-          console.log(
-            "Presence event:",
-            message.action,
-            "for user",
-            message.clientId
-          );
-        };
-
-        channelRef.current!.presence.subscribe(handlePresence);
-
-        // Cleanup function to unsubscribe
-        return () => {
-          channelRef.current!.presence.unsubscribe(handlePresence);
-        };
-      }
-      // ... handle other states if needed
-    };
-
-    // Attach the state change handler
-    channelRef.current.on(onStateChange);
-
-    // Cleanup
-    return () => {
-      if (channelRef.current) {
-        channelRef.current.off(onStateChange);
-        // If needed, you can add detach or other cleanup logic related to the channel
-      }
-    };
-  }, [channelRef.current]);
-
-  useEffect(() => {
-    if (!channelRef.current) return;
-
-    // Listener for users entering the channel
-    const handleEnter = (member: Ably.Types.PresenceMessage) => {
-      console.log("User entered:", member.clientId);
-      if (member.clientId === recipientId) {
-        setIsUserOnline(true);
-      }
-    };
-
-    // Listener for users leaving the channel
-    const handleLeave = (member: Ably.Types.PresenceMessage) => {
-      console.log("User left:", member.clientId);
-      if (member.clientId === recipientId) {
-        setIsUserOnline(false);
-      }
-    };
-
-    channelRef.current.presence.subscribe("enter", handleEnter);
-    channelRef.current.presence.subscribe("leave", handleLeave);
-
-    // Fetch the initial presence set when the component mounts
-    if (channelRef.current.state === "attached") {
-      channelRef.current.presence
-        .get()
-        .then((members) => {
-          console.log("Members in the channel:", members);
-          const isRecipientOnline = members.some(
-            (member) => member.clientId === recipientId
-          );
-          setIsUserOnline(isRecipientOnline);
-        })
-        .catch((err) => {
-          console.error("Error fetching presence data:", err);
-        });
-    }
-
-    // Cleanup function
-    return () => {
-      channelRef.current!.presence.unsubscribe("enter", handleEnter);
-      channelRef.current!.presence.unsubscribe("leave", handleLeave);
-      if (
-        channelRef.current!.state !== "detaching" &&
-        channelRef.current!.state !== "detached"
-      ) {
-        channelRef
-          .current!.presence.leave("User has left the chat.")
-          .catch((err) => {
-            console.error("Error leaving the chat:", err);
-          });
-      }
-    };
-  }, [channelRef.current, recipientId]);
-
-  console.log("this is channel:", channelRef.current);
   console.log("this is recipientId:", recipientId);
 
   console.log(
@@ -270,17 +142,14 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
             return;
           }
           console.log("Parsed chatconversation data from server:", data);
-          // Create a Set from existing message ids
-          const existingMessageIds = new Set(
-            messages.map((message) => message.id)
-          );
 
-          console.log("Existing message IDs:", existingMessageIds);
-
-          // Filter out duplicates
+          // Filter out duplicates based on 'ably_message_id'
           const uniqueNewMessages = data.filter(
-            (newMsg) => !existingMessageIds.has(newMsg.id)
+            (newMsg) => !receivedMessageIds.has(newMsg.ably_message_id)
           );
+
+          console.log("receivedMessageIds: ", receivedMessageIds);
+          console.log("uniquemessage: ", uniqueNewMessages);
           setMessages([...messages, ...uniqueNewMessages]);
           setLoading(false); // Turn off the loading state
         })
@@ -300,73 +169,114 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
 
   useEffect(() => {
     let isMounted = true;
-    let currentSubscription: { unsubscribe: () => void } | null = null;
 
-    const handleNewMessage = (message: any) => {
-      if (isMounted) {
-        const data = message.data;
-        setMessages((prevMessages) => {
-          // Combine previous messages with the new message
-          const updatedMessages = [
-            ...prevMessages,
-            {
-              id: data.id,
-              sender_id: data.sender_id,
-              content: data.content,
-              recipient_id: data.recipient_id,
-              createtime: data.createtime,
-            },
-          ];
-
-          // Sort messages by their `createtime`
-          updatedMessages.sort((a, b) => {
-            const dateA = new Date(a.createtime).getTime();
-            const dateB = new Date(b.createtime).getTime();
-            return dateA - dateB; // sort in ascending order
-          });
-
-          return updatedMessages;
-        });
-      }
-    };
-    console.log("useEffect activeConversationKey:", activeConversationKey);
-
-    if (activeConversationKey && ActiveAdId) {
+    if (ably && activeConversationKey && ActiveAdId) {
       setLoading(true);
+      const channel = ably.channels.get(`[?rewind=10]${channelName}`);
 
-      fetchChatHistory()
-        .then(() => {
-          // After successfully fetching the chat history,
-          // update the last fetched conversation ID to the current active one.
-          if (isMounted) {
-            lastFetchedConversationId.current = activeConversationKey;
-            setLoading(false); // Turn off loading
+      const handleNewMessage = (message: any) => {
+        if (isMounted) {
+          const data = message.data;
+          console.log("ably data: ", data)
+          // Check if message is already received
+          if (!receivedMessageIds.has(data.id)) {
+            setMessages((prevMessages) =>
+              [
+                ...prevMessages,
+                {
+                  ably_message_id: data.id,
+                  sender_id: data.sender_id,
+                  content: data.content,
+                  recipient_id: data.recipient_id,
+                  createtime: data.createtime,
+                },
+              ].sort(
+                (a, b) =>
+                  new Date(a.createtime).getTime() -
+                  new Date(b.createtime).getTime()
+              )
+            );
           }
-        })
-        .catch(() => {
-          if (isMounted) {
-            setLoading(false); // Turn off loading in case of an error
-          }
-        });
+          setReceivedMessageIds((prevIds) => new Set(prevIds).add(data.id));
+        }
+      };
 
-      // Unsubscribe from previous subscription if any
-      if (currentSubscription) {
-        channelRef.current!.unsubscribe();
-        currentSubscription = null;
-      }
-
-      // Subscribe to new messages on the channel
-      channelRef.current!.subscribe("send_message", handleNewMessage);
+      channel.subscribe("send_message", handleNewMessage);
 
       return () => {
-        if (currentSubscription) {
-          currentSubscription.unsubscribe();
-          currentSubscription = null;
+        if (isMounted) {
+          channel.unsubscribe("send_message", handleNewMessage);
         }
-        isMounted = false;
       };
     }
-  }, [loggedInUser_phone, recipientId, activeConversationKey, ActiveAdId]);
+  }, [ably, activeConversationKey, ActiveAdId, channelName]);
+
+  useEffect(() => {
+    if (activeConversationKey && ActiveAdId) {
+      setLoading(true);
+      fetchChatHistory()
+        .then(() => {
+          setLoading(false);
+          lastFetchedConversationId.current = activeConversationKey;
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    }
+  }, [activeConversationKey, ActiveAdId]);
+
+  const sendMessage = () => {
+    const trimmedInput = newMessage.trim();
+
+    // Check if the input is empty after trimming
+    if (!trimmedInput) {
+      console.log("Cannot send an empty message");
+      return; // Exit the function to prevent sending an empty message
+    }
+
+    if (ably) {
+      const channel = ably.channels.get(`[?rewind=10]${channelName}`);
+      const uniqueMessageId = `${new Date().getTime()}-${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+      const payload = {
+        sender_id: loggedInUser_phone,
+        recipient_id: recipientId,
+        content: newMessage,
+        createtime: new Date().toISOString(),
+        id: uniqueMessageId,
+      };
+
+      channel.publish("send_message", payload, (err) => {
+        if (err) {
+          console.error("Error sending message:", err);
+          return;
+        }
+
+        // After successfully publishing the message to Ably, send it to the backend
+        fetch(`${BASE_URL}/api/handle_message`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sender_id: loggedInUser_phone || "unknown",
+            recipient_id: recipientId,
+            content: newMessage,
+            ad_id: activeConversation?.ad_id,
+            ad_type: activeConversation?.ad_type,
+            ably_message_id: uniqueMessageId,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log("Message stored in backend:", data))
+          .catch((error) =>
+            console.error("Error storing message in backend:", error)
+          );
+      });
+    }
+    setNewMessage("");
+  };
 
   const activeConversation = conversations.find(
     //this ActiveConversationId will be the same
@@ -409,6 +319,8 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     // Reset data when the activeConversationKey changes
     setCaregiver(null);
     setCareneeder(null);
+    setAnimalCareneeder(null);
+    setAnimalCaregiver(null);
 
     console.log("Active Conversation key changed:", activeConversationKey);
   }, [activeConversationKey]);
@@ -431,18 +343,32 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
             setCareneeder(data);
           } else if (activeConversation.ad_type === "caregivers") {
             setCaregiver(data);
+          } else if (activeConversation.ad_type === "animalcaregivers") {
+            setAnimalCaregiver(data);
+          } else if (activeConversation.ad_type === "animalcareneeders") {
+            setAnimalCareneeder(data);
           }
         }
       };
 
       if (activeConversation.ad_type === "careneeders") {
         fetchData(
-          `${BASE_URL}/api/all_careneeders/${activeConversation.ad_id}`,
+          `${BASE_URL}/api/careneeder/all_careneeders/${activeConversation.ad_id}`,
           handleData
         );
       } else if (activeConversation.ad_type === "caregivers") {
         fetchData(
-          `${BASE_URL}/api/all_caregivers/${activeConversation.ad_id}`,
+          `${BASE_URL}/api/caregiver/all_caregivers/${activeConversation.ad_id}`,
+          handleData
+        );
+      } else if (activeConversation.ad_type === "animalcaregivers") {
+        fetchData(
+          `${BASE_URL}/api/animalcaregiver/all_animalcaregiverform/${activeConversation.ad_id}`,
+          handleData
+        );
+      } else if (activeConversation.ad_type === "animalcareneeders") {
+        fetchData(
+          `${BASE_URL}/api/animalcareneeder/all_animalcareneederform/${activeConversation.ad_id}`,
           handleData
         );
       }
@@ -456,56 +382,15 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
       ? careneeder
       : activeConversation?.ad_type === "caregivers"
       ? caregiver
+      : activeConversation?.ad_type === "animalcaregivers"
+      ? animalcaregiver
+      : activeConversation?.ad_type === "animalcareneeders"
+      ? animalcareneeder
       : null;
 
   console.log("activeConversation?.ad_type:", activeConversation?.ad_type);
 
   console.log("Current data:", currentData);
-
-  const sendMessage = () => {
-    const timestamp = new Date().toISOString();
-
-    const uniqueMessageId = `${new Date().getTime()}-${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
-    // Implement your sending logic here using fetch and /api/handle_message
-    const payload = {
-      sender_id: loggedInUser_phone,
-      recipient_id: recipientId,
-      content: newMessage,
-      createtime: timestamp,
-      id: uniqueMessageId,
-    };
-    channelRef
-      .current!.publish("send_message", payload)
-      .then(() => {
-        // Now send the message data to your backend
-        fetch(`${BASE_URL}/api/handle_message`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sender_id: loggedInUser_phone || "unknown",
-            recipient_id: recipientId,
-            content: newMessage,
-            ad_id: activeConversation?.ad_id,
-            ad_type: activeConversation?.ad_type,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Message stored in backend:", data);
-          })
-          .catch((error) => {
-            console.error("There was an error sending the message", error);
-          });
-      })
-      .catch((err) => {
-        console.error("Error sending message:", err);
-      });
-    setNewMessage("");
-  };
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-x-hidden mx-auto border-l min-height: 100vh">

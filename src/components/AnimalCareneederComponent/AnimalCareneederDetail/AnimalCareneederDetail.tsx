@@ -29,7 +29,7 @@ const AnimalCareneederDetail: React.FC = () => {
   const phoneNumber = queryParams.get("phoneNumber");
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/all_animalcareneederform/${id}`)
+    fetch(`${BASE_URL}/api/animalcareneeder/all_animalcareneederform/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

@@ -72,7 +72,7 @@ const CareneederCard: React.FC<CareneederCardProps> = ({
   };
 
   const handleSave = () => {
-    fetch(`${BASE_URL}/api/mycareneeder/${editedCareneeder.id}/ad`, {
+    fetch(`${BASE_URL}/api/careneeder/mycareneeder/${editedCareneeder.id}/ad`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(editedCareneederAd),
